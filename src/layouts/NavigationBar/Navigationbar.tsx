@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import { Button } from '../../common/Button/Button'
 import { Link } from './Link'
+import { NavigationBarMobile } from './NavigationBarMobile/NavigationBarMobile'
+import { NavigationBarDesktop } from './NavigationBarDesktop/NavigationBarDesktop'
 export const Navbar : React.FC = () => {
     const [loading, setLoading] = useState(false)
     interface Path {
@@ -23,7 +25,7 @@ export const Navbar : React.FC = () => {
         }
     ]
     return (
-    <nav className='bg-transparent  font-montserrat flex items-center justify-between px-4 md:px-12 pt-3'>
+    <nav className='bg-transparent  font-montserrat flex items-center justify-between px-4 md:px-12 pt-4 lg:pt-6'>
         <div>
             <a href="/">
                 <h1 className='font-bold text-2xl'>
@@ -31,20 +33,8 @@ export const Navbar : React.FC = () => {
                 </h1>
             </a>
         </div>
-        <div className='md:hidden'>
-            <GiHamburgerMenu/>
-        </div>
-        <div className='hidden md:flex w-full'>
-            <div className='hidden md:flex w-full space-x-8 items-center justify-start pl-10 lg:pl-15'>
-               {paths.map(o => {
-                   return <Link {...o} />
-               })}
-            </div>
-            <div className='hidden md:flex space-x-2 font-medium'>
-                <Button size='sm' text='Log in' type='neutral' border={false} hover="text-gray-500"/>
-                <Button size='sm' text='Sign up' type='neutral'/>
-            </div>
-        </div>
+        <NavigationBarMobile paths={paths}/>
+        <NavigationBarDesktop paths={paths}/>
     </nav>
   )
 }

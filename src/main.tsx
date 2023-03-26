@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom/client'
 import HomePage from './pages/Home/Home'
 import ErrorPage from './pages/Error/Error'
 import './index.css'
-import { Navbar } from './layouts/Navbar/Navbar'
+import { Navbar } from './layouts/NavigationBar/Navigationbar'
 import { Container } from './layouts/Container/Container'
+import {Tasks} from './pages/Tasks/Tasks'
+import {About} from './pages/About/About'
 import { 
   createBrowserRouter,
   RouterProvider } from 'react-router-dom'
@@ -16,6 +18,12 @@ const router = createBrowserRouter([
     },
     {
       path:"/tasks",
+      element : <Tasks/>,
+    },
+    {
+      path:"/about",
+      element : <About/>,
+
     }
   ])
 

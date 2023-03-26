@@ -24,11 +24,11 @@ export const Button = (
    if(size == 'sm'){
        sizeReturned = 'px-4 py-2 text-sm'
    } else if (size == 'md'){
-       sizeReturned = 'px-5 py-5 text-md'
+       sizeReturned = 'px-5 py-2 text-md'
    } else if (size == 'lg'){
-       sizeReturned = 'px-7 px-7 text-lg'
+       sizeReturned = 'px-7 px-4 text-lg'
    } else if(size == 'xl'){
-       sizeReturned = 'px-9 px-9 text-xl'
+       sizeReturned = 'px-9 px-4 text-xl'
    } else {
        throw Error('No data provided for size')
    }
@@ -41,7 +41,7 @@ export const Button = (
    } else {
        throw Error('No data provided for type')
    }
-   const text:string = `${sizeReturned} ${typeReturned} ${border? 'border' : ''} ${hover? `hover:${hover}` : ''} font-montserrat transition rounded-xl truncate`
+   const text:string = `${sizeReturned} ${typeReturned} ${border? 'border' : ''} ${hover?hover: ''} font-montserrat transition rounded-xl truncate`
    return text
     
   }
