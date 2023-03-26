@@ -33,7 +33,7 @@ export const Navbar : React.FC = () => {
         }
     ]
     return (
-    <nav className='bg-transparent md:flex-col  font-montserrat flex items-center md:items-start justify-between px-4 md:px-12 pt-4 lg:pt-6'>
+    <nav className='bg-transparent md:flex-col  font-montserrat flex items-center md:items-start justify-between   pt-4 lg:pt-6'>
         <div className='flex items-center justify-between w-full'>
             <a href="/">
                 <h1 className='font-bold text-3xl'>

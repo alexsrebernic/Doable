@@ -4,7 +4,8 @@ import HomePage from './pages/Home/Home'
 import ErrorPage from './pages/Error/Error'
 import './index.css'
 import { Navbar } from './layouts/NavigationBar/Navigationbar'
-import { Container } from './layouts/Container/Container'
+import { MainContainer } from './layouts/Container/MainContainer/MainContainer'
+import { ContentContainer } from './layouts/Container/ContentContainer/ContentContainer'
 import {Tasks} from './pages/Tasks/Tasks'
 import {About} from './pages/About/About'
 import { 
@@ -29,11 +30,13 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Container>
+    <MainContainer>
       <>
         <Navbar/>
-        <RouterProvider router={router}/>
+        <ContentContainer>
+          <RouterProvider router={router}/>
+        </ContentContainer>
       </>
-    </Container>
+    </MainContainer>
   </React.StrictMode>
 )
