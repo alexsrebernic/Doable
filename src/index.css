@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-1: #D1D1D1;
+  --color-2: #D0D0D0;
+  --color-3: #CECECD;
+  --color-4: #CDCDCD;
+}
+
+#root{
+  background: #f9f9f9;
+  background: linear-gradient(180deg, #f1f1f1 1%, #f3f3f3 25%, #ededed 59%, #ebeaeb 100%);  
+}
+
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
 }

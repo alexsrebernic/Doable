@@ -16,22 +16,34 @@ export const Navbar : React.FC = () => {
             text:'Home'
         },
         {
+            path:'#stats',
+            text:'Stats'
+        },
+        {
             path:'/tasks',
             text:'Tasks'
         },
         {
             path:'/about',
             text:'About'
+        },
+        {
+            path:'/config',
+            text:'Configuration'
         }
     ]
     return (
-    <nav className='bg-transparent  font-montserrat flex items-center justify-between px-4 md:px-12 pt-4 lg:pt-6'>
-        <div>
+    <nav className='bg-transparent md:flex-col  font-montserrat flex items-center md:items-start justify-between px-4 md:px-12 pt-4 lg:pt-6'>
+        <div className='flex items-center justify-between w-full'>
             <a href="/">
-                <h1 className='font-bold text-2xl'>
+                <h1 className='font-bold text-3xl'>
                     Doable™
                 </h1>
             </a>
+            <div className='hidden md:flex space-x-2 font-medium '>
+                <Button size='sm' text='Log in' type='blank' border={false} shadow={false} hover="hover:text-gray-500"/>
+                <Button size='sm' text='Sign up' type='neutral' border={false} shadow={true} hover='  hover:shadow-xl'/>
+            </div>
         </div>
         <NavigationBarMobile paths={paths}/>
         <NavigationBarDesktop paths={paths}/>
