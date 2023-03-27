@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../../../common/Button/Button'
-import { Link } from '../Link'
+import { Link } from '../../../common/Link'
 export const NavigationBarDesktop = ({paths} : {paths: object[]}) => {
   return (
        <div className='hidden md:flex w-full pt-3'>

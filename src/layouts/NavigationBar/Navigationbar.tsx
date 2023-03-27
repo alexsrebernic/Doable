@@ -1,37 +1,13 @@
 import React, { useState } from 'react'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import { Button } from '../../common/Button/Button'
-import { Link } from './Link'
+import paths from '../../helper/routesPaths'
+import { Link } from '../../common/Link'
 import { NavigationBarMobile } from './NavigationBarMobile/NavigationBarMobile'
 import { NavigationBarDesktop } from './NavigationBarDesktop/NavigationBarDesktop'
 export const Navbar : React.FC = () => {
     const [loading, setLoading] = useState(false)
-    interface Path {
-        path: string,
-        text: string
-    }
-    const paths: Path[] = [
-        {
-            path:'/',
-            text:'Home'
-        },
-        {
-            path:'#stats',
-            text:'Stats'
-        },
-        {
-            path:'/tasks',
-            text:'Tasks'
-        },
-        {
-            path:'/about',
-            text:'About'
-        },
-        {
-            path:'/config',
-            text:'Configuration'
-        }
-    ]
+  
     return (
     <nav className='bg-transparent md:flex-col  font-montserrat flex items-center md:items-start justify-between   pt-4 lg:pt-6'>
         <div className='flex items-center justify-between w-full'>
