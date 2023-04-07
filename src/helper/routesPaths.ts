@@ -21,8 +21,8 @@ const paths: Path[] = [
         text:'About'
     },
     {
-        path:'/config',
-        text:'Configuration'
+        path:'/settings',
+        text:'Settings',
     }
 ]
 export default paths

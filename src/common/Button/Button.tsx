@@ -2,10 +2,11 @@ import React from 'react'
 import {ImSpinner8} from 'react-icons/im'
 
 interface Props {
-    size: string, 
-    type: string, 
-    text: string, 
+    size?: string, 
+    type?: string, 
+    text?: string, 
     hover?:string,
+    aStyle?: string,
     loading?:Boolean, 
     border?: Boolean, 
     shadow?: Boolean,
@@ -16,6 +17,7 @@ export const Button = (
     type = 'neutral', 
     text = 'Ok', 
     hover,
+    aStyle = '',
     loading = false, 
     border = true, 
     shadow = false,
@@ -56,7 +58,7 @@ export const Button = (
     throw Error('No data provided for type')
 
    }
-   const text:string = `${sizeReturned} ${typeReturned} ${border? 'border' : ''} ${shadow?'shadow-md': ''} ${hover?hover: ''}   font-montserrat transition rounded-xl truncate`
+   const text:string = ` ${aStyle} ${sizeReturned} ${typeReturned} ${border? 'border' : ''} ${shadow?'shadow-md': ''} ${hover?hover: ''}   font-montserrat transition rounded-xl truncate`
    return text
     
   }
