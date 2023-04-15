@@ -11,5 +11,4 @@ export default async function getPhoto(photoId: string, key? : string, secret_ke
     } catch (error : any){
         throw Error(error)
     }
-    return {}
 }

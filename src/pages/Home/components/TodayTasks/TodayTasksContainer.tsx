@@ -6,7 +6,7 @@ export const TodayTasksContainer = ({tasks} : {tasks: Task[]}) => {
   return (
     <div>
       <div className='pb-3'>
-        <h1 className='text-center lg:text-right font-semibold text-2xl '>
+        <h1 className='text-center lg:text-left font-semibold text-2xl '>
           Today tasks
         </h1>
       </div>
@@ -26,7 +26,6 @@ export const TodayTasksContainer = ({tasks} : {tasks: Task[]}) => {
                 <Button text='Create a task' border={false} shadow={true} hover='hover:shadow-xl'/>
               </div>
               }
-              {}
           </ul>
       
         </div>

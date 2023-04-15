@@ -14,7 +14,7 @@ const Footer = () => {
                         </h1>
                     </a>
                     <p>
-                     "a place for everything and everything in its place"
+                     "A place for everything and everything in its place"
                     </p>
                     <span>- Benjamin Franklin</span>
                 </div>

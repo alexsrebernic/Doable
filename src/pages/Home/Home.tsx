@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { CalendarCarrousel } from './components/CalendarCarrousel'
+import { CalendarCarrouselContainer } from './components/CalendarCarrousel/CalendarCarrouselContainer'
 import usePhotosCalendarCarrousel from './hooks/usePhotosCalendarCarrousel'
 import { Stats } from './Stats/Stats'
 import { TodayTasksContainer } from './components/TodayTasks/TodayTasksContainer'
 import Task from '../../types/Task'
+import { JsonCalendar } from 'json-calendar'
 function Home() {
   // const photos = usePhotosCalendarCarrousel()
   const tasks : Task[] = [{
@@ -16,7 +17,7 @@ function Home() {
       <div className='col-span-12 pb-12'>
         <div className='grid grid-cols-12 gap-6'>
           <div className='space-y-3  col-span-12 lg:col-span-8 xl:col-span-9 '>
-            <CalendarCarrousel photos={[{}]}/>
+            <CalendarCarrouselContainer photos={[{}]}/>
           </div>
           <div className='col-span-12 lg:col-span-4 xl:col-span-3'>
             <TodayTasksContainer tasks={tasks}/>
