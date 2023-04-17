@@ -3,7 +3,7 @@ import { Month } from './CalendarCarrouselContainer'
 export const Calendar = ({month} : {month:Month | null}) => {
   if(month !== null){
       return (
-        <div>
+        <div className='flex flex-col items-center sm:items-start sm:p-6'>
             <div>
 
             </div>

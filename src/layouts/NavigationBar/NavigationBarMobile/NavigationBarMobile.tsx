@@ -11,7 +11,7 @@ export const NavigationBarMobile = ({paths}:{paths:object[]}) => {
                 <GiHamburgerMenu size={23}/>
             </button>
             {isCollapsed && 
-            <div onClick={collapse} className='h-screen absolute top-0 left-0 w-screen'>
+            <div onClick={collapse} className='h-screen absolute z-10 top-0 left-0 w-screen'>
                 <div onClick={e => e.stopPropagation()} className=' main-bg absolute shadow-xl  w-screen top-[3rem] left-0     py-3 px-5 mx-auto'>
                     <ul className='flex flex-col text-xl space-y-3 '>
                         {paths.map((o,i) => {

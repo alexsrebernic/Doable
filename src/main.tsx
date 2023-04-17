@@ -7,7 +7,7 @@ import { MainContainer } from './layouts/Container/MainContainer/MainContainer'
 import { RouterContainer } from './layouts/Container/RouterContainer/RouterContainer'
 import {ContentContainer} from './layouts/Container/ContentContainer/ContentContainer'
 import Footer from './layouts/Footer/Footer'
-import { Tasks } from './pages/Tasks/Tasks'
+import { Lists } from './pages/Lists/Lists'
 import { About } from './pages/About/About'
 import { Settings } from './pages/Settings/Settings'
 import { 
@@ -24,8 +24,8 @@ const router = createBrowserRouter([
       errorElement: <ErrorPage/>
     },
     {
-      path:"/tasks",
-      element : <Tasks/>,
+      path:"/lists",
+      element : <Lists/>,
     },
     {
       path:"/about",

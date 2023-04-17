@@ -14,7 +14,7 @@ function Home() {
   }]
   return (
     <>
-      <div className='col-span-12 pb-12'>
+      <div className='col-span-12 '>
         <div className='grid grid-cols-12 gap-6'>
           <div className='space-y-3  col-span-12 lg:col-span-8 xl:col-span-9 '>
             <CalendarCarrouselContainer photos={[{}]}/>

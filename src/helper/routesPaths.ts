@@ -13,8 +13,8 @@ const paths: Path[] = [
         text:'Stats'
     },
     {
-        path:'/tasks',
-        text:'Tasks'
+        path:'/lists',
+        text:'Lists'
     },
     {
         path:'/about',
