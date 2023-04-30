@@ -9,7 +9,7 @@ const paths: Path[] = [
         text:'Home',
     },
     {
-        path:'#stats',
+        path:'/#stats',
         text:'Stats'
     },
     {

@@ -32,19 +32,8 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
     setIsOpen(false);
   }
   return (
-    <div className='min-h-screen min-w-screen main-bg-gradient font-montserrat'>
-         <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+    <div className='min-h-screen grid grid-cols-12 min-w-screen main-bg-gradient font-montserrat'>
+      
          <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}

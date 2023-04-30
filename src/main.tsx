@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import ErrorPage from './pages/Error/Error'
 import './index.css'
-import { Navbar } from './layouts/NavigationBar/Navigationbar'
+import { Sidebar } from './layouts/Sidebar/Sidebar'
 import { MainContainer } from './layouts/Container/MainContainer/MainContainer'
 import { RouterContainer } from './layouts/Container/RouterContainer/RouterContainer'
 import {ContentContainer} from './layouts/Container/ContentContainer/ContentContainer'
@@ -40,9 +40,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <MainContainer>
+      <Sidebar/>
       <ContentContainer>
         <>
-          <Navbar/>
           <Suspense fallback={<div>Loading ...</div>}>
             <RouterContainer>
               <RouterProvider router={router}/>

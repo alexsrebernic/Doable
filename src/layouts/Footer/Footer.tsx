@@ -2,16 +2,16 @@ import React from 'react'
 import paths from '../../helper/routesPaths'
 import { Link } from '../../common/Link'
 import {BsFillSuitHeartFill} from 'react-icons/bs'
+import { Logo } from '../../common/Logo'
 const Footer = () => {
   return (
-    <footer className='min-h-[5em]  bg-white shadow-xl font-montserrat'>
+    <footer className='min-h-[5em] col-span-12  bg-white shadow-xl font-montserrat'>
         <div className='flex flex-col h-full items-center justify-between pt-3 max-w-screen-xl px-4 lg:px-8 xl:px-0  mx-auto'>
             <div className='w-full flex flex-col md:flex-row items-center justify-between py-5'>
                 <div className='flex-1 text-center md:text-left'>
                     <a href="/">
-                        <h1 className='font-bold text-3xl text-center md:text-left font-montserrat'>
-                            Doable™
-                        </h1>
+                        <Logo/>
+                        
                     </a>
                     <p>
                      "A place for everything and everything in its place"

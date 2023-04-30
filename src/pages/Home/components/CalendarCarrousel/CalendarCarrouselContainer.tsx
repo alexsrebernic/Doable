@@ -4,11 +4,7 @@ import getPhoto from '../../../../api/unsplash/getPhoto';
 import { Button } from '../../../../common/Button/Button';
 import { JsonCalendar } from 'json-calendar';
 import { Calendar } from './Calendar';
-export interface Month {
- monthName : string,
- year: number,
- days: number[][]
-}
+import { Month } from '../../../../types/Month';
 export const CalendarCarrouselContainer = ({photos} : {photos : Object[]}) => {
     const [currentMonth , setCurrentMonth] = useState<Month | null>(null)
     useEffect(() => {

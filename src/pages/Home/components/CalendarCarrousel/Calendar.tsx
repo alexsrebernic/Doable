@@ -1,5 +1,5 @@
 import React from 'react'
-import { Month } from './CalendarCarrouselContainer'
+import { Month } from '../../../../types/Month'
 export const Calendar = ({month} : {month:Month | null}) => {
   if(month !== null){
       return (
