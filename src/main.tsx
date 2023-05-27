@@ -6,51 +6,91 @@ import { Sidebar } from './layouts/Sidebar/Sidebar'
 import { MainContainer } from './layouts/Container/MainContainer/MainContainer'
 import { RouterContainer } from './layouts/Container/RouterContainer/RouterContainer'
 import {ContentContainer} from './layouts/Container/ContentContainer/ContentContainer'
-import Footer from './layouts/Footer/Footer'
-import { Lists } from './pages/Lists/Lists'
 import { About } from './pages/About/About'
 import { Settings } from './pages/Settings/Settings'
 import { 
   createBrowserRouter,
+  Navigate,
+  Outlet,
+  redirect,
   RouterProvider } from 'react-router-dom'
 import { config } from 'dotenv'
+import Root, {rootLoader} from './pages/Root/Root'
+import Home from './pages/Home/Home'
 
-const HomePage = React.lazy(() => import('./pages/Home/Home'))
-
-const router = createBrowserRouter([
-    {
-      path: "/",
-      element : <HomePage/>,
-      errorElement: <ErrorPage/>
-    },
-    {
-      path:"/lists",
-      element : <Lists/>,
-    },
-    {
-      path:"/about",
-      element : <About/>,
-
-    },
-    {
-      path:"/settings",
-      element : <Settings/>,
-    }
-  ])
+const routes = [
+ {
+   path: "/",
+   element:<Root />,
+   errorElement:<ErrorPage/>,
+   children: [
+     {
+      path:"/tasks",
+      errorElement:<ErrorPage/>,
+      element:<Outlet/>,
+       children:[
+         {
+           path:"home",
+           element:<Home/>
+         },
+         {
+          path:"myday",
+          element:<Home/>
+        },
+        {
+          path:"important",
+          element:<Home/>
+        },
+        {
+          path:"completed",
+          element:<Home/>
+        },
+        {
+          path:"all",
+          element:<Home/>
+        },
+        {
+          path:":taskname",
+          element:<Home/>
+        },
+       ]
+     }
+   ]
+ },
+ {
+   path:"/stats",
+   element:<Home/>
+ },
+ {
+  path:"/settings",
+  element:<Settings/>
+ },
+ {
+  path:"/about",
+  element:<About/>
+ },
+]
+const opts = {
+  basename:"/"
+}
+const router = createBrowserRouter(
+  routes,
+  opts
+  
+)
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <MainContainer>
       <Sidebar/>
       <ContentContainer>
         <>
-          <Suspense fallback={<div>Loading ...</div>}>
+          <Suspense>
             <RouterContainer>
               <RouterProvider router={router}/>
             </RouterContainer>
           </Suspense>
         </>
       </ContentContainer>
-      <Footer/>
     </MainContainer>
   </React.StrictMode>
 )

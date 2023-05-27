@@ -1,5 +1,6 @@
 import React, {createContext, useState} from 'react'
 import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 const customStyles = {
   content: {
@@ -32,15 +33,29 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
     setIsOpen(false);
   }
   return (
-    <div className='min-h-screen grid grid-cols-12 min-w-screen main-bg-gradient font-montserrat'>
-      
-         <Modal
+    <>
+      <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
-        >{modalContent}</Modal>
+        >
+          {modalContent}
+        </Modal>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      <div className='max-h-screen grid grid-cols-12 max-w-screen  font-montserrat'>
         <ModalAndToastContext.Provider value={
           {
             openModal: (arg : JSX.Element) => openModal(arg),
@@ -50,7 +65,9 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
         }>
           {children}
         </ModalAndToastContext.Provider>
-    </div>
+      </div>
+    </>
+  
 
   )
 }

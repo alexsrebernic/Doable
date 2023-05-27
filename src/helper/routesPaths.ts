@@ -5,11 +5,11 @@ interface Path {
 }
 const paths: Path[] = [
     {
-        path:'/',
+        path:'/home',
         text:'Home',
     },
     {
-        path:'/#stats',
+        path:'/home#stats',
         text:'Stats'
     },
     {

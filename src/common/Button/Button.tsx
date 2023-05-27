@@ -2,8 +2,8 @@ import React from 'react'
 import {ImSpinner8} from 'react-icons/im'
 
 interface Props {
-    size?: string, 
-    type?: string, 
+    size?: "sm" | "md" | "lg" | "xl", 
+    type?: "neutral" | "danger" | "success" | "reverse", 
     text?: string, 
     hover?:string,
     aStyle?: string,
