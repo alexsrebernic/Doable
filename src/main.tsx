@@ -17,7 +17,8 @@ import {
 import { config } from 'dotenv'
 import Root, {rootLoader} from './pages/Root/Root'
 import Home from './pages/Home/Home'
-
+import { Navbar } from './layouts/Navbar/Navbar'
+import { ContentSidebar } from './layouts/ContentSidebar/ContentSidebar'
 const routes = [
  {
    path: "/",
@@ -81,15 +82,14 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <MainContainer>
-      <Sidebar/>
+      <Navbar/>
       <ContentContainer>
-        <>
+        <Sidebar/>
           <Suspense>
             <RouterContainer>
-              <RouterProvider router={router}/>
+                <RouterProvider router={router}/>
             </RouterContainer>
           </Suspense>
-        </>
       </ContentContainer>
     </MainContainer>
   </React.StrictMode>

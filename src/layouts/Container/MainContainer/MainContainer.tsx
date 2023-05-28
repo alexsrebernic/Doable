@@ -12,12 +12,15 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
   },
 };
-export const ModalAndToastContext = createContext(null as any)
+export const AppContext = createContext(null as any)
 
 export const MainContainer = ({children} : {children: React.ReactNode} ) => {
   Modal.setAppElement('#root');
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null)
+  const [isSidebarShowing, collapseSidebar] = useState(false)
+  const [isHelpSidebarShowing, collapseHelpSidebar] = useState(false)
+  const [isCalendarShowing, collapseCalendar] = useState(false)
   function openModal(content : JSX.Element) {
     setModalContent(content)
     setIsOpen(true);
@@ -55,16 +58,19 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
           pauseOnHover
           theme="light"
         />
-      <div className='max-h-screen grid grid-cols-12 max-w-screen  font-montserrat'>
-        <ModalAndToastContext.Provider value={
+      <div className='min-h-screen lg:max-h-screen flex flex-col max-w-screen  font-montserrat lg:overflow-hidden'>
+        <AppContext.Provider value={
           {
             openModal: (arg : JSX.Element) => openModal(arg),
             closeModal: () => closeModal(),
-            showToast: (message: string , type : string) => showToast(message,type)
+            showToast: (message: string , type : string) => showToast(message,type),
+            sidebar: { state:isSidebarShowing, func:() => collapseSidebar(oldVal => !oldVal)},
+            calendar: {state: isCalendarShowing, func: () => collapseCalendar(oldVal => !oldVal)},
+            helpSidebar: {state:isHelpSidebarShowing, func: () => collapseHelpSidebar(oldVal => !oldVal)}
           }
         }>
           {children}
-        </ModalAndToastContext.Provider>
+        </AppContext.Provider>
       </div>
     </>
   

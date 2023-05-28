@@ -2,8 +2,8 @@ import React from 'react'
 
 export const ContentContainer = ({children} : {children: React.ReactNode} ) => {
   return (
-    <div className='container  h-screen     col-span-12 lg:col-span-9 xl:col-span-10'>
-        {children}
+    <div className='flex-1  h-full 2xl:h-screen w-screen grid grid-cols-16   '>
+      {children}
     </div>
 
   )
