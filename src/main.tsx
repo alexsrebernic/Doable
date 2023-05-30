@@ -1,13 +1,11 @@
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import ErrorPage from './pages/Error/Error'
 import './index.css'
 import { Sidebar } from './layouts/Sidebar/Sidebar'
 import { MainContainer } from './layouts/Container/MainContainer/MainContainer'
 import { RouterContainer } from './layouts/Container/RouterContainer/RouterContainer'
 import {ContentContainer} from './layouts/Container/ContentContainer/ContentContainer'
 import { About } from './pages/About/About'
-import { Settings } from './pages/Settings/Settings'
 import { 
   createBrowserRouter,
   Navigate,
@@ -15,64 +13,10 @@ import {
   redirect,
   RouterProvider } from 'react-router-dom'
 import { config } from 'dotenv'
-import Root, {rootLoader} from './pages/Root/Root'
-import Home from './pages/Home/Home'
 import { Navbar } from './layouts/Navbar/Navbar'
-import { ContentSidebar } from './layouts/ContentSidebar/ContentSidebar'
-const routes = [
- {
-   path: "/",
-   element:<Root />,
-   errorElement:<ErrorPage/>,
-   children: [
-     {
-      path:"/tasks",
-      errorElement:<ErrorPage/>,
-      element:<Outlet/>,
-       children:[
-         {
-           path:"home",
-           element:<Home/>
-         },
-         {
-          path:"myday",
-          element:<Home/>
-        },
-        {
-          path:"important",
-          element:<Home/>
-        },
-        {
-          path:"completed",
-          element:<Home/>
-        },
-        {
-          path:"all",
-          element:<Home/>
-        },
-        {
-          path:":taskname",
-          element:<Home/>
-        },
-       ]
-     }
-   ]
- },
- {
-   path:"/stats",
-   element:<Home/>
- },
- {
-  path:"/settings",
-  element:<Settings/>
- },
- {
-  path:"/about",
-  element:<About/>
- },
-]
+import routes from './routes.jsx'
 const opts = {
-  basename:"/"
+  basename:"/tasks/home"
 }
 const router = createBrowserRouter(
   routes,

@@ -15,7 +15,7 @@ export const ButtonNav = ({text,icon, path, activePath, number} : Props) => {
     const focusActivePath = 'focus:bg-[#80A3FE] focus:text-white'
 
   return (
-    <button onClick={() => console.log(path)} className={`${activePath? classActivePath : ''} ${focusActivePath} group transition ${hoverActivePath} rounded-xl w-full py-2 px-4 flex items-center justify-between `}>
+    <a href={path} onClick={() => console.log(path)} className={`${activePath? classActivePath : ''} ${focusActivePath} group transition ${hoverActivePath} rounded-xl w-full py-2 px-4 flex items-center justify-between `}>
         <div className='flex items-center space-x-3'>
             <Icon className='group-hover:text-white text-[#225FFC] group-focus:text-white transition' icon={icon}  width={26}/>
             <span className='font-semibold text-lg'>
@@ -28,6 +28,6 @@ export const ButtonNav = ({text,icon, path, activePath, number} : Props) => {
                 {number}
             </span>
         }
-    </button>
+    </a>
     )
 }
