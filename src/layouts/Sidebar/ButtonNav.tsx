@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useNavigation } from 'react-router-dom';
 interface Props {
     text : string,
     icon: string,
@@ -13,7 +13,7 @@ export const ButtonNav = ({text,icon, path, activePath, number} : Props) => {
     const classActivePath = 'bg-[#225FFC] text-white'
     const hoverActivePath = 'hover:bg-[#80A3FE] hover:text-white'
     const focusActivePath = 'focus:bg-[#80A3FE] focus:text-white'
-
+    const navigation = useNavigation()
   return (
     <a href={path} onClick={() => console.log(path)} className={`${activePath? classActivePath : ''} ${focusActivePath} group transition ${hoverActivePath} rounded-xl w-full py-2 px-4 flex items-center justify-between `}>
         <div className='flex items-center space-x-3'>

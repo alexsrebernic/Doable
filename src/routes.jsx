@@ -1,11 +1,15 @@
 import Root, {rootLoader} from './pages/Root/Root'
 import Home from './pages/Home/Home'
-import { Navbar } from './layouts/Navbar/Navbar'
-import { ContentSidebar } from './layouts/ContentSidebar/ContentSidebar'
+import { Stats } from './pages/Stats/Stats'
 import { Settings } from './pages/Settings/Settings'
 import ErrorPage from './pages/Error/Error'
 import { Outlet } from 'react-router-dom'
 import {About} from './pages/About/About'
+import {Myday} from './pages/Myday/Myday'
+import {Important} from './pages/Important/Important'
+import {Completed} from './pages/Completed/Completed'
+import {All} from './pages/All/All'
+import {UserTag} from './pages/UserTag/UserTag'
 export default [
     {
       path: "/",
@@ -23,23 +27,23 @@ export default [
             },
             {
              path:"myday",
-             element:<Home/>
+             element:<Myday/>
            },
            {
              path:"important",
-             element:<Home/>
+             element:<Important/>
            },
            {
              path:"completed",
-             element:<Home/>
+             element:<Completed/>
            },
            {
              path:"all",
-             element:<Home/>
+             element:<All/>
            },
            {
-             path:":taskname",
-             element:<Home/>
+             path:":tag_id",
+             element:<UserTag/>
            },
           ]
         }
@@ -47,7 +51,7 @@ export default [
     },
     {
       path:"/stats",
-      element:<Home/>
+      element:<Stats/>
     },
     {
      path:"/settings",

@@ -3,7 +3,7 @@ import { AppContext } from '../Container/MainContainer/MainContainer'
 import { useContext, useState } from 'react';
 import { SearchInput } from './SearchInput';
 
-export const Navbar = () => {
+export const Topbar = () => {
   const {sidebar,helpSidebar} = useContext(AppContext)
   const [message, setMessage] = useState('');
 
