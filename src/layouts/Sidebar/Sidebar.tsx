@@ -1,23 +1,16 @@
 import React, { useContext } from 'react'
 import { AppContext } from '../Container/MainContainer/MainContainer'
 import { Icon } from '@iconify/react';
-import favoriteCategories from '../../helper/routesPaths.js'
+import FavoriteTags from '../../helper/favoriteTag.js'
+import { Tag } from '../../types/Tag';
 import { ButtonNav } from './ButtonNav';
 import { useSpring, animated } from '@react-spring/web'
 
-export const Sidebar = () => {
+export const Sidebar = ({springs}) => {
   const {sidebar} = useContext(AppContext)
   const phoneClasses =  'absolute  top-0   w-screen  bg-black/[.4]' 
   const desktopClasses = 'lg:w-full lg:static lg:bg-transparent lg:block lg:border-r lg:col-span-4 xl:col-span-3 2xl:col-span-3'
-  const springs = useSpring({
-    from: { 
-      x: -400 
-    },
-    to: { 
-      x: 0 
-    },
-    reset:sidebar.state,
-  })
+
   return (
       <div onClick={(e) =>{
         e.stopPropagation()
@@ -50,15 +43,15 @@ export const Sidebar = () => {
                     </span>
                   </button>
                  
-                  <div>
-                      <ButtonNav text='Stats' icon='gridicons:stats' path='/stats' activePath={false} number={false}/>
+                  <div >
+                      <ButtonNav func={sidebar.func} text='Stats' icon='gridicons:stats' fullPath='/stats'  number={0}/>
                   </div>
                   <div className='space-y-2'>
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
-                    <div className='space-y-2'>
+                    <div className=''>
                       {
-                        favoriteCategories.map((o,index) => {
-                          return <ButtonNav text={o.text} icon={o.icon} path={o.path} activePath={false} number={false} key={index}/>
+                        FavoriteTags.map((o : Tag,index : number) => {
+                          return <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={o.fullPath}  number={0} key={index}/>
                         })
                       }
                     </div>

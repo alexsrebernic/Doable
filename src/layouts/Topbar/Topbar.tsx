@@ -3,7 +3,7 @@ import { AppContext } from '../Container/MainContainer/MainContainer'
 import { useContext, useState } from 'react';
 import { SearchInput } from './SearchInput';
 
-export const Topbar = () => {
+export const Topbar = ({openAnimationSidebar}) => {
   const {sidebar,helpSidebar} = useContext(AppContext)
   const [message, setMessage] = useState('');
 
@@ -11,6 +11,11 @@ export const Topbar = () => {
     // 👇 Get input value from "event"
     setMessage(value);
   };
+  function collapseSidebar(){
+    if(helpSidebar.state) return helpSidebar.func()
+    sidebar.func()
+    openAnimationSidebar()
+  }
   return (
     <div  className='static border-b w-screen grid grid-cols-16 '>
         <div className='hidden lg:block lg:col-span-4 xl:col-span-3 border-r 2xl:col-span-3'>
@@ -25,7 +30,7 @@ export const Topbar = () => {
         </div>
         <div className='px-2 w-full sm:px-4 py-2 flex justify-between col-span-16 lg:col-span-12 xl:col-span-13  2xl:col-span-13'>
             <div className='flex justify-center items-center md:space-x-6 lg:space-x-0'>
-                <div onClick={() => helpSidebar.state? helpSidebar.func() : sidebar.func()} className='lg:hidden'>
+                <div onClick={collapseSidebar} className='lg:hidden'>
                     <Icon icon="material-symbols:menu" width={40} />
                 </div>
                   <SearchInput value={message} func={handleChange}/>
