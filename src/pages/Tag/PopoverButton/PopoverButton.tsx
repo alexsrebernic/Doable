@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { SVGProps } from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Icon } from '@iconify/react'
@@ -6,7 +6,8 @@ import { Icon } from '@iconify/react'
 interface Props {
   text: String,
   elements: object[],
-  icon: String
+  icon: String,
+
 }
 export default function PopoverButton({text,elements,icon} : Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -45,7 +46,11 @@ export default function PopoverButton({text,elements,icon} : Props) {
             return (
               <div className='flex items-center px-2 space-x-3 p-2 hover:bg-gray-200 transition cursor-pointer' key={i}>
                 <div>
-                  <Icon color="#225FFC" width={23} icon={o.icon}/>
+                  {
+                    o.icon?
+                    <Icon color="#225FFC" width={23} icon={o.icon}/>:
+                    <img className='fill-[#225FFC]' src={o.svgElement} alt="" />
+                  }
                 </div>
                 <span>
                   {o.text}

@@ -2,6 +2,11 @@ import React, { useState } from 'react'
 import PopoverButton from '../../PopoverButton/PopoverButton'
 import { Icon } from '@iconify/react'
 import { Tooltip } from '@mui/material'
+import afterTomorrowSVG from '../../../../assets/aftertomorrow.svg'
+import selectDateSVG from '../../../../assets/selectdate.svg'
+import todaySVG from '../../../../assets/today.svg'
+import tomorrowSVG from '../../../../assets/tomorrow.svg'
+
 export const CreateTaskContainer = () => {
     const [inputValue,setInputValue] = useState<String | null>(null)
     function handleInput(event : Event){
@@ -26,20 +31,20 @@ export const CreateTaskContainer = () => {
                         elements={
                             [
                                 {
-                                    icon:"material-symbols:today",
-                                    text:"Today"
+                                    svgElement:todaySVG,
+                                    text:"Today",
                                 },
                                 {
-                                    icon:"ci:chevron-right",
-                                    text:"Tomorrow"
+                                    svgElement:tomorrowSVG,
+                                    text:"Tomorrow",
                                 },
                                 {
-                                    icon:"ci:chevron-right-duo",
-                                    text:"After tomorrow"
+                                    svgElement:afterTomorrowSVG,
+                                    text:"After tomorrow",
                                 },
                                 {
-                                    icon:"",
-                                    text:"",
+                                    svgElement:selectDateSVG,
+                                    text:"Select date",
                                 },
                             ]
                         } 

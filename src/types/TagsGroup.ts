@@ -1,5 +1,6 @@
-import { Tag } from "./Tag"
+import { TagId } from "./TagId"
 
 export type TagsGroup = {
-    tags : Tag[]
+    tags : TagId[]
+    createdAt: Date
 }
