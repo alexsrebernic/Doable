@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Tag } from '../../../types/Tag'
+import { Tag } from '../../../types/Tag/Tag'
 import { Icon } from '@iconify/react'
 import {getCurrentDate} from '../../../helper/getCurrentDate.js'
 import { Popover,Tooltip } from '@mui/material'
 import PopoverButton from '../PopoverButton/PopoverButton'
 export const Header = ({tag} : {tag:Tag}) => {
-
     const menuSettingsElement = [
         {
             icon:"material-symbols:print",
@@ -38,15 +37,20 @@ export const Header = ({tag} : {tag:Tag}) => {
     <div>
         <div className='flex items-center space-x-3'>
             <div>
-                <h1 className='font-semibold text-xl sm:text-2xl md:text-3xl 2xl:text-3xl truncate'>
+                <div className='flex items-center space-x-3'>
+                    <div className='hidden md:block'>
+                    {
+                        tag.hasOwnProperty('icon')?
+                        tag.icon!.includes(":")?
+                        <Icon color='#225FFC' icon={tag.icon} width={25}/>:
+                        <img src={tag.icon} alt="" /> : 
+                        <div className='w-6 h-6 rounded-full bg-[#225FFC]'></div>
+                    }
+                    </div>
+                  
+                    <h1 className='font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl truncate'>
                     {tag.name}
                 </h1>
-                <div>
-                    {tag.name == 'My day' && 
-                    <span className='text-gray-500 font-medium'>
-                        {getCurrentDate("/")}
-                    </span>
-                    }
                 </div>
             </div>
             <div className='flex items-center justify-between w-full'>

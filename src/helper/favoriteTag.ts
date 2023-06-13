@@ -1,7 +1,6 @@
-import { Tag } from "../types/Tag"
+import { FavoriteTag } from "../types/Tag/FavoriteTag"
 
-
-const FavoriteTags : Tag[] = [
+const FavoriteTags : FavoriteTag[] = [
     {
         fullPath:'tasks/myday',
         name: "My day",
@@ -48,4 +47,7 @@ const FavoriteTags : Tag[] = [
         canAddTask: true,
     }
 ]
+export const favoriteTagsIds = FavoriteTags.map((o) => {
+    return o.id
+})
 export default FavoriteTags

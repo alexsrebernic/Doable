@@ -9,18 +9,13 @@ import { useSpring } from '@react-spring/web'
 export const RootLayout = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const [isDataFetched, setIsDataFetched] = useState(false)
   useEffect(() => {
     settingApp()
   })
   function settingApp(){
     try {
-      console.log("Getting user info, data, fetching...")
-      console.log(isDataFetched,location.pathname)
-      if(!isDataFetched && location.pathname === "/"){
-        setIsDataFetched(true)
+      if(location.pathname === "/"){
         navigate("/tasks/myday")
-        console.log("Data getted, now redirecting to home")
       }
     } catch(e){
       throw e

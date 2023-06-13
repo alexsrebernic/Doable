@@ -1,6 +1,8 @@
 import React, {createContext, useState} from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import fetchMocksTags from '../../../helper/fetchMockTags';
+import useInitializeApp from '../../../hooks/useInitializeApp';
 import Modal from 'react-modal';
 const customStyles = {
   content: {
@@ -21,6 +23,7 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
   const [isSidebarShowing, collapseSidebar] = useState(false)
   const [isHelpSidebarShowing, collapseHelpSidebar] = useState(false)
   const [isCalendarShowing, collapseCalendar] = useState(false)
+  const data = useInitializeApp()
   function openModal(content : JSX.Element) {
     setModalContent(content)
     setIsOpen(true);
@@ -66,7 +69,8 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
             showToast: (message: string , type : string) => showToast(message,type),
             sidebar: { state:isSidebarShowing, func:() => collapseSidebar(oldVal => !oldVal)},
             calendar: {state: isCalendarShowing, func: () => collapseCalendar(oldVal => !oldVal)},
-            helpSidebar: {state:isHelpSidebarShowing, func: () => collapseHelpSidebar(oldVal => !oldVal)}
+            helpSidebar: {state:isHelpSidebarShowing, func: () => collapseHelpSidebar(oldVal => !oldVal)},
+            ...data
           }
         }>
           {children}

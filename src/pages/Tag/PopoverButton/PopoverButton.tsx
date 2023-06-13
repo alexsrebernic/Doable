@@ -7,9 +7,10 @@ interface Props {
   text: String,
   elements: object[],
   icon: String,
-
+  color?:String,
+  size?: Number
 }
-export default function PopoverButton({text,elements,icon} : Props) {
+export default function PopoverButton({text,elements,icon,color,size} : Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +27,7 @@ export default function PopoverButton({text,elements,icon} : Props) {
   return (
     <div>
       <button aria-describedby={id}  onClick={handleClick}>
-        <Icon icon={icon} width={30} className='hover:text-blue-500 text-[#225FFC] transition' color=''/>
+        <Icon icon={icon} width={size?size:30} className={color?`text-[${color}]`:'hover:text-blue-500 text-[#225FFC] transition'} color=''/>
       </button>
       <Popover
         id={id}

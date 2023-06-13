@@ -4,7 +4,7 @@ export default function Error404Page() {
     const error:any = useRouteError();
     console.error(error);
     return (
-      <div id="error-page" className='text-center py-6 h-3/4 flex items-center justify-center'>
+      <div id="error-page" className='text-center py-6 h-screen flex items-center justify-center'>
         <div>
         <h1 className='font-semibold text-3xl'>Oops!</h1>
         <p>Sorry, an unexpected error has occurred.</p>
