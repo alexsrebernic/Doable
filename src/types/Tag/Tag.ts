@@ -4,6 +4,7 @@ export interface Tag {
     name: String,
     icon?: String,
     id: String,
+    numberOfTasks?: number,
     theme?: String,
     tasks?: Task[] | MockTask[]
 }

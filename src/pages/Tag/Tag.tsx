@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import favoriteTags, {favoriteTagsIds} from '../../helper/favoriteTag'
 import {  Tag as TagType } from '../../types/Tag/Tag'
 import { Header } from './Header/Header'
-import { AppContext } from '../../layouts/Container/MainContainer/MainContainer'
+import { AppContext } from '../../layouts/Container/MainContainer/RootContainer'
 import { CreateTaskContainer } from './Body/CreateTask/CreateTaskContainer'
 import { TasksContainer } from './Body/Task/TasksContainer'
 import Task from '../../types/Task/Task'
@@ -12,57 +12,24 @@ import { GroupTasksContainer } from './Body/Task/GroupTasksContainer'
 
 export const Tag = () => {
   const navigate = useNavigate()
-  const {showToast, tags,setTags} : {showToast:Function,tags:TagType[]} = useContext(AppContext)
+  const {showToast, tags} : {showToast:Function,tags:TagType[]} = useContext(AppContext)
   const {tag_id} = useParams()
-  const [tag,setTag] = useState<TagType | null | undefined>(null)
-  const [tasks,setTasks] = useState<Task[] | MockTask[] | null | undefined>(null)
+  const [tag,setTag] = useState<TagType | null>(null)
+  const [tasks,setTasks] = useState<Task[] | MockTask[] | null>(null)
   const [isLoading,setIsLoading] = useState(false)
   useEffect(() => {
-    try {
-
-    } catch(error){
-      
-    }
     if(tags){
       setIsLoading(true)
       if(!tag_id) {
         setIsLoading(false)
         return navigate('/tasks/myday')
       }
-      let favoriteTag : TagType | undefined = favoriteTags.find(tag => tag.id == tag_id? tag : null) 
-      if(!favoriteTag){ 
-        let tag : TagType | undefined = tags.find(o => o.id == tag_id? o : null)
-        setTag(tag)
-        if(!tag) return navigate("/tasks/myday")
-      } else {
-        switch(true){
-          case favoriteTag.id == 'completed': setCompletedTask() ;
-          case favoriteTag.id == 'myday' : setMyDayTasks();
-          case favoriteTag.id == 'all' : setAllTasks() ;
-          case favoriteTag.id == 'important' : setImportantTasks();
-        }
-        favoriteTag.tasks = tags.find(o => o.id == favoriteTag!.id)?.tasks
-        setTag(favoriteTag)
-      }
-      setTasks(tag?.tasks)
+      let tag : TagType = tags.find(o => o.id == tag_id? o : null)
+      setTag(tag)
       setIsLoading(false)
+      if(!tag) return navigate("/tasks/myday")
     }
   })
-  function setCompletedTask(){
-
-  }
-  function setMyDayTasks(){
-
-  }
-  function setAllTasks(){
-
-  }
-  function setImportantTasks(){
-
-  }
-  function getTag(){
-
-  }
   return (
     <div className=''>
       {tag && 
@@ -73,10 +40,10 @@ export const Tag = () => {
           <>
             <CreateTaskContainer/>
           </>}
-          <TasksContainer tasks={tasks}/>
+          <TasksContainer tasks={tag.tasks}/>
           {tag.id !== 'completed' && 
           <>
-            <GroupTasksContainer/>
+            <GroupTasksContainer text="Completed"/>
           </>
           }
         </div>

@@ -16,7 +16,7 @@ const customStyles = {
 };
 export const AppContext = createContext(null as any)
 
-export const MainContainer = ({children} : {children: React.ReactNode} ) => {
+export const RootContainer = ({children} : {children: React.ReactNode} ) => {
   Modal.setAppElement('#root');
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null)
@@ -24,6 +24,9 @@ export const MainContainer = ({children} : {children: React.ReactNode} ) => {
   const [isHelpSidebarShowing, collapseHelpSidebar] = useState(false)
   const [isCalendarShowing, collapseCalendar] = useState(false)
   const data = useInitializeApp()
+  const store = {
+    
+  }
   function openModal(content : JSX.Element) {
     setModalContent(content)
     setIsOpen(true);

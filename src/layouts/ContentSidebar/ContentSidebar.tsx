@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { AppContext } from '../Container/MainContainer/MainContainer'
+import { AppContext } from '../Container/MainContainer/RootContainer'
 import { Icon } from '@iconify/react';
 
 export const ContentSidebar = () => {

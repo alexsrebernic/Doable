@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useNavigation } from 'react-router-dom'
 import { Sidebar } from '../../layouts/Sidebar/Sidebar'
-import { MainContainer } from '../../layouts/Container/MainContainer/MainContainer'
+import { MainContainer } from '../../layouts/Container/MainContainer/RootContainer'
 import { RouterContainer } from '../../layouts/Container/RouterContainer/RouterContainer'
 import {ContentContainer} from '../../layouts/Container/ContentContainer/ContentContainer'
 import { Topbar } from '../../layouts/Topbar/Topbar'
@@ -10,18 +10,10 @@ export const RootLayout = () => {
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
-    settingApp()
-  })
-  function settingApp(){
-    try {
-      if(location.pathname === "/"){
-        navigate("/tasks/myday")
-      }
-    } catch(e){
-      throw e
+    if(location.pathname === "/"){
+      navigate("/tasks/myday")
     }
-    
-  }
+  })
   const [springs, api] = useSpring(() => ({
     from: { x: 0 },
   }))

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { AppContext } from '../Container/MainContainer/MainContainer'
+import { AppContext } from '../Container/MainContainer/RootContainer'
 import { Icon } from '@iconify/react';
 import FavoriteTags , {favoriteTagsIds} from '../../helper/favoriteTag.js'
 import { Tag } from '../../types/Tag/Tag';
@@ -12,6 +12,9 @@ export const Sidebar = ({springs}) => {
   const desktopClasses = 'lg:w-full lg:static lg:bg-transparent lg:block lg:border-r lg:col-span-4 xl:col-span-3 2xl:col-span-3'
   
   return (
+   <>
+    {
+      tags && 
       <div onClick={(e) =>{
         e.stopPropagation()
         sidebar.func()}
@@ -50,9 +53,13 @@ export const Sidebar = ({springs}) => {
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
                     <div className=''>
                       {
-                        FavoriteTags.map((o : Tag,index : number) => {
-                          return <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={o.fullPath}  number={0} key={index}/>
-                        })
+                           tags.map((o : Tag, index : number) => {
+                            return favoriteTagsIds.includes(o.id) ?
+                            (
+                              <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
+                            ) :
+                            null
+                          })
                       }
                     </div>
                   </div>
@@ -60,11 +67,10 @@ export const Sidebar = ({springs}) => {
                     <span className='text-[#8a8a8a]  font-semibold'>Your tags</span>
                     <div>
                       {
-                        tags &&
                         tags.map((o : Tag, index : number) => {
                           return favoriteTagsIds.includes(o.id) ? null :
                           (
-                            <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.fullPath}`}  number={0} key={index}/>
+                            <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
                           )
                         })
                       }
@@ -79,5 +85,8 @@ export const Sidebar = ({springs}) => {
             </div>
           </animated.div>
       </div>
+    }
+   </>
+     
   )
 }

@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { MainContainer } from './layouts/Container/MainContainer/MainContainer'
+import { RootContainer } from './layouts/Container/MainContainer/RootContainer'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -17,8 +17,8 @@ const router = createBrowserRouter(
 )
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <MainContainer>
+    <RootContainer>
       <RouterProvider router={router}/>
-    </MainContainer>
+    </RootContainer>
   </React.StrictMode>
 )

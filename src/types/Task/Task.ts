@@ -1,12 +1,12 @@
+import { Tag } from "../Tag/Tag"
 import { TagId } from "../Tag/TagId"
-import { User } from "./User"
 
 type Task = {
-    owner: User,
     text: string,
     tagId: TagId,
     completed: Boolean,
     createdAt: Date,
+    fromTag: Tag
     favorite: Boolean,
     dueDate?: Date,
     repeat? : Boolean,
