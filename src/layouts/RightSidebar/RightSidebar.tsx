@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import { AppContext } from '../Container/MainContainer/RootContainer'
+import { AppContext } from '../Container/RootContainer/RootContainer'
 import { Icon } from '@iconify/react';
 
-export const ContentSidebar = () => {
+export const RightSidebar = () => {
   const {helpSidebar} = useContext(AppContext)
   const phoneClasses =  'absolute  inset-y-0 right-0   ' 
   const desktopClasses = 'xl:w-full xl:static xl:bg-transparent xl:block xl:border-l xl:col-span-4 2xl:col-span-3 2xl:col-span-4'

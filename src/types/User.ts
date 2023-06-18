@@ -1,6 +1,6 @@
-import { userId } from "./UserId"
 export interface User {
-    id: userId,
+    id: number,
     email: string,
+    tagsId: number[],
     createdAt?: Date
 }

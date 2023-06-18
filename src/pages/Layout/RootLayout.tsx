@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useNavigation } from 'react-router-dom'
-import { Sidebar } from '../../layouts/Sidebar/Sidebar'
-import { MainContainer } from '../../layouts/Container/MainContainer/RootContainer'
+import { LeftSidebar } from '../../layouts/LeftSidebar/LeftSidebar'
 import { RouterContainer } from '../../layouts/Container/RouterContainer/RouterContainer'
 import {ContentContainer} from '../../layouts/Container/ContentContainer/ContentContainer'
 import { Topbar } from '../../layouts/Topbar/Topbar'
@@ -31,10 +30,10 @@ export const RootLayout = () => {
     <>
       <Topbar openAnimationSidebar={openAnimationSidebar}/>
       <ContentContainer>
-        <Sidebar springs={springs}/>
-            <RouterContainer>
-                <Outlet/>
-            </RouterContainer>
+        <LeftSidebar springs={springs}/>
+          <RouterContainer>
+              <Outlet/>
+          </RouterContainer>
       </ContentContainer>
     </>
   )

@@ -1,12 +1,12 @@
 import { Tag } from "../Tag/Tag"
-import { TagId } from "../Tag/TagId"
 
 type Task = {
     text: string,
-    tagId: TagId,
+    ownerId: number,
+    readonly id: number,
     completed: Boolean,
     createdAt: Date,
-    fromTag: Tag
+    tagId: number
     favorite: Boolean,
     dueDate?: Date,
     repeat? : Boolean,

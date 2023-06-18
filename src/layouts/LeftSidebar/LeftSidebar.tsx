@@ -1,20 +1,17 @@
 import React, { useContext, useEffect } from 'react'
-import { AppContext } from '../Container/MainContainer/RootContainer'
+import { AppContext } from '../Container/RootContainer/RootContainer'
 import { Icon } from '@iconify/react';
 import FavoriteTags , {favoriteTagsIds} from '../../helper/favoriteTag.js'
 import { Tag } from '../../types/Tag/Tag';
 import { ButtonNav } from './ButtonNav';
 import { useSpring, animated } from '@react-spring/web'
 
-export const Sidebar = ({springs}) => {
+export const LeftSidebar = ({springs}) => {
   const {sidebar,tags} = useContext(AppContext)
   const phoneClasses =  'absolute  top-0   w-screen  bg-black/[.4]' 
   const desktopClasses = 'lg:w-full lg:static lg:bg-transparent lg:block lg:border-r lg:col-span-4 xl:col-span-3 2xl:col-span-3'
   
   return (
-   <>
-    {
-      tags && 
       <div onClick={(e) =>{
         e.stopPropagation()
         sidebar.func()}
@@ -53,27 +50,25 @@ export const Sidebar = ({springs}) => {
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
                     <div className=''>
                       {
-                           tags.map((o : Tag, index : number) => {
-                            return favoriteTagsIds.includes(o.id) ?
-                            (
+                           FavoriteTags.map((o : Tag, index : number) => {
+                            return (
                               <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
-                            ) :
-                            null
-                          })
+                              )
+                            })
                       }
                     </div>
                   </div>
                   <div className='py-1 space-y-2'>
                     <span className='text-[#8a8a8a]  font-semibold'>Your tags</span>
                     <div>
-                      {
+                      {/* {
                         tags.map((o : Tag, index : number) => {
                           return favoriteTagsIds.includes(o.id) ? null :
                           (
                             <ButtonNav func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
                           )
                         })
-                      }
+                      } */}
                     </div>
                       <div className='flex space-x-3 py-2 px-4 items-center cursor-pointer hover:bg-gray-200 rounded-xl transition'>
                         <Icon icon="ic:baseline-plus" className='text-[#8a8a8a]'  width={30} />
@@ -85,8 +80,7 @@ export const Sidebar = ({springs}) => {
             </div>
           </animated.div>
       </div>
-    }
-   </>
+  
      
   )
 }
