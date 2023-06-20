@@ -1,14 +1,15 @@
-import { configureStore, createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { Tag } from '../../types/Tag/Tag';
-import { fetchTags as fetchTagsFromAPI } from '../../api';
-import axios from 'axios';
+import { fetchTags as fetchTagsFromAPI } from '../../api/api';
+import FavoriteTags from '../../helper/favoriteTag';
+import { addTask } from './tasksSlice';
 export const fetchTags = createAsyncThunk('tags/fetchTags', async (userId: number) => {
     const response = await fetchTagsFromAPI(userId);
     return response.data;
   });
 export const tagsSlice = createSlice({
     name: 'tags',
-    initialState: [] as Tag[],
+    initialState: [...FavoriteTags] as Tag[],
     reducers: {
       addTag: (state, action: PayloadAction<Tag>) => {
         state.push(action.payload);
@@ -25,12 +26,21 @@ export const tagsSlice = createSlice({
         return state.filter((tag) => tag.id !== id);
       },
       setTags: (state, action: PayloadAction<Tag[]>) => {
-        return state = action.payload
+        action.payload = [...action.payload, ...FavoriteTags]
+        return action.payload
       },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchTags.fulfilled, (state, action) => {
         return action.payload;
-      });
+      })
+      .addCase(addTask, (state, action) => {
+        const { id, tagId } = action.payload;
+        const tag = state.find((tag) => tag.id === tagId);
+        if (tag) {
+          tag.tasksIds.push(id);
+        }
+      })
     },
   });
+  export const { addTag, updateTag, removeTag, setTags } = tagsSlice.actions;

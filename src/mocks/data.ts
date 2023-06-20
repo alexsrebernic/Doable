@@ -4,7 +4,7 @@ import Task from "../types/Task/Task";
 export const mockTags : Tag[] = [
     {
       name: 'Work',
-      icon: 'work-icon',
+      icon: null,
       ownerId: 1,
       id: 1,
       numberOfTasks: 3,
@@ -13,7 +13,7 @@ export const mockTags : Tag[] = [
     },
     {
       name: 'Personal',
-      icon: 'personal-icon',
+      icon: null,
       id: 2,
       ownerId: 1,
       numberOfTasks: 2,
@@ -32,7 +32,9 @@ export const mockTasks : Task[] = [
       completed: false,
       createdAt: new Date(),
       tagId: 1,
-      favorite: false,
+      important: false,
+      dueDate: null,
+      repeat: null,
     },
     {
       text: 'Prepare presentation slides',
@@ -41,7 +43,9 @@ export const mockTasks : Task[] = [
       completed: false,
       createdAt: new Date(),
       tagId: 1,
-      favorite: true,
+      important: true,
+      dueDate: null,
+      repeat: null,
     },
     {
       text: 'Send email to client',
@@ -50,7 +54,9 @@ export const mockTasks : Task[] = [
       completed: false,
       createdAt: new Date(),
       tagId: 1,
-      favorite: false,
+      important: false,
+      dueDate: null,
+      repeat: null,
     },
     {
       text: 'Go grocery shopping',
@@ -59,7 +65,9 @@ export const mockTasks : Task[] = [
       completed: false,
       createdAt: new Date(),
       tagId: 2,
-      favorite: true,
+      important: true,
+      dueDate: null,
+      repeat: null,
     },
     {
       text: 'Exercise for 30 minutes',
@@ -68,7 +76,9 @@ export const mockTasks : Task[] = [
       completed: false,
       createdAt: new Date(),
       tagId: 2,
-      favorite: false,
+      important: false,
+      dueDate: null,
+      repeat: null,
     },
     // Add more mock tasks here
   ];

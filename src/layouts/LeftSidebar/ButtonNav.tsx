@@ -1,23 +1,38 @@
 import React from 'react'
 import { Icon } from '@iconify/react';
 import { NavLink, useNavigation } from 'react-router-dom';
+import { Emoji } from 'emoji-picker-react';
 interface Props {
     text : String,
     icon: String,
     fullPath: String,
     number: number,
-    func: Function
+    func: Function,
+    notFavorite : Boolean
 }
-export const ButtonNav = ({text,icon, fullPath, number, func} : Props) => {
+export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false} : Props) => {
 
-    const activeClasses = 'bg-[#80A3FE] text-white '
+    const activeClassesFavorite = 'bg-[#80A3FE] text-white hover:bg-[#80A3FE] hover:text-white '
+    const activeClassesNonFavorite = 'bg-gray-200 transition text-black hover:bg-gray-200'
+
   return (
     <NavLink to={fullPath}>
         {({isActive, isPending}) => (
             <>
-            <div onClick={func} className={`${isActive? activeClasses : ''} hover:bg-[#80A3FE] my-2 hover:text-white group transition rounded-xl w-full py-2 px-4 flex items-center justify-between`}>
+            <div onClick={func} className={
+                `${isActive? 
+                    notFavorite?  activeClassesNonFavorite : activeClassesFavorite 
+                    : notFavorite?'text-black hover:bg-gray-200 ' : 'hover:bg-[#80A3FE] hover:text-white' 
+                    }  my-2  group transition rounded-xl w-full py-2 px-4 flex items-center justify-between`}>
                 <div className='flex items-center space-x-3'>
-                    <Icon className={`${isActive? 'text-white':'text-[#225FFC] '}group-hover:text-white  group-focus:text-white transition`} icon={icon}  width={26}/>
+                    {
+                        notFavorite?
+                        icon? 
+                        <Emoji unified={icon} size={26}/>:
+                        <Icon className={`${isActive? 'text-gray-500':'text-black '}group-hover:text-gray-700  group-focus:text-gray-700 transition`} icon="mi:list"  width={26}/>
+                        :
+                        <Icon className={`${isActive? 'text-white':'text-[#225FFC] '}group-hover:text-white  group-focus:text-white transition`} icon={icon}  width={26}/>
+                    }
                     <span className='font-semibold text-lg'>
                         {text}
                     </span> 
@@ -29,7 +44,6 @@ export const ButtonNav = ({text,icon, fullPath, number, func} : Props) => {
                     </span>
                 }
             </div>
-           
             </>
         )}
        

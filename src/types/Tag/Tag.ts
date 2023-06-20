@@ -1,9 +1,11 @@
 export interface Tag {
-    name: String,
-    icon?: String,
-    readonly id: number | 'completed' | 'important'| 'myday'|'mytasks'|'all',
+    name: string,
+    icon: string |  null,
+    readonly id: string | 'completed' | 'important'| 'myday'|'mytasks'|'all',
     numberOfTasks?: number,
-    theme?: String,
-    tasksIds?: number[],
-    ownerId: number
+    theme?: string,
+    tasksIds?: string[],
+    ownerId?: string,
+    sortBy?: 'importance' | 'dueDate' | 'createdAt' | 'alphabetically'
+    sortOrder? : 'asc' | 'desc',
 }

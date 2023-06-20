@@ -1,10 +1,9 @@
 import {  createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { User } from '../../types/User';
 import axios from 'axios';
-import { userId } from '../../types/UserId';
-import { fetchUser as fetchUserFromAPI } from '../../api';
+import { fetchUser as fetchUserFromAPI } from '../../api/api';
 
-export const fetchUser = createAsyncThunk('tags/fetchUser', async (userId : userId) => {
+export const fetchUser = createAsyncThunk('tags/fetchUser', async (userId : number) => {
   const response  = await fetchUserFromAPI(userId);
   return response.data;
 });
@@ -14,7 +13,8 @@ export const userSlice = createSlice({
     reducers: {
       setUser: (state, action: PayloadAction<User>) => action.payload,
       clearUser: (state) => null,
-      getCurrentUser: (state) => state
+      getCurrentUser: (state) => state,
+      getCurrentUserId: (state) => state?.id
     },
     extraReducers: (builder) => {
       builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -22,3 +22,4 @@ export const userSlice = createSlice({
       });
     },
   });
+export const { setUser, clearUser, getCurrentUser,getCurrentUserId } = userSlice.actions;

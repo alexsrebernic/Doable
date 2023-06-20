@@ -1,7 +1,8 @@
-import React, {createContext, useState} from 'react'
+import React, {createContext, useEffect, useState} from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
+import useInitializeApp from '../../../hooks/useInitializeApp';
 const customStyles = {
   content: {
     top: '50%',
@@ -13,8 +14,8 @@ const customStyles = {
   },
 };
 export const AppContext = createContext(null as any)
-
 export const RootContainer = ({children} : {children: React.ReactNode} ) => {
+  useInitializeApp()
   Modal.setAppElement('#root');
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null)

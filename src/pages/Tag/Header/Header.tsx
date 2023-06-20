@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react'
 import {getCurrentDate} from '../../../helper/getCurrentDate.js'
 import { Popover,Tooltip } from '@mui/material'
 import PopoverButton from '../PopoverButton/PopoverButton'
+import { Emoji } from 'emoji-picker-react'
 export const Header = ({tag} : {tag:Tag}) => {
     const menuSettingsElement = [
         {
@@ -40,11 +41,11 @@ export const Header = ({tag} : {tag:Tag}) => {
                 <div className='flex items-center space-x-3'>
                     <div className='hidden md:block'>
                     {
-                        tag.hasOwnProperty('icon')?
-                        tag.icon!.includes(":")?
-                        <Icon color='#225FFC' icon={tag.icon} width={25}/>:
-                        <img src={tag.icon} alt="" /> : 
-                        <div className='w-6 h-6 rounded-full bg-[#225FFC]'></div>
+                        tag.icon?
+                        tag.icon.includes(':')?
+                        <Icon color='#225FFC' icon={tag.icon} width={30}/>:
+                        <Emoji/>:
+                        <Icon color='black' icon="mi:list" width={40}/>
                     }
                     </div>
                   

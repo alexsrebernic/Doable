@@ -8,7 +8,8 @@ import {
 } from "react-router-dom";
 import routes from './routes.js'
 import { Provider } from 'react-redux';
-import store from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import {store, persistor} from './store';
 const opts = {
   basename:"/"
 }
@@ -19,9 +20,11 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RootContainer>
-        <RouterProvider router={router}/>
-      </RootContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <RootContainer>
+          <RouterProvider router={router}/>
+        </RootContainer>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 )
