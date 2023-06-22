@@ -5,11 +5,11 @@ import FavoriteTags from '../../helper/favoriteTag';
 import { addTask } from './tasksSlice';
 export const fetchTags = createAsyncThunk('tags/fetchTags', async (userId: number) => {
     const response = await fetchTagsFromAPI(userId);
-    return response.data;
+    return [...response.data, ...FavoriteTags];
   });
 export const tagsSlice = createSlice({
     name: 'tags',
-    initialState: [...FavoriteTags] as Tag[],
+    initialState: [] as Tag[],
     reducers: {
       addTag: (state, action: PayloadAction<Tag>) => {
         state.push(action.payload);
@@ -21,23 +21,25 @@ export const tagsSlice = createSlice({
           state.tags[tagIndex] = updatedTag;
         }
       },
-      removeTag: (state, action: PayloadAction<number>) => {
+      removeTag: (state, action: PayloadAction<string>) => {
         const id = action.payload;
         return state.filter((tag) => tag.id !== id);
       },
       setTags: (state, action: PayloadAction<Tag[]>) => {
-        action.payload = [...action.payload, ...FavoriteTags]
         return action.payload
       },
     },
     extraReducers: (builder) => {
-      builder.addCase(fetchTags.fulfilled, (state, action) => {
-        return action.payload;
+      builder.addCase(fetchTags.fulfilled, (state, action, ) => {
+        return action.payload
       })
       .addCase(addTask, (state, action) => {
         const { id, tagId } = action.payload;
-        const tag = state.find((tag) => tag.id === tagId);
+        const tag = state.find((tag) => tag.id == tagId);
         if (tag) {
+          if (!tag.tasksIds) {
+            tag.tasksIds = []; // Asegúrate de inicializar la propiedad si es null o undefined
+          }
           tag.tasksIds.push(id);
         }
       })

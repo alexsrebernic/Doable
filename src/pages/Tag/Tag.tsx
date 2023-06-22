@@ -8,7 +8,7 @@ import { CreateTaskContainer } from './Body/CreateTask/CreateTaskContainer'
 import { TasksContainer } from './Body/Task/TasksContainer'
 import Task from '../../types/Task/Task'
 import { GroupTasksContainer } from './Body/Task/GroupTasksContainer'
-import { selectTasksByTagId,selectTagById } from '../../store'
+import { selectTasksByTagId,selectTagById, selectTags } from '../../store'
 import { useSelector } from 'react-redux'
 export const Tag = () => {
   const navigate = useNavigate()
@@ -20,7 +20,6 @@ export const Tag = () => {
 
   useEffect(() => {
     try {
-      console.log(tag,tasks)
       setIsLoading(true)
       if(!tag) throw Error("ERROR 404: Tag doesn´t exists");
       setIsLoading(false)
@@ -30,7 +29,6 @@ export const Tag = () => {
       console.error(error)
       navigate("/tasks/myday")
     }
-  
   },[tag_id])
   
   return (
@@ -43,11 +41,11 @@ export const Tag = () => {
           <>
             <CreateTaskContainer tag={tag} route={tag_id}/>
           </>}
-          <TasksContainer tag={tag} tasks={(() => tasks.filter(t => !t.completed))() }/>
-          {tasks.every(task => !task.completed)? null :
-          <>
-            <GroupTasksContainer tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
-          </>
+          <TasksContainer tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
+          {tasks.every(task => !task.completed) || tag.id === 'completed'? null :
+            <>
+              <GroupTasksContainer tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
+            </>
           }
         </div>
       </>

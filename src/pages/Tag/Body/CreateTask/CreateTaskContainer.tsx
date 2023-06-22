@@ -37,18 +37,17 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
         setDueDateValue(null)
     }
     function handleCreateTask(){
-        const id = uniqid()
         dispatch(addTask(
             {
                 text: inputValue,
                 completed: false,
-                important: false,
-                dueDate: dueDateValue,
+                important: tag.id === 'important'? true : false,
+                dueDate: tag.id === 'myday'? new Date() : dueDateValue,
                 repeat: repeatValue,
                 createdAt: new Date(),
                 ownerId: dispatch(getCurrentUserId()).payload ,
                 tagId: tag.id,
-                id
+                id: uniqid()
             }
         ))
         resetValues()

@@ -15,16 +15,10 @@ const useInitializeApp = () => {
         const userId = 123
         // const user = user.payload;
         // dispatch(setUser(user)); // Set the user in the store
-        const [tagsAction, tasksAction] = await Promise.all([
+        await Promise.all([
           dispatch(fetchTags(userId)),
           dispatch(fetchTasks(userId))
         ]);
-        if (tagsAction.payload) {
-          dispatch(setTags(tagsAction.payload));
-        }
-        if (tasksAction.payload) {
-          dispatch(setTasks(tasksAction.payload));
-        }
       } catch (error) {
         console.error(error)
       }

@@ -1,6 +1,5 @@
-import {TaskId} from "./TaskId"
 
 export type TaskGroup = {
-    tasksGroup: TaskId[],
+    tasksGroup: string[],
     name: String,
 }
