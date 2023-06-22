@@ -13,18 +13,15 @@ export const GroupTasksContainer = ({text, tasks, tag} : Props) => {
   const toggleIsOpen = () => setIsOpen(oldVal => !oldVal)
   useEffect(() => {
     const valorGuardado = localStorage.getItem(tag.id);
-    console.log(valorGuardado,tag.id)
     if (valorGuardado == 'true') {
       setIsOpen(true)
     } else {
       setIsOpen(false)
     }
-    console.log(isOpen)
   }, [tag.id]);
 
   useEffect(() => {
     localStorage.setItem(tag.id, isOpen? 'true' : 'false');
-    console.log(isOpen)
   }, [isOpen])
 
   return (

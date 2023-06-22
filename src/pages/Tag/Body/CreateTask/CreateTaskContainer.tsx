@@ -55,9 +55,12 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
   return (
     <div className='w-full  shadow rounded-sm'>
         <div className='flex w-full bg-white items-center justify-start  py-3 px-3 space-x-3 rounded-sm'>
+            <div>
             <div className='rounded-full border border-[#225FFC] w-6 h-6 cursor-pointer'>
 
+</div>
             </div>
+           
             <div className='w-full'>
                 <input value={inputValue} onChange={(e : Event) => handleInput(e)} type="text" placeholder='Add task...' className='w-full focus:outline-none placeholder:text-[#225FFC] placeholder:text-sm placeholder:focus:text-black focus:text-black transition'/>
             </div>
