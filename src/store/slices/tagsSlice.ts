@@ -14,11 +14,11 @@ export const tagsSlice = createSlice({
       addTag: (state, action: PayloadAction<Tag>) => {
         state.push(action.payload);
       },
-      updateTag: (state, action: PayloadAction<Tag>) => {
-        const updatedTag = action.payload;
-        const tagIndex = state.tags.findIndex((tag : Tag) => tag.id === updatedTag.id);
+      updateTagProp: (state, action: PayloadAction<Tag>) => {
+        const {tagId,prop,value} = action.payload;
+        const tagIndex = state.findIndex((tag : Tag) => tag.id === tagId);
         if (tagIndex !== -1) {
-          state.tags[tagIndex] = updatedTag;
+          state[tagIndex][prop] = value;
         }
       },
       removeTag: (state, action: PayloadAction<string>) => {
@@ -45,4 +45,4 @@ export const tagsSlice = createSlice({
       })
     },
   });
-  export const { addTag, updateTag, removeTag, setTags } = tagsSlice.actions;
+  export const { addTag, updateTagProp, removeTag, setTags } = tagsSlice.actions;

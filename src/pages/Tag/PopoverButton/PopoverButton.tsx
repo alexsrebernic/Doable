@@ -9,10 +9,16 @@ interface Props {
   icon: String,
   color?:String,
   size?: Number
+  value?: string 
 }
-export default function PopoverButton({text,elements,icon,color,size} : Props) {
+export default function PopoverButton({text,elements,icon,color,size,value} : Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
+  function handleFunction(func,args){
+    console.log(func,args)
+    func(args? args : null)
+    handleClose()
+  }
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -26,8 +32,12 @@ export default function PopoverButton({text,elements,icon,color,size} : Props) {
 
   return (
     <div>
-      <button aria-describedby={id}  onClick={handleClick}>
+      <button className={`${value && 'border-[#225FFC] space-x-2 flex items-center rounded  border border-solid'} p-1 transition` }  aria-describedby={id}  onClick={handleClick}>
         <Icon icon={icon} width={size?size:30} className={color?`text-[${color}]`:'hover:text-blue-500 text-[#225FFC] transition'} color=''/>
+        {
+          
+          value && <span className='text-[#225FFC] text-sm font-medium'>{value}</span>
+        }
       </button>
       <Popover
         id={id}
@@ -45,7 +55,7 @@ export default function PopoverButton({text,elements,icon,color,size} : Props) {
         {
           elements.map((o,i) => {
             return (
-              <div className='flex items-center px-2 space-x-3 p-2 hover:bg-gray-200 transition cursor-pointer' key={i}>
+              <div onClick={() => handleFunction(o.func,o.arg)} className={`${o.hasOwnProperty('component')  && 'border-t border-1 border-solid ' } flex items-center px-2 space-x-3 p-2 hover:bg-gray-200 transition cursor-pointer`} key={i}>
                 <div>
                   {
                     o.icon?

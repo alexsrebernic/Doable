@@ -3,26 +3,23 @@ import { Icon } from '@iconify/react';
 import Task from '../../../../types/Task/Task';
 import { Tag } from '../../../../types/Tag/Tag';
 import { TasksContainer } from './TasksContainer';
+import { useSelector, useDispatch } from 'react-redux';
+import { setComponentVariable } from '../../../../store/slices/componentsSlice';
 interface Props {
   text : String ,
   tasks: Task[] | [],
   tag : Tag 
 }
 export const GroupTasksContainer = ({text, tasks, tag} : Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleIsOpen = () => setIsOpen(oldVal => !oldVal)
-  useEffect(() => {
-    const valorGuardado = localStorage.getItem(tag.id);
-    if (valorGuardado == 'true') {
-      setIsOpen(true)
-    } else {
-      setIsOpen(false)
-    }
-  }, [tag.id]);
+  const dispatch = useDispatch()
+  const toggleIsOpen = () => dispatch(setComponentVariable({tagId: tag.id, variable: !isOpen}))
+  const isOpen : boolean = useSelector(state => !state.component.hasOwnProperty(tag.id)? false : state.component[tag.id]);
 
   useEffect(() => {
-    localStorage.setItem(tag.id, isOpen? 'true' : 'false');
-  }, [isOpen])
+    if (!isOpen) {
+      dispatch(setComponentVariable({tagId: tag.id, variable: isOpen}))
+    }
+  }, [tag.id]);
 
   return (
     <div  >

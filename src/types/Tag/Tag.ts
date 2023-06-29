@@ -6,6 +6,6 @@ export interface Tag {
     theme?: string,
     tasksIds?: string[],
     ownerId?: string,
-    sortBy?: 'importance' | 'dueDate' | 'createdAt' | 'alphabetically'
+    sortBy?: 'importance' | 'dueDate' | 'createdAt' | 'alphabetically' 
     sortOrder? : 'asc' | 'desc',
 }

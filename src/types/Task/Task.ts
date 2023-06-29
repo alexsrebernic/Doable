@@ -6,9 +6,10 @@ type Task = {
     readonly id: string,
     completed: Boolean,
     createdAt: Date,
-    tagId: string
+    tagId: string,
+    tagName: string,
     important: Boolean,
     dueDate: Date | null,
-    repeat : Boolean | null,
+    repeat : string | null,
 }
 export default Task

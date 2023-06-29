@@ -42,7 +42,7 @@ export const Tag = () => {
             <CreateTaskContainer tag={tag} route={tag_id}/>
           </>}
           <TasksContainer tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
-          {tasks.every(task => !task.completed) || tag.id === 'completed'? null :
+          {tasks.every(task => !task.completed) || tag.id === 'completed' || tag.id === 'important'? null :
             <>
               <GroupTasksContainer tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
             </>
