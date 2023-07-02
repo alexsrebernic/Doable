@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Tag } from '../../../types/Tag/Tag'
 import { Icon } from '@iconify/react'
 import {getCurrentDate} from '../../../helper/getCurrentDate.js'
@@ -8,12 +8,25 @@ import { Emoji } from 'emoji-picker-react'
 import { useDispatch } from 'react-redux'
 import { updateTagProp } from '../../../store/slices/tagsSlice'
 import convertCamelCaseToNormal from '../../../helper/convertCamelCaseToNormal'
+import { useContext } from 'react'
+import { favoriteTagsIds } from '../../../helper/favoriteTag'
+import { AppContext } from '../../../layouts/Container/RootContainer/RootContainer'
 export const Header = ({tag} : {tag:Tag}) => {
+    const {showToast} = useContext(AppContext)
     const dispatch = useDispatch()
+    const [tagName, setTagName] = useState<string>('')
+    const [isChangingValue, setIsChangingValue] = useState<boolean>(false)
+    useEffect(() => {
+        setTagName(tag.name)
+        checkIfInputAndValueAreEquals(tag.name)
+    },[tag])
     function printList(){
 
     }
     function changeTheme(){
+
+    }
+    function removeTag(){
 
     }
     function changeSortOrder(order){
@@ -33,7 +46,7 @@ export const Header = ({tag} : {tag:Tag}) => {
             icon:"mdi:paint-outline",
             text:"Change theme",
             func: changeTheme
-        }
+        },
     ]
     const menuSortElement = [
         {
@@ -86,65 +99,101 @@ export const Header = ({tag} : {tag:Tag}) => {
       
         return sortByText
       }
-  return (
-    <div>
-        <div className='flex items-center space-x-3'>
-            <div>
-                <div className='flex items-center space-x-3'>
-                    <div className='hidden md:block'>
-                    {
-                        tag.icon?
-                        tag.icon.includes(':')?
-                        <Icon color='#225FFC' icon={tag.icon} width={30}/>:
-                        <Emoji/>:
-                        <Icon color='black' icon="mi:list" width={40}/>
-                    }
-                    </div>
-                  
-                    <h1 className='font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl truncate'>
-                    {tag.name}
-                </h1>
-                </div>
-            </div>
-            <div className='flex items-center justify-between w-full'>
-                    <Tooltip title="Categorie menu">
-                        <div>
-                            <PopoverButton icon="ph:dots-three-bold" text="Settings" elements={menuSettingsElement}/>
-                        </div>
-                    </Tooltip>
-                <div className='flex space-x-4 font-medium '>
-                    {
-                        tag.sortBy && 
-                        <>
-                           <div className='font-semibold text-sm flex justify.center items-center px-2 space-x-1'>
-                                <div onClick={toggleSortOrder} className='cursor-pointer' >
-                                    {tag.sortOrder == 'desc'? 
-                                    <Icon icon="majesticons:chevron-up" width={20}/>:
-                                    <Icon icon="majesticons:chevron-down" width={20}/>
-                                }
-                                </div>
-                                <span>
-                                    {
-                                        getSortedText()
-                                    }
-                                </span> 
-                                <Icon onClick={removeSortBy} className='cursor-pointer' icon="basil:cross-outline" width={20} />
+    function handleInputTagName(event){
+        const value = event.target.value
+        checkIfInputAndValueAreEquals(value)
+        setTagName(value)
+    }
+    function checkIfInputAndValueAreEquals(value){
+        if(value !== tag.name){
+            setIsChangingValue(true)
+       } else {
+           setIsChangingValue(false)
+       }
+    }
+    function handleChangeTagName(){
+        return tagName.length > 0 ? dispatch(updateTagProp({tagId: tag.id,prop: 'name',value: tagName})) : showToast('ERROR: Tag must have a name','error')
 
-                            </div>
-                        </>
-                    }
-                 
-                    <Tooltip title="Sort tasks">
-                        <div>
-                            <PopoverButton icon="bx:sort" text="Sort" elements={menuSortElement}/>
+    }
+    function handleResetTagName(){
+        setTagName(tag.name)
+        checkIfInputAndValueAreEquals(tag.name)
+    }
+  return (
+    <>
+    {tag && 
+            <div>
+            <div className='flex items-center space-x-3'>
+                <div>
+                    <div className='flex items-center sm:space-x-3'>
+                        <div className='hidden md:block'>
+                        {
+                            tag.icon?
+                            <Icon color='#225FFC' icon={tag.icon} width={30}/>:
+                            <Icon color='black' icon="mi:list" width={40}/>
+                        }
                         </div>
-                    </Tooltip>
-                    <Tooltip title="Suggestions to add to your list" className='cursor-pointer'>
-                        <Icon icon="carbon:idea" width={30} color='#225FFC'/>
-                    </Tooltip>
+                        {
+                            favoriteTagsIds.includes(tag.id)?
+                            <h1 
+                        className={`font-semibold truncate text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  `}
+                        >
+                                {tag.name}
+                            </h1>
+                            :
+                            <input 
+                            onKeyDown={(event) => (event.key === 'Enter' && tagName.length > 0) && handleChangeTagName()}
+                            style={{ width: tagName.length + 'ch' }}
+                            value={tagName}
+                            className={`focus:outline-none max-w-[6em] 2xl:max-w-[8em] overflow-x-auto font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  bg-transparent`}
+                            type="text"
+                            onChange={handleInputTagName}
+                            />
+                        }
+                      
+                        {
+                            isChangingValue &&
+                            <div className='flex space-x-1 pl-2'>
+                                <Icon onClick={handleChangeTagName} className='cursor-pointer'  icon="material-symbols:check" width={25} color='green'/>
+                                <Icon onClick={handleResetTagName} className='cursor-pointer' icon="bx:x" width={25} color='red'/>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div className='flex items-center justify-between w-full'>
+                            <div>
+                                <PopoverButton removeText='Remove tag' value={!favoriteTagsIds.includes(tag.id)} removeValueFunc={removeTag} icon="ph:dots-three-bold" text="Settings" elements={menuSettingsElement}/>
+                            </div>
+                    <div className='flex space-x-4 font-medium '>
+                        {
+                            tag.sortBy && 
+                            <>
+                               <div className='font-semibold text-sm flex justify.center items-center px-2 space-x-1'>
+                                    <div onClick={toggleSortOrder} className='cursor-pointer' >
+                                        {tag.sortOrder == 'desc'? 
+                                        <Icon icon="majesticons:chevron-up" width={20}/>:
+                                        <Icon icon="majesticons:chevron-down" width={20}/>
+                                    }
+                                    </div>
+                                    <span>
+                                        {
+                                            getSortedText()
+                                        }
+                                    </span> 
+                                    <Icon onClick={removeSortBy} className='cursor-pointer' icon="basil:cross-outline" width={20} />
+    
+                                </div>
+                            </>
+                        }
+                            <div>
+                                <PopoverButton icon="bx:sort" text="Sort" elements={menuSortElement}/>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+    </>
+
   )
 }

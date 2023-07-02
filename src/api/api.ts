@@ -4,21 +4,18 @@ const API_BASE_URL = 'https://api.example.com'; // Replace with your actual API 
 
 export const fetchTags = (userId : number) => {
     if (process.env.NODE_ENV === 'development') {
-      // Return mock data in development environment
       return Promise.resolve({ data: mockTags });
     }
     return axios.get(`${API_BASE_URL}/tags/${userId}`);
 };
 export const fetchTasks = (userId: number) => {
     if (process.env.NODE_ENV === 'development') {
-        // Return mock data in development environment
         return Promise.resolve({ data: mockTasks });
     }
     return axios.get(`${API_BASE_URL}/tasks/${userId}`);
 };
 export const fetchUser = (userId : number) => {
     if (process.env.NODE_ENV === 'development') {
-        // Return mock data in development environment
         return Promise.resolve({ data: mockUser });
     }
     return axios.get(`${API_BASE_URL}/user/${userId}`);

@@ -35,26 +35,5 @@ const persistor = persistStore(store);
 
 export  {store, persistor};
 
-// Export actions
-
-// Selectors
-export const selectTags = (state: RootState) => state.tags;
-export const selectTasks = (state: RootState) => state.tasks;
-export const selectTagById = (tagId : number | string) => createSelector(selectTags, (tags) => tags.find(tag => tag.id == tagId))
-export const selectTasksByTagId = (tagId: number | string) => createSelector(
-  selectTasks,
-  (tasks) => {
-    switch (tagId) {
-      case 'completed': return tasks.filter((task) => task.completed);
-      case 'important': return tasks.filter((task) => task.important);
-      case 'myday': return tasks.filter((task) => task.dueDate? isToday(task.dueDate) : false);
-      case 'all': return tasks;
-      default: return tasks.filter((task) => task.tagId == tagId);
-    }
-  }
-);
-
-export const selectNonFavoriteTags = createSelector(selectTags, (tags) => tags.filter((tag) => !favoriteTagsIds.includes(tag.id))) 
-  
 // RootState type
 export type RootState = ReturnType<typeof store.getState>;

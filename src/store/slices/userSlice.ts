@@ -2,6 +2,8 @@ import {  createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { User } from '../../types/User';
 import axios from 'axios';
 import { fetchUser as fetchUserFromAPI } from '../../api/api';
+import { addTag } from './tagsSlice';
+import { RootState } from '..';
 
 export const fetchUser = createAsyncThunk('tags/fetchUser', async (userId : number) => {
   const response  = await fetchUserFromAPI(userId);
@@ -13,13 +15,20 @@ export const userSlice = createSlice({
     reducers: {
       setUser: (state, action: PayloadAction<User>) => action.payload,
       clearUser: (state) => null,
-      getCurrentUser: (state) => state,
-      getCurrentUserId: (state) => state?.id
+      updateUserProp: (state, action) => {
+        const {prop,value} = action.payload;
+        state[prop] = value;
+      },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchUser.fulfilled, (state, action) => {
         return action.payload;
-      });
+      })
+      .addCase(addTag,(state,action) => {
+        const {id} = action.payload
+        state?.tagsIds.push(id)
+      })
     },
   });
-export const { setUser, clearUser, getCurrentUser,getCurrentUserId } = userSlice.actions;
+export const selectCurrentUser = (state: RootState) => state.user
+export const { setUser, clearUser,updateUserProp } = userSlice.actions;

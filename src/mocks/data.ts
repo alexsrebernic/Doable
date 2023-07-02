@@ -1,5 +1,6 @@
 import { Tag } from "../types/Tag/Tag";
 import Task from "../types/Task/Task";
+import { User } from "../types/User";
 
 export const mockTags : Tag[] = [
     {
@@ -87,9 +88,9 @@ export const mockTasks : Task[] = [
     },
     // Add more mock tasks here
   ];
-export const mockUser = {
+export const mockUser : User = {
     id: "1",
     email: 'example@example.com',
-    tagsId: ["1", "2"],
+    tagsIds: ["1", "2"],
     createdAt: new Date(),
 };

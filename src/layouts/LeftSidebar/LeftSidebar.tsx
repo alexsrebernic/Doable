@@ -5,24 +5,46 @@ import FavoriteTags , {favoriteTagsIds} from '../../helper/favoriteTag.js'
 import { Tag } from '../../types/Tag/Tag';
 import { ButtonNav } from './ButtonNav';
 import { useSpring, animated } from '@react-spring/web'
-import { useSelector } from 'react-redux';
-import { selectNonFavoriteTags } from '../../store';
-
+import { useDispatch, useSelector } from 'react-redux';
+selectNonFavoriteTags
+import { addTag, selectNonFavoriteTags } from '../../store/slices/tagsSlice';
+import { useNavigate } from 'react-router-dom';
+import uniqid from 'uniqid'
+import { TagList } from './TagList';
 export const LeftSidebar = ({springs}) => {
-  const {sidebar,tags} = useContext(AppContext)
+  const dispatch = useDispatch()
+  const {sidebar,tags,user} = useContext(AppContext)
+  const navigate = useNavigate()
   const phoneClasses =  'absolute  top-0   w-screen  bg-black/[.4]' 
   const desktopClasses = 'lg:w-full lg:static lg:bg-transparent lg:block lg:border-r lg:col-span-4 xl:col-span-3 2xl:col-span-3'
   const nonFavoriteTags = useSelector(selectNonFavoriteTags)
+  function handleAddTag(){
+   const id =  uniqid()
+   dispatch(addTag({id,userId: user.id}))
+   navigate(`tasks/${id}`)
+   sidebar.func()
+  }
+  const sortTagsByUserOrder = () => {
+    if(!user.tagsIds || user.tagsIds.length == 0) return []
+    const sortedTags = []
+    for (const tagId of user.tagsIds) {
+      const tag = nonFavoriteTags.find((t) => t.id === tagId);
+      if (tag) {
+        sortedTags.push(tag);
+      }
+    }
+    return sortedTags;
+  };
   return (
       <div onClick={(e) =>{
         e.stopPropagation()
         sidebar.func()}
-        }  className={`${sidebar.state? phoneClasses : 'hidden'} ${desktopClasses}  h-screen z-10`}>
+        }  className={`${sidebar.state? phoneClasses : 'hidden'} ${desktopClasses} h-screen lg:h-[95vh]  z-10 overflow-y-auto`}>
           <animated.div style={{ ...springs}} onClick={(e) =>{
             e.stopPropagation()
             }}
-            className=' bg-white w-4/5 md:w-1/2 lg:w-full border-r lg:border-none h-full'>
-            <div>
+            className=' bg-white w-4/5 md:w-1/2 lg:w-full border-r lg:border-none h-full  overflow-y-auto  '>
+            <div className='h-full flex flex-col'>
               <div className='py-4 px-4 flex lg:hidden border-b justify-between  space-x-3'>
                 <div className='flex items-center'>
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,8 +56,8 @@ export const LeftSidebar = ({springs}) => {
                     <Icon icon="mdi:menu-close" width={40}/>
                   </div>
               </div>
-              <div className='px-4 py-4'>
-                <div className='space-y-3'>
+              <div className='px-4 py-4 flex flex-col flex-1'>
+                <div className='space-y-3 h-full flex flex-col'>
                   <button style={{
                     "boxShadow":" 0px 0px 4px #225FFC"
                   }} className='bg-[#225FFC] flex items-center justify-center space-x-3 py-2.5 shadow-md shadow-[#225FFC] w-full rounded-xl'>
@@ -44,9 +66,8 @@ export const LeftSidebar = ({springs}) => {
                       Create New Task
                     </span>
                   </button>
-                 
                   <div >
-                      <ButtonNav func={sidebar.func} text='Stats' icon='gridicons:stats' fullPath='/stats'  number={0}/>
+                      <ButtonNav notFavorite={false} func={sidebar.func} text='Stats' icon='gridicons:stats' fullPath='/stats'  number={0}/>
                   </div>
                   <div className='space-y-2'>
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
@@ -60,17 +81,12 @@ export const LeftSidebar = ({springs}) => {
                       }
                     </div>
                   </div>
-                  <div className='py-1 space-y-2'>
+                  <div className='py-1 space-y-2 flex-1 max-h-full '>
                     <span className='text-[#8a8a8a]  font-semibold'>Your tags</span>
-                    <div>
-                      { 
-                        nonFavoriteTags &&
-                        nonFavoriteTags.map((o : Tag, index : number) => {
-                          return <ButtonNav notFavorite={true} func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
-                        })
-                      }
+                    <div className='overflow-y-auto  max-h-[200px] 2xl:max-h-[300px]'>
+                      <TagList user={user} tags={sortTagsByUserOrder()} func={sidebar.func}/>
                     </div>
-                      <div className='flex space-x-3 py-2 px-4 items-center cursor-pointer hover:bg-gray-200 rounded-xl transition'>
+                      <div onClick={handleAddTag} className='flex space-x-3 py-2 px-4 items-center cursor-pointer hover:bg-gray-200 rounded-xl transition'>
                         <Icon icon="ic:baseline-plus" className='text-[#8a8a8a]'  width={30} />
                         <span className='text-[#8a8a8a] font-semibold text-md'>New tag</span>
                       </div>

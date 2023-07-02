@@ -3,7 +3,10 @@ import Task from '../../types/Task/Task';
 import axios from 'axios';
 import { Tag } from '../../types/Tag/Tag';
 import { fetchTasks as fetchTasksFromAPI } from '../../api/api';
-import { addTask } from '..';
+import { RootState } from '..';
+import { createSelector } from '@reduxjs/toolkit';
+import { selectTags } from './tagsSlice';
+import { isToday } from 'date-fns';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
     const response = await fetchTasksFromAPI(userId);
     return response.data;
@@ -61,4 +64,18 @@ export const tasksSlice = createSlice({
       });
     },
   });
+const selectTasks = (state: RootState) => state.tasks;
+const selectTasksByTagId = (tagId: number | string) => createSelector(
+  selectTasks,
+  (tasks) => {
+    switch (tagId) {
+      case 'completed': return tasks.filter((task) => task.completed);
+      case 'important': return tasks.filter((task) => task.important);
+      case 'myday': return tasks.filter((task) => task.dueDate? isToday(task.dueDate) : false);
+      case 'all': return tasks;
+      default: return tasks.filter((task) => task.tagId == tagId);
+    }
+  }
+);
+export {selectTasks,selectTasksByTagId}
 export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant } = tasksSlice.actions;

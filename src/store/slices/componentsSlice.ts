@@ -8,9 +8,7 @@ export const componentSlice = createSlice({
   reducers: {
     setComponentVariable: (state, action) => {
       const { tagId, variable } : { tagId: string , variable : boolean} = action.payload;
-      console.log(tagId,variable)
       state[tagId] = variable;
-      console.log(state[tagId])
     },
     removeComponentVariable: (state, action) => {
       const { tag } = action.payload;

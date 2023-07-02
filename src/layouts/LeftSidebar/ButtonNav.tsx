@@ -8,9 +8,11 @@ interface Props {
     fullPath: String,
     number: number,
     func: Function,
-    notFavorite : Boolean
+    notFavorite : Boolean,
+    isDragged? : boolean,
+    isDragOver?: boolean,
 }
-export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false} : Props) => {
+export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false, isDragOver, isDragged} : Props) => {
 
     const activeClassesFavorite = 'bg-[#80A3FE] text-white hover:bg-[#80A3FE] hover:text-white '
     const activeClassesNonFavorite = 'bg-gray-200 transition text-black hover:bg-gray-200'
@@ -23,17 +25,17 @@ export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false
                 `${isActive? 
                     notFavorite?  activeClassesNonFavorite : activeClassesFavorite 
                     : notFavorite?'text-black hover:bg-gray-200 ' : 'hover:bg-[#80A3FE] hover:text-white' 
-                    }  my-2  group transition rounded-xl w-full py-2 px-4 flex items-center justify-between`}>
-                <div className='flex items-center space-x-3'>
+                    }  
+                 ${isDragOver && 'opacity-50'}
+                my-2  group transition rounded-xl w-full py-2 px-4 flex items-center justify-between`}>
+                <div className='flex items-center overflow-hidden space-x-3'>
                     {
                         notFavorite?
-                        icon? 
-                        <Emoji unified={icon} size={26}/>:
                         <Icon className={`${isActive? 'text-gray-500':'text-black '}group-hover:text-gray-700  group-focus:text-gray-700 transition`} icon="mi:list"  width={26}/>
                         :
                         <Icon className={`${isActive? 'text-white':'text-[#225FFC] '}group-hover:text-white  group-focus:text-white transition`} icon={icon}  width={26}/>
                     }
-                    <span className='font-semibold text-lg'>
+                    <span className='font-semibold text-lg truncate flex-1'>
                         {text}
                     </span> 
                 </div>

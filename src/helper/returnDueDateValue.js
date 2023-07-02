@@ -1,4 +1,4 @@
-export const returnDueDateValue = (selectedDueDate,customDate) => {
+export const returnDueDateValue = (selectedDueDate) => {
     let dueDateValue;
     switch (selectedDueDate) {
       case 'Today':
@@ -15,7 +15,7 @@ export const returnDueDateValue = (selectedDueDate,customDate) => {
         dueDateValue = afterTomorrow;
         break;
       case 'custom':
-        dueDateValue = customDate
+        dueDateValue = new Date(selectedDueDate)
         break;
     }
     return dueDateValue

@@ -11,17 +11,20 @@ import dailySVG from '../../../../assets/daily.svg'
 import monthlySVG from '../../../../assets/monthly.svg'
 import weeklySVG from '../../../../assets/weekly.svg'
 import workdaysSVG from '../../../../assets/workday.svg'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Tag } from '../../../../types/Tag/Tag'
 import uniqid from 'uniqid'
 import { addTask } from '../../../../store/slices/tasksSlice'
-import { getCurrentUserId } from '../../../../store/slices/userSlice'
 import {returnDueDateValue} from '../../../../helper/returnDueDateValue'
+import { CustomInputDueDate } from './CustomInputDueDate'
+import { useContext } from 'react'
+import { AppContext } from '../../../../layouts/Container/RootContainer/RootContainer'
 interface Props {
     route : string 
     tag: Tag
 }
 export const CreateTaskContainer = ({route,tag} : Props) => {
+    const {user} = useContext(AppContext)
     const dispatch = useDispatch()
     useEffect(() => {
         resetValues()
@@ -37,8 +40,8 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
     }
     function resetValues(){
         setInputValue("")
-        setRepeatValue(null)
-        setDueDateValue(null)
+        setTaskRepeat(null)
+        setTaskDueDate(null)
     }
     const setTaskRepeat = (selectedRepeat) => {
         setRepeatValueString(selectedRepeat)
@@ -58,7 +61,7 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                 dueDate: tag.id === 'myday'? new Date() : dueDateValue,
                 repeat: repeatValue,
                 createdAt: new Date(),
-                ownerId: dispatch(getCurrentUserId()).payload ,
+                ownerId: user.id ,
                 tagId: tag.id === 'important' || tag.id ===  'all'? 'mytasks' : tag.id,
                 tagName: tag.id === 'important' || tag.id === 'all'? 'My tasks' : tag.name,
                 id: uniqid()
@@ -66,6 +69,7 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
         ))
         resetValues()
     }
+    
   return (
     <div className='w-full  shadow rounded-sm'>
         <div className='flex w-full bg-white items-center justify-start  py-3 px-3 space-x-3 rounded-sm'>
@@ -75,7 +79,7 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
             </div>
            
             <div className='w-full'>
-                <input value={inputValue} onChange={(e : Event) => handleInput(e)} type="text" placeholder='Add task...' className='w-full focus:outline-none placeholder:text-[#225FFC] placeholder:text-sm placeholder:focus:text-black focus:text-black transition'/>
+                <input onKeyDown={(event) => (event.key === 'Enter' && inputValue.length > 0) && handleCreateTask()} value={inputValue} onChange={(e : Event) => handleInput(e)} type="text" placeholder='Add task...' className='w-full focus:outline-none placeholder:text-[#225FFC] placeholder:text-sm placeholder:focus:text-black focus:text-black transition'/>
             </div>
         </div>
         <div className='  flex py-1 w-full shadow px-3 border-t justify-between'>
@@ -85,7 +89,9 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                         color="#225FFC"
                         size={20}
                         text="Add expire date" 
-                       
+                        value={dueDateValueString}
+                        removeText="Remove due date"
+                        removeValueFunc={() => setTaskDueDate(null)}
                         elements={
                             [
                                 {
@@ -110,7 +116,7 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                                 {
                                     svgElement:personalizedSVG,
                                     text:"Select date",
-                                    component: <Component/>
+                                    component: <CustomInputDueDate setValue={setTaskDueDate}/>
                                 },
                             ]
                         } 
@@ -122,6 +128,8 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                           color="#225FFC"
                           size={20}
                         text="Repeat task" 
+                        removeText="Remove repeat"
+                        removeValueFunc={() => setTaskRepeat(null)}
                         value={repeatValueString}
                         elements={
                             [
@@ -156,11 +164,6 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                                     svgElement: anuallySVG,
                                     arg: "Anually"
                                 },
-                                {
-                                    text:"Personalized",
-                                    svgElement: personalizedSVG,
-                                    component: <Component/>
-                                }
                             ]
                         } 
                         icon="material-symbols:repeat"

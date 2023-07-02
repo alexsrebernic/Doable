@@ -3,6 +3,9 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import useInitializeApp from '../../../hooks/useInitializeApp';
+import { User } from '../../../types/User';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../store/slices/userSlice';
 const customStyles = {
   content: {
     top: '50%',
@@ -22,6 +25,7 @@ export const RootContainer = ({children} : {children: React.ReactNode} ) => {
   const [isSidebarShowing, collapseSidebar] = useState(false)
   const [isHelpSidebarShowing, collapseHelpSidebar] = useState(false)
   const [isCalendarShowing, collapseCalendar] = useState(false)
+  const user : User | null = useSelector(selectCurrentUser) || null
   function openModal(content : JSX.Element) {
     setModalContent(content)
     setIsOpen(true);
@@ -68,6 +72,7 @@ export const RootContainer = ({children} : {children: React.ReactNode} ) => {
             sidebar: { state:isSidebarShowing, func:() => collapseSidebar(oldVal => !oldVal)},
             calendar: {state: isCalendarShowing, func: () => collapseCalendar(oldVal => !oldVal)},
             helpSidebar: {state:isHelpSidebarShowing, func: () => collapseHelpSidebar(oldVal => !oldVal)},
+            user
           }
         }>
           {children}

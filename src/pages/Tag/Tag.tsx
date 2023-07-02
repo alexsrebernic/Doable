@@ -8,7 +8,8 @@ import { CreateTaskContainer } from './Body/CreateTask/CreateTaskContainer'
 import { TasksContainer } from './Body/Task/TasksContainer'
 import Task from '../../types/Task/Task'
 import { GroupTasksContainer } from './Body/Task/GroupTasksContainer'
-import { selectTasksByTagId,selectTagById, selectTags } from '../../store'
+import { selectTagById, selectTags } from '../../store/slices/tagsSlice'
+import { selectTasksByTagId } from '../../store/slices/tasksSlice'
 import { useSelector } from 'react-redux'
 export const Tag = () => {
   const navigate = useNavigate()
