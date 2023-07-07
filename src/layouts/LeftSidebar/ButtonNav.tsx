@@ -27,6 +27,7 @@ export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false
                     : notFavorite?'text-black hover:bg-gray-200 ' : 'hover:bg-[#80A3FE] hover:text-white' 
                     }  
                  ${isDragOver && 'opacity-50'}
+                 ${notFavorite && 'cursor-grab'}
                 my-2  group transition rounded-xl w-full py-2 px-4 flex items-center justify-between`}>
                 <div className='flex items-center overflow-hidden space-x-3'>
                     {
@@ -35,7 +36,7 @@ export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false
                         :
                         <Icon className={`${isActive? 'text-white':'text-[#225FFC] '}group-hover:text-white  group-focus:text-white transition`} icon={icon}  width={26}/>
                     }
-                    <span className='font-semibold text-lg truncate flex-1'>
+                    <span className='font-medium text-lg truncate flex-1'>
                         {text}
                     </span> 
                 </div>

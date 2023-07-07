@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { AppContext } from '../Container/RootContainer/RootContainer'
+import { AppContext } from '../../App'
 import { useContext, useState } from 'react';
 import { useSpring, animated } from '@react-spring/web'
 

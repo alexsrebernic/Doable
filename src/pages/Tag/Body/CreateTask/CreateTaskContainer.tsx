@@ -1,7 +1,5 @@
 import React, { Component, useEffect, useState } from 'react'
 import PopoverButton from '../../PopoverButton/PopoverButton'
-import { Icon } from '@iconify/react'
-import { Tooltip } from '@mui/material'
 import afterTomorrowSVG from '../../../../assets/aftertomorrow.svg'
 import personalizedSVG from '../../../../assets/selectdate.svg'
 import todaySVG from '../../../../assets/today.svg'
@@ -18,7 +16,7 @@ import { addTask } from '../../../../store/slices/tasksSlice'
 import {returnDueDateValue} from '../../../../helper/returnDueDateValue'
 import { CustomInputDueDate } from './CustomInputDueDate'
 import { useContext } from 'react'
-import { AppContext } from '../../../../layouts/Container/RootContainer/RootContainer'
+import { AppContext } from '../../../../App'
 interface Props {
     route : string 
     tag: Tag

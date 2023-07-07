@@ -1,30 +1,43 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Task from '../../../../types/Task/Task'
 import { useSpring, animated } from '@react-spring/web'
 import { Tag } from '../../../../types/Tag/Tag'
-import { ListItem } from './ListItem'
+import { TaskList } from './TaskList'
 import { useDispatch } from 'react-redux'
 interface Props {
   tasks : Task[] | [],
   tag : Tag,
-  reverseAnimation?:boolean
+  reverseAnimation?:boolean,
+  route: string
 }
-export const TasksContainer = ({tasks,tag,reverseAnimation} : Props) => {
+export const TasksContainer = ({tasks,tag,reverseAnimation,route} : Props) => {
   const dispatch = useDispatch()
-  const springs = useSpring({
+  const [resetAnimation, setResetAnimation] = useState(true)
+  const [springs, api] = useSpring(() => ({
     from:{
       y:-30,
       opacity:0,
     },
-    to: {
-      y:0,
-      opacity:1,
-
-    },
-    repeat:true,
-    reset:true,
-    reverse:reverseAnimation? reverseAnimation : false,
-  })
+  }))
+  function fadeInAnimation(){
+    api.start({
+      from:{
+        y:-30,
+        opacity:0,
+      },
+      to: {
+        y:0,
+        opacity:1,
+  
+      },
+      reset: true,
+      reverse: reverseAnimation? reverseAnimation : false,
+    })
+  }
+  useEffect(() => {
+    fadeInAnimation()
+  },[route])
+ 
   function sortTasks(){
     switch(tag.sortBy){
       case 'alphabetically':return tasks.sort((a, b) => {
@@ -50,12 +63,9 @@ export const TasksContainer = ({tasks,tag,reverseAnimation} : Props) => {
   }
   const sortTasksByTagOrder = (tasks : Task[], tag : Tag) => {
     if (!tag || !tag.tasksIds || tag.tasksIds.length === 0) {
-      return tasks; // Si no hay tag o no tiene tasksIds, retorna el array de tareas sin cambios
+      return tasks; 
     }
-  
     const sortedTasks = [];
-  
-    // Itera sobre los IDs en el orden especificado por tasksIds y agrega las tareas correspondientes
     for (const taskId of tag.tasksIds) {
       const task = tasks.find((t) => t.id === taskId);
       if (task) {
@@ -66,8 +76,8 @@ export const TasksContainer = ({tasks,tag,reverseAnimation} : Props) => {
     return sortedTasks;
   };
   return (
-    <animated.div style={springs} className="my-5" >
-      <ListItem tasks={sortTasks()} tag={tag} />
+    <animated.div style={springs}  >
+      <TaskList tasks={sortTasks()} tag={tag} />
     </animated.div>
   )
 }

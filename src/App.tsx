@@ -2,10 +2,10 @@ import React, {createContext, useEffect, useState} from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
-import useInitializeApp from '../../../hooks/useInitializeApp';
-import { User } from '../../../types/User';
+import useInitializeApp from './hooks/useInitializeApp';
+import { User } from './types/User';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../store/slices/userSlice';
+import { selectCurrentUser } from './store/slices/userSlice';
 const customStyles = {
   content: {
     top: '50%',
@@ -17,7 +17,7 @@ const customStyles = {
   },
 };
 export const AppContext = createContext(null as any)
-export const RootContainer = ({children} : {children: React.ReactNode} ) => {
+export const App = ({children} : {children: React.ReactNode} ) => {
   useInitializeApp()
   Modal.setAppElement('#root');
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -63,7 +63,8 @@ export const RootContainer = ({children} : {children: React.ReactNode} ) => {
           pauseOnHover
           theme="light"
         />
-      <div className='min-h-screen lg:max-h-screen flex flex-col max-w-screen  font-montserrat lg:overflow-hidden'>
+      <div 
+      className={`min-h-screen lg:max-h-screen flex flex-col max-w-screen  font-montserrat lg:overflow-hidden ${isSidebarShowing? 'fixed overflow-y-scroll inline' : 'static overflow-y-auto'}`}>
         <AppContext.Provider value={
           {
             openModal: (arg : JSX.Element) => openModal(arg),

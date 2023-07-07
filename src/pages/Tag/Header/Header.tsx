@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Tag } from '../../../types/Tag/Tag'
 import { Icon } from '@iconify/react'
-import {getCurrentDate} from '../../../helper/getCurrentDate.js'
-import { Popover,Tooltip } from '@mui/material'
 import PopoverButton from '../PopoverButton/PopoverButton'
-import { Emoji } from 'emoji-picker-react'
 import { useDispatch } from 'react-redux'
 import { updateTagProp } from '../../../store/slices/tagsSlice'
-import convertCamelCaseToNormal from '../../../helper/convertCamelCaseToNormal'
 import { useContext } from 'react'
 import { favoriteTagsIds } from '../../../helper/favoriteTag'
-import { AppContext } from '../../../layouts/Container/RootContainer/RootContainer'
-export const Header = ({tag} : {tag:Tag}) => {
+import { AppContext } from '../../../App'
+import { CreateTaskContainer } from '../Body/CreateTask/CreateTaskContainer'
+export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
     const {showToast} = useContext(AppContext)
     const dispatch = useDispatch()
     const [tagName, setTagName] = useState<string>('')
@@ -122,7 +119,8 @@ export const Header = ({tag} : {tag:Tag}) => {
   return (
     <>
     {tag && 
-            <div>
+    <div className='space-y-3'>
+      <div>
             <div className='flex items-center space-x-3'>
                 <div>
                     <div className='flex items-center sm:space-x-3'>
@@ -192,6 +190,12 @@ export const Header = ({tag} : {tag:Tag}) => {
                 </div>
             </div>
         </div>
+        {tag.id !== 'completed' && 
+            <>
+                <CreateTaskContainer  tag={tag} route={tag_id}/>
+            </>
+        }
+    </div>
     }
     </>
 

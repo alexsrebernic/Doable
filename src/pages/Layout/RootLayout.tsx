@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Outlet, useLocation, useNavigate, useNavigation } from 'react-router-dom'
 import { LeftSidebar } from '../../layouts/LeftSidebar/LeftSidebar'
-import { RouterContainer } from '../../layouts/Container/RouterContainer/RouterContainer'
-import {ContentContainer} from '../../layouts/Container/ContentContainer/ContentContainer'
 import { Topbar } from '../../layouts/Topbar/Topbar'
 import { useSpring } from '@react-spring/web'
+import { RightSidebar } from '../../layouts/RightSidebar/RightSidebar'
+import { AppContext } from '../../App'
 export const RootLayout = () => {
+  const {sidebar} = useContext(AppContext)
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
@@ -29,12 +30,15 @@ export const RootLayout = () => {
   return (
     <>
       <Topbar openAnimationSidebar={openAnimationSidebar}/>
-      <ContentContainer>
+      <div className={`flex-1  h-full  w-screen grid grid-cols-16  mt-14 lg:mt-0`}>
         <LeftSidebar springs={springs}/>
-          <RouterContainer>
+        <div className={` col-span-16 lg:col-span-12 xl:col-span-13 2xl:col-span-13 grid grid-cols-16 h-full`}>
+          <div className={`col-span-16  xl:col-span-12 2xl:col-span-12 bg-[#F3F3F3] p-5  2xl:p-10 `}>
               <Outlet/>
-          </RouterContainer>
-      </ContentContainer>
+          </div>
+          <RightSidebar/>
+        </div>
+      </div>
     </>
   )
 }

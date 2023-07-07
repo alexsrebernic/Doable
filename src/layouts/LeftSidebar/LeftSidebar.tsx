@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AppContext } from '../Container/RootContainer/RootContainer'
+import { AppContext } from '../../App';
 import { Icon } from '@iconify/react';
 import FavoriteTags , {favoriteTagsIds} from '../../helper/favoriteTag.js'
 import { Tag } from '../../types/Tag/Tag';
@@ -9,23 +9,33 @@ import { useDispatch, useSelector } from 'react-redux';
 selectNonFavoriteTags
 import { addTag, selectNonFavoriteTags } from '../../store/slices/tagsSlice';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 import uniqid from 'uniqid'
 import { TagList } from './TagList';
 export const LeftSidebar = ({springs}) => {
   const dispatch = useDispatch()
-  const {sidebar,tags,user} = useContext(AppContext)
+  const {sidebar,user, showToast} = useContext(AppContext)
+
+  const [inputTagName, setInputTagName] = useState('')
+  const input = useRef(null)
+
+ 
   const navigate = useNavigate()
-  const phoneClasses =  'absolute  top-0   w-screen  bg-black/[.4]' 
-  const desktopClasses = 'lg:w-full lg:static lg:bg-transparent lg:block lg:border-r lg:col-span-4 xl:col-span-3 2xl:col-span-3'
   const nonFavoriteTags = useSelector(selectNonFavoriteTags)
+
   function handleAddTag(){
+  if(inputTagName.length == 0) return showToast('ERROR: Tag must have a name','error')
    const id =  uniqid()
-   dispatch(addTag({id,userId: user.id}))
+   dispatch(addTag({id,userId: user.id,tagName: inputTagName}))
    navigate(`tasks/${id}`)
    sidebar.func()
+   setInputTagName('')
+   input.current.blur()
   }
+
   const sortTagsByUserOrder = () => {
-    if(!user.tagsIds || user.tagsIds.length == 0) return []
+    if(!user.hasOwnProperty("tagsIds") ) return []
+    if(user.tagsIds.length == 0 ) return []
     const sortedTags = []
     for (const tagId of user.tagsIds) {
       const tag = nonFavoriteTags.find((t) => t.id === tagId);
@@ -35,16 +45,20 @@ export const LeftSidebar = ({springs}) => {
     }
     return sortedTags;
   };
+
+  const phoneClasses =  'fixed  top-0   w-screen  bg-black/[.4]' 
+  const desktopClasses = 'lg:w-full lg:static lg:bg-transparent lg:block lg:border-r lg:col-span-4 xl:col-span-3 2xl:col-span-3'
+
   return (
       <div onClick={(e) =>{
         e.stopPropagation()
         sidebar.func()}
-        }  className={`${sidebar.state? phoneClasses : 'hidden'} ${desktopClasses} h-screen lg:h-[95vh]  z-10 overflow-y-auto`}>
+        }  className={`${sidebar.state? phoneClasses : 'hidden'} ${desktopClasses} top-0   lg:static  h-screen lg:h-[95vh]  z-10 `}>
           <animated.div style={{ ...springs}} onClick={(e) =>{
             e.stopPropagation()
             }}
-            className=' bg-white w-4/5 md:w-1/2 lg:w-full border-r lg:border-none h-full  overflow-y-auto  '>
-            <div className='h-full flex flex-col'>
+            className=' bg-white w-4/5 md:w-1/2 lg:w-full border-r lg:border-none h-full   '>
+            <div className='h-full flex flex-col overflow-y-auto pb-3 lg:pb-8'>
               <div className='py-4 px-4 flex lg:hidden border-b justify-between  space-x-3'>
                 <div className='flex items-center'>
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,8 +70,8 @@ export const LeftSidebar = ({springs}) => {
                     <Icon icon="mdi:menu-close" width={40}/>
                   </div>
               </div>
-              <div className='px-4 py-4 flex flex-col flex-1'>
-                <div className='space-y-3 h-full flex flex-col'>
+              <div className='px-4  pt-4 flex flex-col  overflow-hidden'>
+                <div className='space-y-3 max-h-full flex flex-col overflow-y-auto'>
                   <button style={{
                     "boxShadow":" 0px 0px 4px #225FFC"
                   }} className='bg-[#225FFC] flex items-center justify-center space-x-3 py-2.5 shadow-md shadow-[#225FFC] w-full rounded-xl'>
@@ -69,7 +83,7 @@ export const LeftSidebar = ({springs}) => {
                   <div >
                       <ButtonNav notFavorite={false} func={sidebar.func} text='Stats' icon='gridicons:stats' fullPath='/stats'  number={0}/>
                   </div>
-                  <div className='space-y-2'>
+                  <div className='space-y-2 '>
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
                     <div className=''>
                       {
@@ -81,19 +95,26 @@ export const LeftSidebar = ({springs}) => {
                       }
                     </div>
                   </div>
-                  <div className='py-1 space-y-2 flex-1 max-h-full '>
-                    <span className='text-[#8a8a8a]  font-semibold'>Your tags</span>
-                    <div className='overflow-y-auto  max-h-[200px] 2xl:max-h-[300px]'>
-                      <TagList user={user} tags={sortTagsByUserOrder()} func={sidebar.func}/>
+                  <span className='text-[#8a8a8a]  font-semibold'>Your tags</span>
+                  <div className=' space-y-2   max-h-full lg:overflow-y-auto'>
+                    <div className='overflow-y-auto  '>
+                      {
+                        user && <TagList user={user} tags={sortTagsByUserOrder()} func={sidebar.func}/>
+                    }
                     </div>
-                      <div onClick={handleAddTag} className='flex space-x-3 py-2 px-4 items-center cursor-pointer hover:bg-gray-200 rounded-xl transition'>
-                        <Icon icon="ic:baseline-plus" className='text-[#8a8a8a]'  width={30} />
-                        <span className='text-[#8a8a8a] font-semibold text-md'>New tag</span>
-                      </div>
+                     
                   </div>
                 </div>
               </div>
+                <div  className='flex space-x-3 py-2 px-8 items-center cursor-pointer  rounded-xl transition'>
+                        <Icon onClick={handleAddTag} icon="ic:baseline-plus" className='text-[#225FFC]'  width={30} />
+                        <input 
+                        value={inputTagName} 
+                        onChange={(e) => setInputTagName(e.target.value)} 
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddTag()} ref={input} type="text" placeholder='New Tag' className='text-black placeholder:text-[#225FFC]  font-medium text-md focus:outline-none w-full' />
+                  </div>
             </div>
+            
           </animated.div>
       </div>
   

@@ -15,9 +15,9 @@ export const tagsSlice = createSlice({
     initialState: [] as Tag[],
     reducers: {
       addTag: (state, action) => {
-        const {id, userId} = action.payload
+        const {id, userId,tagName} = action.payload
         state.push({
-          name:`Tag N°${state.length}`,
+          name:tagName,
           icon:null,
           tasksIds: [],
           id: id,
@@ -50,7 +50,7 @@ export const tagsSlice = createSlice({
         const tag = state.find((tag) => tag.id == tagId);
         if (tag) {
           if (!tag.tasksIds) {
-            tag.tasksIds = []; // Asegúrate de inicializar la propiedad si es null o undefined
+            tag.tasksIds = []
           }
           tag.tasksIds.push(id);
         }

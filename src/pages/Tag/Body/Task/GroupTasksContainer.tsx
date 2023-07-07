@@ -8,9 +8,10 @@ import { setComponentVariable } from '../../../../store/slices/componentsSlice';
 interface Props {
   text : String ,
   tasks: Task[] | [],
-  tag : Tag 
+  tag : Tag,
+  route: string
 }
-export const GroupTasksContainer = ({text, tasks, tag} : Props) => {
+export const GroupTasksContainer = ({text, tasks, tag,route} : Props) => {
   const dispatch = useDispatch()
   const toggleIsOpen = () => dispatch(setComponentVariable({tagId: tag.id, variable: !isOpen}))
   const isOpen : boolean = useSelector(state => !state.component.hasOwnProperty(tag.id)? false : state.component[tag.id]);
@@ -33,7 +34,7 @@ export const GroupTasksContainer = ({text, tasks, tag} : Props) => {
       </div>
      <div>
        {
-         isOpen && <TasksContainer reverseAnimation={!isOpen} tag={tag} tasks={tasks} />
+         isOpen && <TasksContainer route={route} reverseAnimation={!isOpen} tag={tag} tasks={tasks} />
        }
      </div>
     </div>

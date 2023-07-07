@@ -1,12 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import favoriteTags, {favoriteTagsIds} from '../../helper/favoriteTag'
-import {  Tag as TagType } from '../../types/Tag/Tag'
 import { Header } from './Header/Header'
-import { AppContext } from '../../layouts/Container/RootContainer/RootContainer'
-import { CreateTaskContainer } from './Body/CreateTask/CreateTaskContainer'
+import { AppContext } from '../../App'
 import { TasksContainer } from './Body/Task/TasksContainer'
-import Task from '../../types/Task/Task'
 import { GroupTasksContainer } from './Body/Task/GroupTasksContainer'
 import { selectTagById, selectTags } from '../../store/slices/tagsSlice'
 import { selectTasksByTagId } from '../../store/slices/tasksSlice'
@@ -36,16 +32,12 @@ export const Tag = () => {
     <div className=''>
       {(tag && tasks) && 
       <>
-        <Header tag={tag}/>
-        <div className='my-5'>
-          {tag.id !== 'completed' && 
-          <>
-            <CreateTaskContainer tag={tag} route={tag_id}/>
-          </>}
-          <TasksContainer tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
+        <Header tag_id={tag_id} tag={tag}/>
+        <div className='my-5 overflow-auto max-h-full'>
+          <TasksContainer route={tag_id} tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
           {tasks.every(task => !task.completed) || tag.id === 'completed' || tag.id === 'important'? null :
             <>
-              <GroupTasksContainer tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
+              <GroupTasksContainer route={tag_id} tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
             </>
           }
         </div>

@@ -23,7 +23,7 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
     <>
      {
       task && 
-      <div   className={`${isDragged && 'opacity-50'} ${(isDragOver && !isDragged) && 'border-b-[#225FFC] border-b-2 border-solid'} bg-white hover:bg-gray-50  transition flex  items-center px-3 py-3 space-x-3 shadow cursor-pointer`}>
+      <div   className={`${isDragged && 'opacity-50'} ${(isDragOver && !isDragged) && 'border-b-[#225FFC] border-b-2 border-solid'} cursor-grab bg-white hover:bg-gray-50  transition flex  items-center px-3 py-3 space-x-3 shadow cursor-pointer`}>
         <div>
         <div onClick={handleToggleCompleted} className={`${
           task.completed? 

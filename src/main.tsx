@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { RootContainer } from './layouts/Container/RootContainer/RootContainer'
+import { App } from './App'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -21,9 +21,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <RootContainer>
+        <App>
           <RouterProvider router={router}/>
-        </RootContainer>
+        </App>
       </PersistGate>
     </Provider>
   </React.StrictMode>
