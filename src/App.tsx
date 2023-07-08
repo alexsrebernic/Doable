@@ -64,7 +64,7 @@ export const App = ({children} : {children: React.ReactNode} ) => {
           theme="light"
         />
       <div 
-      className={`min-h-screen lg:max-h-screen flex flex-col max-w-screen  font-montserrat lg:overflow-hidden ${isSidebarShowing? 'fixed overflow-y-scroll inline' : 'static overflow-y-auto'}`}>
+      className={`h-screen  max-w-screen flex flex-col font-montserrat overflow-hidden`}>
         <AppContext.Provider value={
           {
             openModal: (arg : JSX.Element) => openModal(arg),

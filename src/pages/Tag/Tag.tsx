@@ -29,11 +29,11 @@ export const Tag = () => {
   },[tag_id])
   
   return (
-    <div className=''>
+    <div className='flex flex-col flex-1 max-h-full relative overflow-hidden'>
       {(tag && tasks) && 
       <>
         <Header tag_id={tag_id} tag={tag}/>
-        <div className='my-5 overflow-auto max-h-full'>
+        <div className='mb-5 mt-2 flex flex-col   overflow-y-auto max-h-full '>
           <TasksContainer route={tag_id} tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
           {tasks.every(task => !task.completed) || tag.id === 'completed' || tag.id === 'important'? null :
             <>

@@ -5,7 +5,6 @@ import { Tag } from '../../types/Tag/Tag';
 import { fetchTasks as fetchTasksFromAPI } from '../../api/api';
 import { RootState } from '..';
 import { createSelector } from '@reduxjs/toolkit';
-import { selectTags } from './tagsSlice';
 import { isToday } from 'date-fns';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
     const response = await fetchTasksFromAPI(userId);
@@ -61,7 +60,7 @@ export const tasksSlice = createSlice({
     extraReducers: (builder) => {
       builder.addCase(fetchTasks.fulfilled, (state, action) => {
         return action.payload;
-      });
+      })
     },
   });
 const selectTasks = (state: RootState) => state.tasks;

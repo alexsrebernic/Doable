@@ -12,10 +12,8 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
     const {showToast} = useContext(AppContext)
     const dispatch = useDispatch()
     const [tagName, setTagName] = useState<string>('')
-    const [isChangingValue, setIsChangingValue] = useState<boolean>(false)
     useEffect(() => {
         setTagName(tag.name)
-        checkIfInputAndValueAreEquals(tag.name)
     },[tag])
     function printList(){
 
@@ -98,24 +96,14 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
       }
     function handleInputTagName(event){
         const value = event.target.value
-        checkIfInputAndValueAreEquals(value)
         setTagName(value)
     }
-    function checkIfInputAndValueAreEquals(value){
-        if(value !== tag.name){
-            setIsChangingValue(true)
-       } else {
-           setIsChangingValue(false)
-       }
-    }
+  
     function handleChangeTagName(){
-        return tagName.length > 0 ? dispatch(updateTagProp({tagId: tag.id,prop: 'name',value: tagName})) : showToast('ERROR: Tag must have a name','error')
+        return tagName.length > 0 ? dispatch(updateTagProp({tagId: tag.id,prop: 'name',value: tagName})) : setTagName(tag.name)
 
     }
-    function handleResetTagName(){
-        setTagName(tag.name)
-        checkIfInputAndValueAreEquals(tag.name)
-    }
+
   return (
     <>
     {tag && 
@@ -128,13 +116,13 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                         {
                             tag.icon?
                             <Icon color='#225FFC' icon={tag.icon} width={30}/>:
-                            <Icon color='black' icon="mi:list" width={40}/>
+                            <Icon color='#225FFC' icon="mi:list" width={40}/>
                         }
                         </div>
                         {
                             favoriteTagsIds.includes(tag.id)?
                             <h1 
-                        className={`font-semibold truncate text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  `}
+                        className={`font-semibold text-[#225FFC] truncate text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  `}
                         >
                                 {tag.name}
                             </h1>
@@ -143,18 +131,12 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                             onKeyDown={(event) => (event.key === 'Enter' && tagName.length > 0) && handleChangeTagName()}
                             style={{ width: tagName.length + 'ch' }}
                             value={tagName}
-                            className={`focus:outline-none max-w-[6em] 2xl:max-w-[8em] overflow-x-auto font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  bg-transparent`}
+                            className={`px-2 max-w-[6em] md:max-w-[16em] 2xl:max-w-[20em] text-[#225FFC] overflow-x-auto font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  bg-transparent`}
                             type="text"
+                            onBlur={(e) => handleChangeTagName()}
                             onChange={handleInputTagName}
+                            maxLength={30}
                             />
-                        }
-                      
-                        {
-                            isChangingValue &&
-                            <div className='flex space-x-1 pl-2'>
-                                <Icon onClick={handleChangeTagName} className='cursor-pointer'  icon="material-symbols:check" width={25} color='green'/>
-                                <Icon onClick={handleResetTagName} className='cursor-pointer' icon="bx:x" width={25} color='red'/>
-                            </div>
                         }
                     </div>
                 </div>

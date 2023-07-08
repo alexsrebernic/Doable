@@ -33,16 +33,10 @@ export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
         console.log(event.dataTransfer.getData('type'))
         setDraggedElementIndex(index)
     }
-    function handleOnDragEnter(event){
-        console.log(event)
-        const type = event.dataTransfer.getData('type')
-        console.log(type)
-        if(type !== 'task') return 
-    }
   return (
     <div 
         onDrop={(e) => handleDrop(e)} 
-        className='space-y-2  py-2'>
+        className='space-y-2  py-2 overflow-y-auto flex-1  relative '>
         { tasks &&
             tasks.map((t,index) => {
             return (

@@ -76,7 +76,7 @@ export const TasksContainer = ({tasks,tag,reverseAnimation,route} : Props) => {
     return sortedTasks;
   };
   return (
-    <animated.div style={springs}  >
+    <animated.div style={springs}  className='  flex'>
       <TaskList tasks={sortTasks()} tag={tag} />
     </animated.div>
   )

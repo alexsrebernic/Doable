@@ -17,7 +17,7 @@ export const Topbar = ({openAnimationSidebar}) => {
     openAnimationSidebar()
   }
   return (
-    <div  className='fixed  bg-white lg:static top-0 border-b w-screen grid grid-cols-16 '>
+    <div  className='  bg-white static  border-b w-screen grid grid-cols-16 '>
         <div className='hidden lg:block lg:col-span-4 xl:col-span-3 border-r 2xl:col-span-3'>
             <div  className=''>
               <div className='flex items-center px-4 py-3 space-x-3'>

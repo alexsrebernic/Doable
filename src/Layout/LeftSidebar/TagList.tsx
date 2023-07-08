@@ -57,8 +57,6 @@ export const TagList = ({tags,func,user} : Props) => {
                         onDragStart={(e) => handleDrag(e,index,o.id)}
                         onDragEnter={() => setOverElementIndex(index)}
                         onDragOver={(e : React.DragEvent) => e.preventDefault()}
-                        onDragLeave={() => resetValues()}
-                        onDragEnd={() => resetValues()}
                     >
                          <ButtonNav 
                             notFavorite={true} 

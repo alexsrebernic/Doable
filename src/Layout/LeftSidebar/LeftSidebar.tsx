@@ -24,7 +24,7 @@ export const LeftSidebar = ({springs}) => {
   const nonFavoriteTags = useSelector(selectNonFavoriteTags)
 
   function handleAddTag(){
-  if(inputTagName.length == 0) return showToast('ERROR: Tag must have a name','error')
+  if(inputTagName.length == 0) return 
    const id =  uniqid()
    dispatch(addTag({id,userId: user.id,tagName: inputTagName}))
    navigate(`tasks/${id}`)

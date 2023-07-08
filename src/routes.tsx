@@ -5,12 +5,12 @@ import { Outlet } from 'react-router-dom'
 import {About} from './pages/About/About'
 import { Tag } from './pages/Tag/Tag'
 import { RouteObject } from 'react-router-dom'
-import { RootLayout } from './pages/Layout/RootLayout'
+import { Layout } from './Layout/Layout'
 
 const routes : RouteObject[] = [
     {
       path: "/",
-      element:<RootLayout/>,
+      element:<Layout/>,
       errorElement:<Error404Page/>,
       children: [
         {

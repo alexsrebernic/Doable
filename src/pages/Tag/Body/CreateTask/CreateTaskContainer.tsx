@@ -43,6 +43,7 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
     }
     const setTaskRepeat = (selectedRepeat) => {
         setRepeatValueString(selectedRepeat)
+        setTaskDueDate('Today')
         setRepeatValue(selectedRepeat)
     };
     const setTaskDueDate = (selectedDate) => {
@@ -61,7 +62,6 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                 createdAt: new Date(),
                 ownerId: user.id ,
                 tagId: tag.id === 'important' || tag.id ===  'all'? 'mytasks' : tag.id,
-                tagName: tag.id === 'important' || tag.id === 'all'? 'My tasks' : tag.name,
                 id: uniqid()
             }
         ))

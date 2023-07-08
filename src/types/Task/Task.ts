@@ -7,7 +7,6 @@ type Task = {
     completed: Boolean,
     createdAt: Date,
     tagId: string,
-    tagName: string,
     important: Boolean,
     dueDate: Date | null,
     repeat : string | null,

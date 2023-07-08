@@ -10,7 +10,7 @@ export const RightSidebar = () => {
       <div onClick={(e) =>{
         e.stopPropagation()
         helpSidebar.func()}
-        }  className={`${helpSidebar.state? phoneClasses : 'hidden'} ${desktopClasses} shadow-xl xl:shadow-none h-screen`}>
+        }  className={`${helpSidebar.state? phoneClasses : 'hidden'} ${desktopClasses} shadow-xl xl:shadow-none h-screen lg:h-full`}>
           <div onClick={(e) =>{
           e.stopPropagation()
         }}
