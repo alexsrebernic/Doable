@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Task from '../../../../types/Task/Task'
 import { TaskItem } from './TaskItem';
 import { Tag } from '../../../../types/Tag/Tag';
@@ -9,9 +9,11 @@ import { useRef } from 'react';
 export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
     const [draggedTaskIndex, setDraggedElementIndex] = useState<number | null>(null)
     const [dragOverTaskIndex, setOverElementIndex] = useState<number | null>(null)
-
     const dispatch = useDispatch()
-   
+    useEffect(() => {
+        resetValues()
+    },[tag]) 
+
     function handleDrop(event){
         const type = event.dataTransfer.getData('type')
         console.log(type)

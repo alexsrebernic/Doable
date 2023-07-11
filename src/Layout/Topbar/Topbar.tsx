@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react';
 import { AppContext } from '../../App'
 import { useContext, useState } from 'react';
+import React from 'react';
 import { SearchInput } from './SearchInput';
 
-export const Topbar = ({openAnimationSidebar}) => {
+export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => {
   const {sidebar,helpSidebar} = useContext(AppContext)
   const [message, setMessage] = useState('');
 
@@ -11,10 +12,15 @@ export const Topbar = ({openAnimationSidebar}) => {
     // 👇 Get input value from "event"
     setMessage(value);
   };
-  function collapseSidebar(){
+  function collapseLeftSidebar(){
     if(helpSidebar.state) return helpSidebar.func()
     sidebar.func()
-    openAnimationSidebar()
+    openAnimationLeftSidebar()
+  }
+  function collapseRightSidebar(){
+    if(sidebar.state) return sidebar.func()
+    helpSidebar.func()
+    openAnimationRightSidebar()
   }
   return (
     <div  className='  bg-white static  border-b w-screen grid grid-cols-16 '>
@@ -30,7 +36,7 @@ export const Topbar = ({openAnimationSidebar}) => {
         </div>
         <div className='px-2 w-full sm:px-4 py-2 flex justify-between col-span-16 lg:col-span-12 xl:col-span-13  2xl:col-span-13'>
             <div className='flex justify-center items-center md:space-x-6 lg:space-x-0'>
-                <div onClick={collapseSidebar} className='lg:hidden'>
+                <div onClick={collapseLeftSidebar} className='lg:hidden'>
                     <Icon icon="material-symbols:menu" width={40} />
                 </div>
                   <SearchInput value={message} func={handleChange}/>
@@ -41,7 +47,7 @@ export const Topbar = ({openAnimationSidebar}) => {
                 <div className='w-[30px] cursor-pointer h-[30px] bg-gray-200 rounded-full'>
 
                 </div>
-                <div onClick={helpSidebar.func} className='xl:hidden'>
+                <div onClick={collapseRightSidebar} className='xl:hidden'>
                     <Icon width={30} height={30} icon="mdi:calendar" color="#225ffc" />
                 </div>
             </div>

@@ -129,7 +129,7 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                             :
                             <input 
                             onKeyDown={(event) => (event.key === 'Enter' && tagName.length > 0) && handleChangeTagName()}
-                            style={{ width: tagName.length + 'ch' }}
+                            style={{ width: tagName.length + 2 + 'ch' }}
                             value={tagName}
                             className={`px-2 max-w-[6em] md:max-w-[16em] 2xl:max-w-[20em] text-[#225FFC] overflow-x-auto font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  bg-transparent`}
                             type="text"

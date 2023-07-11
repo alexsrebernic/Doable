@@ -2,10 +2,11 @@ import { createSlice, PayloadAction, createAsyncThunk, createSelector } from '@r
 import { Tag } from '../../types/Tag/Tag';
 import { fetchTags as fetchTagsFromAPI } from '../../api/api';
 import FavoriteTags,{favoriteTagsIds} from '../../helper/favoriteTag';
-import { addTask } from './tasksSlice';
+import { addTask, selectTaskById } from './tasksSlice';
 import { RootState } from '..';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from './userSlice';
+import Task from '../../types/Task/Task';
 export const fetchTags = createAsyncThunk('tags/fetchTags', async (userId: number) => {
     const response = await fetchTagsFromAPI(userId);
     return [...response.data, ...FavoriteTags];
@@ -40,6 +41,18 @@ export const tagsSlice = createSlice({
       setTags: (state, action: PayloadAction<Tag[]>) => {
         return action.payload
       },
+      moveTaskToTag:(state, action) => {
+        const {taskId,tagId} = action.payload;
+        console.log(tagId)
+        const toTagIndex = state.findIndex((tag : Tag) => tag.id == tagId);
+        const fromTagIndex = state.findIndex((tag : Tag) => tag.tasksIds?.includes(taskId))
+        if(toTagIndex == fromTagIndex) return
+        console.log(toTagIndex,fromTagIndex)
+        const taskIndex = state[fromTagIndex].tasksIds?.findIndex(t => t.id == taskId)
+        state[toTagIndex].tasksIds?.push(taskId)
+        state[fromTagIndex].tasksIds?.slice(taskIndex,1)
+       
+      },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchTags.fulfilled, (state, action, ) => {
@@ -61,4 +74,4 @@ export const tagsSlice = createSlice({
 export const selectTags = (state: RootState) => state.tags;
 export const selectTagById = (tagId : number | string) => createSelector(selectTags, (tags) => tags.find(tag => tag.id == tagId))
 export const selectNonFavoriteTags = createSelector(selectTags, (tags) => tags.filter((tag) => !favoriteTagsIds.includes(tag.id))) 
-export const { addTag, updateTagProp, removeTag, setTags } = tagsSlice.actions;
+export const { addTag, updateTagProp, removeTag, setTags, moveTaskToTag } = tagsSlice.actions;

@@ -14,11 +14,11 @@ export const Layout = () => {
       navigate("/tasks/myday")
     }
   })
-  const [springs, api] = useSpring(() => ({
+  const [springsLeftBar, apiLeftBar] = useSpring(() => ({
     from: { x: 0 },
   }))
-  function openAnimationSidebar(){
-    api.start({
+  function openAnimationLeftSidebar(){
+    apiLeftBar.start({
       from: {
         x: -400,
       },
@@ -27,16 +27,29 @@ export const Layout = () => {
       },
     })
   }
+  const [springsRightBar, apiRightBar] = useSpring(() => ({
+    from: { x: 0 },
+  }))
+  function openAnimationRightSidebar(){
+    apiRightBar.start({
+      from: {
+        x: 400,
+      },
+      to: {
+        x: 0,
+      },
+    })
+  }
   return (
     <>
-      <Topbar openAnimationSidebar={openAnimationSidebar}/>
+      <Topbar openAnimationLeftSidebar={openAnimationLeftSidebar} openAnimationRightSidebar={openAnimationRightSidebar}/>
       <div className={` flex-1 h-full  w-screen grid grid-cols-16 overflow-hidden `}>
-        <LeftSidebar springs={springs}/>
+        <LeftSidebar springs={springsLeftBar}/>
         <div className={` col-span-16 lg:col-span-12 xl:col-span-13 2xl:col-span-13 grid grid-cols-16 overflow-hidden`}>
           <div className={`col-span-16  xl:col-span-12 2xl:col-span-12 bg-[#F3F3F3] p-5  2xl:p-10 h-full overflow-hidden`}>
               <Outlet/>
           </div>
-          <RightSidebar/>
+          <RightSidebar springs={springsRightBar}/>
         </div>
       </div>
     </>

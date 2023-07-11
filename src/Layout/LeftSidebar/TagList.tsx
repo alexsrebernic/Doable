@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateUserProp } from '../../store/slices/userSlice'
 import { User } from '../../types/User'
-import { setTags } from '../../store/slices/tagsSlice'
+import { moveTaskToTag, setTags } from '../../store/slices/tagsSlice'
 interface Props {
     tags: Tag[],
     func: Function
@@ -29,7 +29,7 @@ export const TagList = ({tags,func,user} : Props) => {
         const type = event.dataTransfer.getData('type')
         if(type === 'task'){
             resetValues()    
-            return moveTaskToTag(id)
+            return dispatch(moveTaskToTag({taskId:id,tagId:user.tagsIds[dragOverTagIndex]}))
         }
         if(!user.tagsIds.includes(id)) return
         const updatedTagsIds = [...user.tagsIds] 
@@ -39,8 +39,8 @@ export const TagList = ({tags,func,user} : Props) => {
         dispatch(updateUserProp({prop: 'tagsIds',value : updatedTagsIds}))
         resetValues()
     }
-    function moveTaskToTag(id){
-
+    function moveTaskToTagHandler(taskId,tagId){
+        dispatch(moveTaskToTag({taskId,tagId}))
     }
     return (
     <div 
