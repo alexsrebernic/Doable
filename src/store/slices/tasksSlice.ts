@@ -5,7 +5,7 @@ import { Tag } from '../../types/Tag/Tag';
 import { fetchTasks as fetchTasksFromAPI } from '../../api/api';
 import { RootState } from '..';
 import { createSelector } from '@reduxjs/toolkit';
-import { isToday } from 'date-fns';
+import { isToday, isSameDay,isThisWeek,isThisMonth } from 'date-fns';
 import { moveTaskToTag } from './tagsSlice';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
     const response = await fetchTasksFromAPI(userId);
@@ -90,11 +90,21 @@ const selectTasksByTagId = (tagId: number | string) => createSelector(
     }
   }
 );
-const selectTodayTasks = () => createSelector(
-  selectTasks,
+
+const selectTasksByDueDate = (dueDate : Date | string  | null) => createSelector(
+  selectTasks, 
   (tasks) => {
-    return tasks.filter((task) => task.dueDate? isToday(task.dueDate) : false);
+    if(typeof dueDate == 'string'){
+      switch(dueDate){
+        case 'Today' : return tasks.filter(task => isToday(task.dueDate));
+        case 'This week':return tasks.filter((task) => isThisWeek(task.dueDate));
+        case 'This month' :return tasks.filter((task) => isThisMonth(task.dueDate));
+      }
+    } else {
+      return tasks.filter((task) => (!dueDate || isToday(dueDate))? task.dueDate? isToday(task.dueDate) : false :  task.dueDate? isSameDay(task.dueDate, dueDate) : false)
+    }
+   
   }
 )
-export {selectTasks,selectTasksByTagId,selectTaskById, selectTodayTasks}
+export {selectTasks,selectTasksByTagId,selectTaskById, selectTasksByDueDate}
 export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant } = tasksSlice.actions;

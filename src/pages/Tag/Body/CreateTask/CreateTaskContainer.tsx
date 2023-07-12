@@ -89,7 +89,10 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                         text="Add expire date" 
                         value={dueDateValueString}
                         removeText="Remove due date"
-                        removeValueFunc={() => setTaskDueDate(null)}
+                        removeValueFunc={() => {
+                            setTaskDueDate(null)
+                            if(repeatValue) resetValues()
+                        }}
                         elements={
                             [
                                 {
