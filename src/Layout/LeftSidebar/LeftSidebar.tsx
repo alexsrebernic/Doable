@@ -72,7 +72,7 @@ export const LeftSidebar = ({springs}) => {
               </div>
               <div className='px-4  pt-4 flex flex-col  overflow-hidden'>
                 <div className='space-y-3 max-h-full flex flex-col overflow-y-auto'>
-                  <button style={{
+                  <button onClick={() => navigate('/tasks/mytasks', {state:true})} style={{
                     "boxShadow":" 0px 0px 4px #225FFC"
                   }} className='bg-[#225FFC] flex items-center justify-center space-x-3 py-2.5 shadow-md shadow-[#225FFC] w-full rounded-xl'>
                     <Icon icon="ic:baseline-plus" color="white" width={24} />
@@ -87,7 +87,7 @@ export const LeftSidebar = ({springs}) => {
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
                     <div className=''>
                       {
-                           FavoriteTags.map((o : Tag, index : number) => {
+                           FavoriteTags.filter(t => t.id !== 'search').map((o : Tag, index : number) => {
                             return (
                               <ButtonNav notFavorite={false} func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
                               )

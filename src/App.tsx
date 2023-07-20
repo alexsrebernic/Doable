@@ -25,6 +25,7 @@ export const App = ({children} : {children: React.ReactNode} ) => {
   const [isSidebarShowing, collapseSidebar] = useState(false)
   const [isHelpSidebarShowing, collapseHelpSidebar] = useState(false)
   const [isCalendarShowing, collapseCalendar] = useState(false)
+  const [searchBarInput, setSearchBarInputValue] = useState('')
   const user : User | null = useSelector(selectCurrentUser) || null
   function openModal(content : JSX.Element) {
     setModalContent(content)
@@ -73,7 +74,8 @@ export const App = ({children} : {children: React.ReactNode} ) => {
             sidebar: { state:isSidebarShowing, func:() => collapseSidebar(oldVal => !oldVal)},
             calendar: {state: isCalendarShowing, func: () => collapseCalendar(oldVal => !oldVal)},
             helpSidebar: {state:isHelpSidebarShowing, func: () => collapseHelpSidebar(oldVal => !oldVal)},
-            user
+            user,
+            searchBarData: {state: searchBarInput, func: (val) => setSearchBarInputValue(val)}
           }
         }>
           {children}

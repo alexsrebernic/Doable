@@ -6,6 +6,7 @@ import {About} from './pages/About/About'
 import { Tag } from './pages/Tag/Tag'
 import { RouteObject } from 'react-router-dom'
 import { Layout } from './Layout/Layout'
+import React from 'react'
 
 const routes : RouteObject[] = [
     {
@@ -17,7 +18,7 @@ const routes : RouteObject[] = [
          path:"tasks/:tag_id",
          errorElement:<Error404Page/>,
          element:<Tag/>,
-        },
+        },  
         {
           path:"stats",
           element:<Stats/>

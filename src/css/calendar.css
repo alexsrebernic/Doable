@@ -17,14 +17,16 @@
 .MuiPickersDay-today {
     background-color: #225FFC !important;
     color: white !important;
-    border:  none  !important;
+    border:  none !important;
     font-family: 'Montserrat', sans-serif;
 }
+
 .Mui-selected {
-    background-color: #8A8A8A !important;
-    color: white;
+    color: #225FFC !important;
     font-weight: 600;
     font-family: 'Montserrat', sans-serif;
+    background-color: white !important;
+    border:  1px solid  #225FFC !important;
 
 }
 .MuiDateCalendar-root div{

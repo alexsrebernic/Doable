@@ -1,3 +1,5 @@
+import { parseISO } from "date-fns";
+
 export const returnDueDateValue = (selectedDueDate) => {
     let dueDateValue;
     switch (selectedDueDate) {
@@ -14,8 +16,8 @@ export const returnDueDateValue = (selectedDueDate) => {
         afterTomorrow.setDate(afterTomorrow.getDate() + 2);
         dueDateValue = afterTomorrow;
         break;
-      case 'custom':
-        dueDateValue = new Date(selectedDueDate)
+      default:
+        dueDateValue = parseISO(selectedDueDate) 
         break;
     }
     return dueDateValue

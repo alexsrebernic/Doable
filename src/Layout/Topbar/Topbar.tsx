@@ -4,13 +4,13 @@ import { useContext, useState } from 'react';
 import React from 'react';
 import { SearchInput } from './SearchInput';
 
+
 export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => {
-  const {sidebar,helpSidebar} = useContext(AppContext)
-  const [message, setMessage] = useState('');
+  const {sidebar,helpSidebar,searchBarData} = useContext(AppContext)
 
   const handleChange = (value: string) => {
     // 👇 Get input value from "event"
-    setMessage(value);
+    searchBarData.func(value);
   };
   function collapseLeftSidebar(){
     if(helpSidebar.state) return helpSidebar.func()
@@ -39,7 +39,7 @@ export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => 
                 <div onClick={collapseLeftSidebar} className='lg:hidden'>
                     <Icon icon="material-symbols:menu" width={40} />
                 </div>
-                  <SearchInput value={message} func={handleChange}/>
+                  <SearchInput value={searchBarData.state} func={handleChange}/>
             </div>
             <div className='flex items-center space-x-3'>
                 <Icon className='cursor-pointer' width={30} height={30} icon="material-symbols:settings" color="#225ffc" />

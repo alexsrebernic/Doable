@@ -50,7 +50,7 @@ export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
                     onDragOver={(e : React.DragEvent) => e.preventDefault()}
                     onDragEnd={() => resetValues()}
                 >
-                    <TaskItem  task={t}   isDragged={draggedTaskIndex == index} isDragOver={dragOverTaskIndex == index} tag={tag}/>
+                    <TaskItem   task={t}   isDragged={draggedTaskIndex == index} isDragOver={dragOverTaskIndex == index} tag={tag}/>
                 </div>
             )
             })

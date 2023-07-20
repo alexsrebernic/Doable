@@ -7,3 +7,6 @@
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
 }
+.css-3bmhjh-MuiPaper-root-MuiPopover-paper {
+  overflow: visible !important
+}

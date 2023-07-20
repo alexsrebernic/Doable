@@ -30,14 +30,19 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
     <>
      {
       task && 
-      <div   className={`${isDragged && 'opacity-50'} ${(isDragOver && !isDragged) && 'border-b-[#225FFC] border-b-2 border-solid'} cursor-grab bg-white 
+      <div  style={{
+        borderBottom:(isDragOver && !isDragged) ? `2px solid ${tag.theme}` : 'none'
+      }}  className={`${isDragged && 'opacity-50'}  cursor-grab bg-white 
       hover:bg-gray-50  transition flex  items-center px-3 py-3 space-x-3 shadow  overflow-hidden`}>
         <div>
-        <div onClick={handleToggleCompleted} className={`${
-          task.completed? 
-          'bg-[#225FFC]' : 
-          'border-[#225FFC]'
-        } rounded-full border  w-6 h-6 cursor-pointer`}>
+        <div 
+        style={
+          {
+            backgroundColor: task.completed? tag.theme : 'transparent',
+            border: !task.completed? `1px solid ${tag.theme}` : 'none'
+          }
+        }
+        onClick={handleToggleCompleted} className={` rounded-full border  w-6 h-6 cursor-pointer`}>
         </div>
         </div>
        
@@ -59,13 +64,16 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
             }
             {
               (task.dueDate || task.repeat) &&
-                <div className={`text-[12px] flex items-center space-x-1  ${isToday(task.dueDate) ? 'text-[#225FFC]':'text-gray-500'}`}>
-                  <div className='flex items-center space-x-1'>
-                  <Icon icon="bx:calendar" width={16} />
-                    <span>
-                      {getDateStatus(task.dueDate)}
-                    </span>
-                  </div>
+                <div className={`text-[12px] flex items-center space-x-1  ${isToday(task.dueDate) ? `text-[${tag.theme}]`:'text-gray-500'}`}>
+                  {
+                    task.dueDate && 
+                    <div className='flex items-center space-x-1'>
+                    <Icon icon="bx:calendar" width={16} />
+                      <span>
+                        {getDateStatus(task.dueDate)}
+                      </span>
+                    </div>
+                  }
                   {
                     task.repeat && 
                     <div>
@@ -83,8 +91,8 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
         <div onClick={handleToggleImportant} className=''>
           {
             task!.important?
-            <Icon width={25} className=' cursor-pointer' color='#225FFC' icon='ph:star-fill'/>:
-            <Icon width={25} className=' cursor-pointer' color='#225FFC' icon='ph:star'/>
+            <Icon width={25} className=' cursor-pointer' color={tag.theme} icon='ph:star-fill'/>:
+            <Icon width={25} className=' cursor-pointer' color={tag.theme} icon='ph:star'/>
           }
         </div>
       </div>

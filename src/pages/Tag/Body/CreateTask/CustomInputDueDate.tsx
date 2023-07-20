@@ -1,7 +1,7 @@
 import React from 'react'
 import personalizedSVG from '../../../../assets/selectdate.svg'
 import { useRef } from 'react';
-export const CustomInputDueDate = ({setValue}) => {
+export const CustomInputDueDate = ({setValue,tagColor}) => {
     const input = useRef(null);
     function handleClick() {
         input.current.focus();
@@ -9,7 +9,6 @@ export const CustomInputDueDate = ({setValue}) => {
     }
     function handleChange(){
         const value = input.current.value
-        console.log(value)
         setValue(value)
     }
     function getCurrentDate() {
@@ -32,7 +31,7 @@ export const CustomInputDueDate = ({setValue}) => {
       <>
         <div onClick={handleClick} className={`flex items-center px-2 space-x-3 p-2 hover:bg-gray-200 transition cursor-pointer w-full`} htmlFor="input-id">
             <div>
-                <img className='fill-[#225FFC]' src={personalizedSVG} alt="" />
+                <img className={`fill-[${tagColor}]`} src={personalizedSVG} alt="" />
             </div>
             <span>
             Personalized

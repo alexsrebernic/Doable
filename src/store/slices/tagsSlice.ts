@@ -19,12 +19,12 @@ export const tagsSlice = createSlice({
         const {id, userId,tagName} = action.payload
         state.push({
           name:tagName,
-          icon:null,
           tasksIds: [],
           id: id,
           numberOfTasks: 0,
           ownerId:  userId,
-          theme: 'default'
+          createdAt: new Date(),
+          theme: '#225FFC',
         });
       },
       updateTagProp: (state, action: PayloadAction<Tag>) => {

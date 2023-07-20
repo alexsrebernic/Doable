@@ -1,19 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../App'
 import { Icon } from '@iconify/react';
-import BasicDateCalendar from './BasicDateCalendar';
+import BasicDateCalendar from './Calendar/BasicDateCalendar';
 import { animated } from '@react-spring/web';
 import { useSelector } from 'react-redux';
 import { selectTasksByDueDate } from '../../store/slices/tasksSlice';
 import { TaskItem } from './TaskItem';
 import BasicDropdown from './Dropdown';
+import dayjs, { Dayjs } from 'dayjs';
 export const RightSidebar = ({springs}) => {
-  const [dateSelected, setDateSelected] = useState(new Date())
-  const [dropdownValue,setDropdownValue] = useState("Today")
+  const [dateSelected, setDateSelected] = useState<string | Dayjs>(dayjs(new Date()))
   const [task,setTask] = useState(null)
-  useEffect(() => {
-    
-  },[dropdownValue])
   const tasks = useSelector(selectTasksByDueDate(dateSelected.hasOwnProperty("$d")? dateSelected.$d : dateSelected))
   const {helpSidebar} = useContext(AppContext)
   const phoneClasses =  'absolute  inset-y-0 right-0   ' 
@@ -46,7 +43,7 @@ export const RightSidebar = ({springs}) => {
                       </div>
                     </div>
                     <div className='py-5 space-y-3  max-h-full  '>
-                      <BasicDateCalendar value={dateSelected} setDate={setDateSelected}/>
+                      <BasicDateCalendar value={dateSelected} setValue={setDateSelected}/>
                       <div className='px-7 '>
                         <BasicDropdown 
                         text='Select'
@@ -55,8 +52,7 @@ export const RightSidebar = ({springs}) => {
                           'This week',
                           'This month'
                         ]}
-                        setFunction={setDropdownValue}
-                        value={dropdownValue}
+                        setFunction={setDateSelected}
                         />
                       </div>
                     
@@ -76,7 +72,7 @@ export const RightSidebar = ({springs}) => {
                               :
                               <div className='my-3'>
                                 <span className='text-sm text-[#8A8A8A]'>
-                                  No completed tasks for today!
+                                  . . .
                                 </span>
                               </div>
                             }
@@ -97,7 +93,7 @@ export const RightSidebar = ({springs}) => {
                               :
                               <div className='my-3'>
                                 <span className='text-sm text-center text-[#8A8A8A]'>
-                                  No pending tasks for today!
+                                  . . .
                                 </span>
                               </div>
                             }

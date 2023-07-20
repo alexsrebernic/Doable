@@ -9,12 +9,11 @@ import { selectTasksByTagId } from '../../store/slices/tasksSlice'
 import { useSelector } from 'react-redux'
 export const Tag = () => {
   const navigate = useNavigate()
-  const {showToast} = useContext(AppContext)
+  const {showToast,searchBarData} = useContext(AppContext)
   const {tag_id} = useParams()
   const [isLoading,setIsLoading] = useState(false)
-  const tag = useSelector(selectTagById(tag_id)) 
-  const tasks = useSelector(selectTasksByTagId(tag_id));
-
+  let tag = useSelector(selectTagById(tag_id)) 
+  let tasks = useSelector(selectTasksByTagId(tag_id,searchBarData.state));
   useEffect(() => {
     try {
       setIsLoading(true)
@@ -27,17 +26,18 @@ export const Tag = () => {
       navigate("/tasks/myday")
     }
   },[tag_id])
-  
   return (
     <div className='flex flex-col flex-1 max-h-full relative overflow-hidden'>
-      {(tag && tasks) && 
+      {(tag && tasks)  && 
       <>
-        <Header tag_id={tag_id} tag={tag}/>
+        {
+          tag.id != 'search' && <Header  tag_id={tag_id} tag={tag}/>
+        }
         <div className='mb-5 mt-2 flex flex-col   overflow-y-auto max-h-full '>
-          <TasksContainer route={tag_id} tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
+          <TasksContainer  route={tag_id} tag={tag} tasks={tag.id !== 'completed'?(() => tasks.filter(t => !t.completed))(): (() => tasks.filter(t => t.completed))() }/>
           {tasks.every(task => !task.completed) || tag.id === 'completed' || tag.id === 'important'? null :
             <>
-              <GroupTasksContainer route={tag_id} tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
+              <GroupTasksContainer  route={tag_id} tag={tag} tasks={(() => tasks.filter(t => t.completed))()} text="Completed"/>
             </>
           }
         </div>

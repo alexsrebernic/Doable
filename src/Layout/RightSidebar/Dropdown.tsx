@@ -9,11 +9,10 @@ interface Props {
     items : string[],
     setFunction: Function
 }
-export default function BasicDropdown({text,items,setFunction,value} : Props) {
-    React.useEffect(() => {
-        setFunction(items[0])
-    },[])
+export default function BasicDropdown({text,items,setFunction} : Props) {
+  const [value,setDropdownValue] = React.useState("Today")
   const handleChange = (event: SelectChangeEvent) => {
+    setDropdownValue(event.target.value as string)
     setFunction(event.target.value as string);
   };
 

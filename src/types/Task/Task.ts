@@ -5,6 +5,7 @@ type Task = {
     ownerId: string,
     readonly id: string,
     completed: Boolean,
+    completedAt: Date | null,
     createdAt: Date,
     tagId: string,
     important: Boolean,

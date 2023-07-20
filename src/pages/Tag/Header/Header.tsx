@@ -8,8 +8,12 @@ import { useContext } from 'react'
 import { favoriteTagsIds } from '../../../helper/favoriteTag'
 import { AppContext } from '../../../App'
 import { CreateTaskContainer } from '../Body/CreateTask/CreateTaskContainer'
+import { removeTag } from '../../../store/slices/tagsSlice'
+import { useNavigate } from 'react-router-dom'
+import { ColorPalletePicker } from './ColorPalletePicker'
 export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
     const {showToast} = useContext(AppContext)
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [tagName, setTagName] = useState<string>('')
     useEffect(() => {
@@ -18,11 +22,13 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
     function printList(){
 
     }
-    function changeTheme(){
-
+    function changeTheme(color){
+        console.log(tag.theme)
+        dispatch(updateTagProp({tagId: tag.id,prop: 'theme',value : color}))
     }
-    function removeTag(){
-
+    function removeTagHandler(){
+        dispatch(removeTag(tag.id))
+        navigate('/tasks/myday')
     }
     function changeSortOrder(order){
         console.log(order)
@@ -38,10 +44,9 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
             func: printList,
         },
         {
-            icon:"mdi:paint-outline",
-            text:"Change theme",
-            func: changeTheme
-        },
+            component: <ColorPalletePicker tag={tag} setValue={changeTheme}/>
+        }
+     
     ]
     const menuSortElement = [
         {
@@ -115,23 +120,24 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                         <div className='hidden md:block'>
                         {
                             tag.icon?
-                            <Icon color='#225FFC' icon={tag.icon} width={30}/>:
-                            <Icon color='#225FFC' icon="mi:list" width={40}/>
+                            <Icon color="#225FFC" icon={tag.icon} width={30}/>:
+                            <Icon color={tag.theme} icon="mi:list" width={40}/>
                         }
                         </div>
                         {
                             favoriteTagsIds.includes(tag.id)?
                             <h1 
-                        className={`font-semibold text-[#225FFC] truncate text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  `}
+                        className={`font-semibold text-[${tag.theme}] truncate text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  `}
                         >
                                 {tag.name}
                             </h1>
                             :
                             <input 
                             onKeyDown={(event) => (event.key === 'Enter' && tagName.length > 0) && handleChangeTagName()}
-                            style={{ width: tagName.length + 2 + 'ch' }}
+                            style={{ width: tagName.length + 2 + 'ch',
+                            color: tag.theme}}
                             value={tagName}
-                            className={`px-2 max-w-[6em] md:max-w-[16em] 2xl:max-w-[20em] text-[#225FFC] overflow-x-auto font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  bg-transparent`}
+                            className={`px-2 max-w-[6em] md:max-w-[16em] 2xl:max-w-[20em] text-[${tag.theme}] overflow-x-auto font-semibold text-2xl sm:text-3xl md:text-3xl 2xl:text-3xl  bg-transparent`}
                             type="text"
                             onBlur={(e) => handleChangeTagName()}
                             onChange={handleInputTagName}
@@ -142,7 +148,7 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                 </div>
                 <div className='flex items-center justify-between w-full'>
                             <div>
-                                <PopoverButton removeText='Remove tag' value={!favoriteTagsIds.includes(tag.id)} removeValueFunc={removeTag} icon="ph:dots-three-bold" text="Settings" elements={menuSettingsElement}/>
+                                <PopoverButton color={tag.theme} removeText='Remove tag' value={!favoriteTagsIds.includes(tag.id)} removeValueFunc={removeTagHandler} icon="ph:dots-three-bold" text="Settings" elements={menuSettingsElement}/>
                             </div>
                     <div className='flex space-x-4 font-medium '>
                         {
@@ -151,8 +157,8 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                                <div className='font-semibold text-sm flex justify.center items-center px-2 space-x-1'>
                                     <div onClick={toggleSortOrder} className='cursor-pointer' >
                                         {tag.sortOrder == 'desc'? 
-                                        <Icon icon="majesticons:chevron-up" width={20}/>:
-                                        <Icon icon="majesticons:chevron-down" width={20}/>
+                                        <Icon color={tag.theme} icon="majesticons:chevron-up" width={20}/>:
+                                        <Icon color={tag.theme} icon="majesticons:chevron-down" width={20}/>
                                     }
                                     </div>
                                     <span>
@@ -160,13 +166,13 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                                             getSortedText()
                                         }
                                     </span> 
-                                    <Icon onClick={removeSortBy} className='cursor-pointer' icon="basil:cross-outline" width={20} />
+                                    <Icon onClick={removeSortBy} color={tag.theme} className='cursor-pointer' icon="basil:cross-outline" width={20} />
     
                                 </div>
                             </>
                         }
                             <div>
-                                <PopoverButton icon="bx:sort" text="Sort" elements={menuSortElement}/>
+                                <PopoverButton color={tag.theme} icon="bx:sort" text="Sort" elements={menuSortElement}/>
                             </div>
                     </div>
                 </div>

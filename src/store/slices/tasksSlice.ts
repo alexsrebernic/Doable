@@ -6,7 +6,7 @@ import { fetchTasks as fetchTasksFromAPI } from '../../api/api';
 import { RootState } from '..';
 import { createSelector } from '@reduxjs/toolkit';
 import { isToday, isSameDay,isThisWeek,isThisMonth } from 'date-fns';
-import { moveTaskToTag } from './tagsSlice';
+import { moveTaskToTag, removeTag } from './tagsSlice';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
     const response = await fetchTasksFromAPI(userId);
     return response.data;
@@ -17,6 +17,7 @@ export const tasksSlice = createSlice({
     reducers: {
       addTask: (state, action: PayloadAction<Task>) => {
         const task = action.payload;
+        console.log(task)
         state.push(task);
       },
       updateTask: (state, action: PayloadAction<Task>) => {
@@ -69,6 +70,9 @@ export const tasksSlice = createSlice({
         newTask.tagId = tagId;
         state[taskIndex] = newTask
       })
+      .addCase(removeTag, (state,action) => {
+        return state.filter(task => task.tagId !== action.payload)
+      })
     },
   });
 const selectTasks = (state: RootState) => state.tasks;
@@ -78,7 +82,7 @@ const selectTaskById =(taskId: string) => createSelector(
     return tasks.find(t => t.id == taskId)
   }
 )
-const selectTasksByTagId = (tagId: number | string) => createSelector(
+const selectTasksByTagId = (tagId: number | string,searchInput : string) => createSelector(
   selectTasks,
   (tasks) => {
     switch (tagId) {
@@ -86,6 +90,7 @@ const selectTasksByTagId = (tagId: number | string) => createSelector(
       case 'important': return tasks.filter((task) => task.important);
       case 'myday': return tasks.filter((task) => task.dueDate? isToday(task.dueDate) : false);
       case 'all': return tasks;
+      case 'search': return tasks.filter((task => searchInput.length > 0 && task.text.toLowerCase().includes(searchInput.toLowerCase()))) 
       default: return tasks.filter((task) => task.tagId == tagId);
     }
   }

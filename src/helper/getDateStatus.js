@@ -1,3 +1,5 @@
+import { parseISO } from "date-fns";
+
 export default function getDateStatus(date) {
     // Get the current date
     var today = new Date();
@@ -9,7 +11,6 @@ export default function getDateStatus(date) {
     // Get the day after tomorrow's date
     var afterTomorrow = new Date();
     afterTomorrow.setDate(today.getDate() + 2);
-  
     // Check if the given date is today
     if (
       date.getDate() === today.getDate() &&

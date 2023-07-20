@@ -13,7 +13,7 @@ interface Props {
   size?: Number,
   value?: string | boolean,
   removeValueFunc?: Function,
-  removeText? : string
+  removeText? : string,
 }
 export default function PopoverButton({text,elements,icon,color,size,value,removeValueFunc,removeText} : Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -35,10 +35,12 @@ export default function PopoverButton({text,elements,icon,color,size,value,remov
 
   return (
     <div >
-      <button className={`${typeof value == 'string' && 'border-[#225FFC] space-x-2 flex items-center rounded  border border-solid'} p-1 transition` }  aria-describedby={id}  onClick={handleClick}>
-        <Icon icon={icon} width={size?size:30} className={color?`text-[${color}]`:'hover:text-blue-500 text-[#225FFC] transition'} color=''/>
+      <button style={{
+        border : typeof value == 'string' && `1px solid ${color}`
+      }} className={`${typeof value == 'string' && `space-x-2 flex items-center rounded  border border-solid`} p-1 transition` }  aria-describedby={id}  onClick={handleClick}>
+        <Icon icon={icon} width={size?size:30} className={`text-[${color}] fill-[${color}] transition`} color={color}/>
         {
-          value && <span className='text-[#225FFC] text-sm font-medium'>{value}</span>
+          value && <span style={{color:color}} className={` text-sm font-medium`}>{value}</span>
         }
       </button>
       <Popover
@@ -50,6 +52,12 @@ export default function PopoverButton({text,elements,icon,color,size,value,remov
           vertical: 'bottom',
           horizontal: 'left',
         }}
+        style={
+          {
+            "overflow" : "visible !important"
+          }
+        }
+        className='overflow-visible'
     >
         <div className='border-b text-center font-semibold py-2 '>
           {text}
@@ -67,12 +75,12 @@ export default function PopoverButton({text,elements,icon,color,size,value,remov
                   </>
                    
                   :
-                  <div onClick={() => handleFunction(o.func,o.arg)} className={`${o.hasOwnProperty('component')  && 'border-t border-1 border-solid ' } flex items-center px-2 space-x-3 p-2 hover:bg-gray-200 transition cursor-pointer`} key={i}>
+                  <div onClick={() => handleFunction(o.func,o.arg)} className={`flex items-center px-2 space-x-3 p-2 hover:bg-gray-200 transition cursor-pointer`} key={i}>
                     <div>
                       {
                         o.icon?
-                        <Icon color="#225FFC" width={23} icon={o.icon}/>:
-                        <img className='fill-[#225FFC]' src={o.svgElement} alt="" />
+                        <Icon color={color} width={23} icon={o.icon}/>:
+                        <img style={{"fill":color}}  src={o.svgElement} alt="" />
                       }
                     </div>
                     <span>
