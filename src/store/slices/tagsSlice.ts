@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk, createSelector } from '@r
 import { Tag } from '../../types/Tag/Tag';
 import { fetchTags as fetchTagsFromAPI } from '../../api/api';
 import FavoriteTags,{favoriteTagsIds} from '../../helper/favoriteTag';
-import { addTask, selectTaskById } from './tasksSlice';
+import { addTask, removeTask, selectTaskById } from './tasksSlice';
 import { RootState } from '..';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from './userSlice';
@@ -66,6 +66,13 @@ export const tagsSlice = createSlice({
             tag.tasksIds = []
           }
           tag.tasksIds.push(id);
+        }
+      })
+      .addCase(removeTask, (state, action) => {
+        const { id, tagId } = action.payload;
+        const tag = state.find((tag) => tag.id == tagId);
+        if (tag) {
+          tag.tasksIds = tag.tasksIds?.filter(taskId => taskId !== id)
         }
       })
     },
