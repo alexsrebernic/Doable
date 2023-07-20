@@ -37,18 +37,18 @@ const CustomPickersDay = styled(PickersDay, {
   }),
 })) as React.ComponentType<CustomPickerDayProps>;
 
-function Day(props: PickersDayProps<Dayjs> & { selectedDay?: Dayjs | null }) {
-  const { day, selectedDay, ...other } = props;
-
-  if (selectedDay == null) {
+function Day(props: PickersDayProps<Dayjs> & { selectedday?: Dayjs | null }) {
+  const { day, selectedday, ...other } = props;
+  console.log(selectedday)
+  if (selectedday == null) {
     return <PickersDay day={day} {...other} />;
   }
-  if(typeof selectedDay == 'string'){
-    if(selectedDay == 'Today') return (
+  if(typeof selectedday == 'string'){
+    if(selectedday == 'Today') return (
       <PickersDay
       day={day} {...other} />
     );
-    if(selectedDay == 'This week') {
+    if(selectedday == 'This week') {
       console.log(day)
       const today = dayjs(new Date())
       const start = today.startOf('week');
@@ -67,7 +67,7 @@ function Day(props: PickersDayProps<Dayjs> & { selectedDay?: Dayjs | null }) {
         />
       );
     }
-    if(selectedDay == 'This month') {
+    if(selectedday == 'This month') {
       const today = dayjs(new Date())
       const start = today.startOf('month');
       const end = today.endOf('month');
@@ -87,16 +87,20 @@ function Day(props: PickersDayProps<Dayjs> & { selectedDay?: Dayjs | null }) {
         />
       );
     }
+  } else {
+    return <PickersDay
+      day={day} {...other} />
   }
 }
 
 export default function BasicDateCalendar({value,setValue}) {
+  console.log(value)
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
         value={typeof value === 'string'? dayjs(new Date()) : value}
         onChange={(newValue) => setValue(newValue)}
-        slots={{ day: Day }}
+        slots={ { day: Day }}
         slotProps={{
           day: {
             selectedday: value,
