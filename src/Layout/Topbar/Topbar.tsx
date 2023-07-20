@@ -1,15 +1,18 @@
 import { Icon } from '@iconify/react';
 import { AppContext } from '../../App'
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { SearchInput } from './SearchInput';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => {
   const {sidebar,helpSidebar,searchBarData} = useContext(AppContext)
-
+  const navigate = useNavigate()
+  const location = useLocation()
   const handleChange = (value: string) => {
-    // 👇 Get input value from "event"
+    if(value.length == 0) navigate(-1)
+    if(location.pathname !== '/tasks/search') navigate('tasks/search')
     searchBarData.func(value);
   };
   function collapseLeftSidebar(){

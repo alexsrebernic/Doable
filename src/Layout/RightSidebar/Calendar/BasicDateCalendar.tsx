@@ -39,7 +39,6 @@ const CustomPickersDay = styled(PickersDay, {
 
 function Day(props: PickersDayProps<Dayjs> & { selectedday?: Dayjs | null }) {
   const { day, selectedday, ...other } = props;
-  console.log(selectedday)
   if (selectedday == null) {
     return <PickersDay day={day} {...other} />;
   }
@@ -49,7 +48,6 @@ function Day(props: PickersDayProps<Dayjs> & { selectedday?: Dayjs | null }) {
       day={day} {...other} />
     );
     if(selectedday == 'This week') {
-      console.log(day)
       const today = dayjs(new Date())
       const start = today.startOf('week');
       const end = today.endOf('week');
@@ -94,7 +92,6 @@ function Day(props: PickersDayProps<Dayjs> & { selectedday?: Dayjs | null }) {
 }
 
 export default function BasicDateCalendar({value,setValue}) {
-  console.log(value)
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar

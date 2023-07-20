@@ -3,7 +3,6 @@ import { parseISO } from "date-fns";
 export default function getDateStatus(date) {
     // Get the current date
     var today = new Date();
-  console.log(date)
     // Get tomorrow's date
     var tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);

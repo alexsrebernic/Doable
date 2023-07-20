@@ -29,14 +29,10 @@ export const SearchInput = ({value,func} : {value:string,func: Function}) => {
                 collapseSearchInput(oldVal => !oldVal)
                 handleClick()
                 func("")
-                navigate('/tasks/search')
                 }} className='inline-block' icon="material-symbols:search" color="8a8a8a" width={30} />
             <div className={` ${showSearchInput?'inline-block':'hidden  '} w-full inline-block items-center justify-between `}>
                 <input 
                 value={value} 
-                onClick={() => 
-                  navigate('/tasks/search')
-                }
                 onChange={(e) => func(e.target.value)
                   }  className={` ${showSearchInput?'block':'hidden'} focus:outline-none   inline-block  placeholder:text-[#8a8a8a]  w-3/4  sm:w-5/6 h-full`} type="text" placeholder='Search task' />
                     {
@@ -49,9 +45,6 @@ export const SearchInput = ({value,func} : {value:string,func: Function}) => {
             <Icon className='inline-block' icon="material-symbols:search" color="8a8a8a" width={30} />
             <div className={` w-full inline-flex items-center justify-between `}>
                 <input
-                 onClick={() => 
-                  navigate('/tasks/search')
-                }
                 value={value}  onChange={(e) => func(e.target.value)}  className={`  focus:outline-none   inline-block  placeholder:text-[#8a8a8a]  w-3/4   h-full`} type="text" placeholder='Search task' />
                     {
                     value.length > 0 &&
