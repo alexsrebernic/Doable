@@ -47,9 +47,9 @@ To set up the Doable app locally, follow these steps:
 
    To enable authentication and backend functionalities, you need to set up Firebase. Create a Firebase project and obtain the necessary credentials (apiKey, authDomain, projectId, etc.).
 
-   - For Firebase Auth: Update the Firebase configuration in `src/auth/firebaseConfig.js`.
+   - For Firebase Auth: Update or create the Firebase configuration in `src/api/firebase.config.js`.
 
-   - For Firebase Backend: Update the Firebase configuration in `src/firebase/firebaseConfig.js`.
+   - For Firebase Backend: Update or create the Firebase configuration in `src/api/firebase.config.js`.
 
 4. **Start the development server**:
 
