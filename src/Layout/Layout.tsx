@@ -6,7 +6,7 @@ import { useSpring } from '@react-spring/web'
 import { RightSidebar } from './RightSidebar/RightSidebar'
 import { AppContext } from '../App'
 export const Layout = () => {
-  const {sidebar} = useContext(AppContext)
+  const {sidebar,helpSidebar} = useContext(AppContext)
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
@@ -31,6 +31,7 @@ export const Layout = () => {
     from: { x: 0 },
   }))
   function openAnimationRightSidebar(){
+    if(window.innerWidth > 1243) return
     apiRightBar.start({
       from: {
         x: 400,
@@ -40,6 +41,9 @@ export const Layout = () => {
       },
     })
   }
+  useEffect(() => {
+    if(helpSidebar.taskId) openAnimationRightSidebar()
+  },[helpSidebar.taskId])
   return (
     <>
       <Topbar openAnimationLeftSidebar={openAnimationLeftSidebar} openAnimationRightSidebar={openAnimationRightSidebar}/>

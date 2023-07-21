@@ -16,6 +16,7 @@ export const Tag = () => {
   let tasks = useSelector(selectTasksByTagId(tag_id,searchBarData.state));
   useEffect(() => {
     try {
+      if(document.readyState !== 'complete') return
       setIsLoading(true)
       if(!tag) throw Error("ERROR 404: Tag doesn´t exists");
       setIsLoading(false)

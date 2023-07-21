@@ -64,7 +64,7 @@ export const TagList = ({tags,func,user} : Props) => {
                             text={o.name} 
                             icon={o.icon} 
                             fullPath={`tasks/${o.id}`}  
-                            number={0} 
+                            id={o.id} 
                             key={index}
                             isDragOver={index == dragOverTagIndex && dragOverTagIndex !== draggedTagIndex}
                             isDragged={index == draggedTagIndex}

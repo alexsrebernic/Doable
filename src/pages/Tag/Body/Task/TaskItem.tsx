@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Task from '../../../../types/Task/Task'
 import { Icon } from '@iconify/react'
 import { toggleImportant,toggleCompleted, updateTask } from '../../../../store/slices/tasksSlice'
@@ -8,6 +8,7 @@ import { Tag } from '../../../../types/Tag/Tag'
 import { selectTagById } from '../../../../store/slices/tagsSlice'
 import getDateStatus from '../../../../helper/getDateStatus'
 import { isToday } from 'date-fns'
+import { AppContext } from '../../../../App'
 
 interface Props {
   task : Task,
@@ -17,23 +18,32 @@ interface Props {
 }
 export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
   const dispatch = useDispatch()
-  const handleToggleCompleted = () => dispatch(toggleCompleted(task.id))
-  const handleToggleImportant = () => dispatch(toggleImportant(task.id))
+  const {helpSidebar : { taskId, setTaskId, func,state }} = useContext(AppContext)
+
+  const handleToggleCompleted = (e) => {
+    dispatch(toggleCompleted(task.id))
+    e.stopPropagation()
+  }
+  const handleToggleImportant = (e) => { 
+    dispatch(toggleImportant(task.id))
+    e.stopPropagation()
+  }
 
   function getTagName(){
     return useSelector(selectTagById(task.tagId))?.name
   }
-  function getTaskDueDate(){
-
+  function handleClick(){
+    setTaskId(task.id)
+    if(!state) func()
   }
   return (
     <>
      {
       task && 
-      <div  style={{
+      <div onClick={handleClick} style={{
         borderBottom:(isDragOver && !isDragged) ? `2px solid ${tag.theme}` : 'none'
-      }}  className={`${isDragged && 'opacity-50'}  cursor-grab bg-white 
-      hover:bg-gray-50  transition flex  items-center px-3 py-3 space-x-3 shadow  overflow-hidden`}>
+      }}  className={`${isDragged && 'opacity-50'}  cursor-pointer bg-white ${taskId == task.id ? 'bg-slate-200' : 'hover:bg-gray-100'}
+       active:cursor-pointer  transition flex  items-center px-3 py-3 space-x-3 shadow  overflow-hidden`}>
         <div>
         <div 
         style={
@@ -42,7 +52,7 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
             border: !task.completed? `1px solid ${tag.theme}` : 'none'
           }
         }
-        onClick={handleToggleCompleted} className={` rounded-full border  w-6 h-6 cursor-pointer`}>
+        onClick={(e) => handleToggleCompleted(e)} className={` rounded-full border  w-6 h-6 cursor-pointer`}>
         </div>
         </div>
        
@@ -63,12 +73,22 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
               </>
             }
             {
+              task.myDay &&
+              <div className='text-gray-500 after:content-["•"] after:px-1 max-w-[10ch] text-xs items-center justify-center space-x-1 px-1  flex font-medium   w-fit'>
+                <Icon icon='ph:sun' color='' />
+                <span>
+                  My day
+                </span>
+              </div>
+            }
+            {
               (task.dueDate || task.repeat) &&
                 <div className={`text-[12px] flex items-center space-x-1  ${isToday(task.dueDate) ? `text-[${tag.theme}]`:'text-gray-500'}`}>
+
                   {
                     task.dueDate && 
                     <div className='flex items-center space-x-1'>
-                    <Icon icon="bx:calendar" width={16} />
+                    <Icon icon="bx:calendar" width={16}  />
                       <span>
                         {getDateStatus(task.dueDate)}
                       </span>
@@ -88,7 +108,7 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
           </div>
          
         </div>
-        <div onClick={handleToggleImportant} className=''>
+        <div onClick={(e) => handleToggleImportant(e)} className=''>
           {
             task!.important?
             <Icon width={25} className=' cursor-pointer' color={tag.theme} icon='ph:star-fill'/>:

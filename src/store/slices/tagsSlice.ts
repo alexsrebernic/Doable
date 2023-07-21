@@ -4,13 +4,15 @@ import { fetchTags as fetchTagsFromAPI } from '../../api/api';
 import FavoriteTags,{favoriteTagsIds} from '../../helper/favoriteTag';
 import { addTask, removeTask, selectTaskById } from './tasksSlice';
 import { RootState } from '..';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from './userSlice';
 import Task from '../../types/Task/Task';
 export const fetchTags = createAsyncThunk('tags/fetchTags', async (userId: number) => {
+    if(!userId) return [...FavoriteTags]
     const response = await fetchTagsFromAPI(userId);
     return [...response.data, ...FavoriteTags];
-  });
+});
+
 export const tagsSlice = createSlice({
     name: 'tags',
     initialState: [] as Tag[],
@@ -21,7 +23,6 @@ export const tagsSlice = createSlice({
           name:tagName,
           tasksIds: [],
           id: id,
-          numberOfTasks: 0,
           ownerId:  userId,
           createdAt: new Date(),
           theme: '#225FFC',
@@ -51,8 +52,10 @@ export const tagsSlice = createSlice({
         const taskIndex = state[fromTagIndex].tasksIds?.findIndex(t => t.id == taskId)
         state[toTagIndex].tasksIds?.push(taskId)
         state[fromTagIndex].tasksIds?.slice(taskIndex,1)
-       
       },
+      setFavoriteTags:(state,action) => {
+        return [...FavoriteTags]
+      }
     },
     extraReducers: (builder) => {
       builder.addCase(fetchTags.fulfilled, (state, action, ) => {
@@ -81,4 +84,4 @@ export const tagsSlice = createSlice({
 export const selectTags = (state: RootState) => state.tags;
 export const selectTagById = (tagId : number | string) => createSelector(selectTags, (tags) => tags.find(tag => tag.id == tagId))
 export const selectNonFavoriteTags = createSelector(selectTags, (tags) => tags.filter((tag) => !favoriteTagsIds.includes(tag.id))) 
-export const { addTag, updateTagProp, removeTag, setTags, moveTaskToTag } = tagsSlice.actions;
+export const { addTag, updateTagProp, removeTag, setTags, moveTaskToTag, setFavoriteTags } = tagsSlice.actions;

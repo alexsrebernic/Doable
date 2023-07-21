@@ -6,6 +6,7 @@ import useInitializeApp from './hooks/useInitializeApp';
 import { User } from './types/User';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from './store/slices/userSlice';
+import Task from './types/Task/Task';
 const customStyles = {
   content: {
     top: '50%',
@@ -26,6 +27,7 @@ export const App = ({children} : {children: React.ReactNode} ) => {
   const [isHelpSidebarShowing, collapseHelpSidebar] = useState(false)
   const [isCalendarShowing, collapseCalendar] = useState(false)
   const [searchBarInput, setSearchBarInputValue] = useState('')
+  const [taskId, setTaskId] = useState<number | null>(null)
   const user : User | null = useSelector(selectCurrentUser) || null
   function openModal(content : JSX.Element) {
     setModalContent(content)
@@ -73,7 +75,12 @@ export const App = ({children} : {children: React.ReactNode} ) => {
             showToast: (message: string , type : string) => showToast(message,type),
             sidebar: { state:isSidebarShowing, func:() => collapseSidebar(oldVal => !oldVal)},
             calendar: {state: isCalendarShowing, func: () => collapseCalendar(oldVal => !oldVal)},
-            helpSidebar: {state:isHelpSidebarShowing, func: () => collapseHelpSidebar(oldVal => !oldVal)},
+            helpSidebar: { 
+              state:isHelpSidebarShowing, 
+              func: () => collapseHelpSidebar(oldVal => !oldVal), 
+              taskId,
+              setTaskId
+            },
             user,
             searchBarData: {state: searchBarInput, func: (val) => setSearchBarInputValue(val)}
           }

@@ -1,6 +1,6 @@
 export interface User {
     id: string,
-    email: string,
+    email: string | null,
     tagsIds: string[],
-    createdAt?: Date
+    createdAt?: number,
 }

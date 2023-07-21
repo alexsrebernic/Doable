@@ -12,14 +12,17 @@ const useInitializeApp = () => {
     const initialize = async () => {
       try {
         console.log("Initializing app...")
-        let user = currentUser
-        if(!user) user = (await dispatch(fetchUser(123))).payload
-        console.log(user)
-        dispatch(setUser(user)); // Set the user in the store
-        await Promise.all([
-          dispatch(fetchTags(user.id)),
-          dispatch(fetchTasks(user.id))
-        ]);
+        let user : User | null = currentUser
+        if(!user){
+          setAnonymusUser(dispatch)
+          await fetchData(dispatch,null)
+        } else {
+          if(user.id === 'anonymus' ){
+            if(user.createdAt! > Date.now() + 86400000) setAnonymusUser(dispatch)
+          } else {
+            await fetchData(dispatch,user.id)
+          }
+        }
       } catch (error) {
         console.error(error)
       }
@@ -29,5 +32,22 @@ const useInitializeApp = () => {
 
   return null; 
 };
+
+function setAnonymusUser(dispatch){
+  dispatch(setUser(
+    {
+      id:'anonymus',
+      createdAt: Date.now(),
+      tagsIds: [],
+      email: null
+    }
+  ))
+}
+async function fetchData(dispatch, userId){
+  await Promise.all([
+    dispatch(fetchTags(userId)),
+    dispatch(fetchTasks(userId))
+  ]);
+}
 
 export default useInitializeApp;

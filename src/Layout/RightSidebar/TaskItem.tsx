@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Task from '../../types/Task/Task'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import { toggleCompleted } from '../../store/slices/tasksSlice'
 import getDateStatus from '../../helper/getDateStatus'
 import { selectTagById } from '../../store/slices/tagsSlice'
 import { NavLink } from 'react-router-dom'
+import { AppContext } from '../../App'
 interface Props {
     task: Task
 }

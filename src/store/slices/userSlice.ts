@@ -19,6 +19,9 @@ export const userSlice = createSlice({
         const {prop,value} = action.payload;
         state[prop] = value;
       },
+      logInUser: (state) => {
+
+      }
     },
     extraReducers: (builder) => {
       builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -31,4 +34,4 @@ export const userSlice = createSlice({
     },
   });
 export const selectCurrentUser = (state: RootState) => state.user
-export const { setUser, clearUser,updateUserProp } = userSlice.actions;
+export const { setUser, clearUser,updateUserProp,logInUser } = userSlice.actions;

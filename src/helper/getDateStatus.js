@@ -1,6 +1,6 @@
 import { parseISO } from "date-fns";
-
-export default function getDateStatus(date) {
+export default function getDateStatus(dueDate) {
+    const date = new Date(dueDate)
     // Get the current date
     var today = new Date();
     // Get tomorrow's date
@@ -11,6 +11,7 @@ export default function getDateStatus(date) {
     var afterTomorrow = new Date();
     afterTomorrow.setDate(today.getDate() + 2);
     // Check if the given date is today
+    console.log(date)
     if (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&

@@ -10,14 +10,14 @@ interface Props {
     setFunction: Function
 }
 export default function BasicDropdown({text,items,setFunction} : Props) {
-  const [value,setDropdownValue] = React.useState("Today")
+  const [value,setDropdownValue] = React.useState("")
   const handleChange = (event: SelectChangeEvent) => {
     setDropdownValue(event.target.value as string)
     setFunction(event.target.value as string);
   };
 
   return (
-    <Box sx={{ width: 130 }}>
+    <Box sx={{ width: 130, height:50 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">{text}</InputLabel>
         <Select
@@ -26,6 +26,7 @@ export default function BasicDropdown({text,items,setFunction} : Props) {
           value={value}
           label={value}
           onChange={handleChange}
+          defaultValue={items[0]}
         >   
         {
             items.map((item,index) =>  <MenuItem key={index} value={item}>{item}</MenuItem>)

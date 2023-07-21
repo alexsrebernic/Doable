@@ -1,5 +1,4 @@
 import { Stats } from './pages/Stats/Stats'
-import { Settings } from './pages/Settings/Settings'
 import Error404Page from './pages/Error/Error404'
 import { Outlet } from 'react-router-dom'
 import {About} from './pages/About/About'
@@ -19,18 +18,6 @@ const routes : RouteObject[] = [
          errorElement:<Error404Page/>,
          element:<Tag/>,
         },  
-        {
-          path:"stats",
-          element:<Stats/>
-        },
-        {
-         path:"settings",
-         element:<Settings/>
-        },
-        {
-         path:"about",
-         element:<About/>
-        },
       ]
     },
   

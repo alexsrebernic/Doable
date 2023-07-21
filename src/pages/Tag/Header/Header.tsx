@@ -43,10 +43,10 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
             text:"Print this list",
             func: printList,
         },
+        !favoriteTagsIds.includes(tag.id) &&
         {
             component: <ColorPalletePicker tag={tag} setValue={changeTheme}/>
         }
-     
     ]
     const menuSortElement = [
         {
@@ -161,7 +161,11 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                                         <Icon color={tag.theme} icon="majesticons:chevron-down" width={20}/>
                                     }
                                     </div>
-                                    <span>
+                                    <span className='text-' style={
+                                        {
+                                            color: tag.theme
+                                        }
+                                    }>
                                         {
                                             getSortedText()
                                         }

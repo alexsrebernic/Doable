@@ -8,6 +8,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { isToday, isSameDay,isThisWeek,isThisMonth } from 'date-fns';
 import { moveTaskToTag, removeTag } from './tagsSlice';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
+    if(!userId) return
     const response = await fetchTasksFromAPI(userId);
     return response.data;
   });
@@ -18,7 +19,7 @@ export const tasksSlice = createSlice({
       addTask: (state, action: PayloadAction<Task>) => {
         const task = action.payload;
         console.log(task)
-        state.push(task);
+        state.unshift(task);
       },
       updateTask: (state, action: PayloadAction<Task>) => {
         const updatedTask = action.payload;
@@ -82,13 +83,13 @@ const selectTaskById =(taskId: string) => createSelector(
     return tasks.find(t => t.id == taskId)
   }
 )
-const selectTasksByTagId = (tagId: number | string,searchInput : string) => createSelector(
+const selectTasksByTagId = (tagId: number | string,searchInput : string | null) => createSelector(
   selectTasks,
   (tasks) => {
     switch (tagId) {
       case 'completed': return tasks.filter((task) => task.completed);
       case 'important': return tasks.filter((task) => task.important);
-      case 'myday': return tasks.filter((task) => task.dueDate? isToday(task.dueDate) : false);
+      case 'myday': return tasks.filter((task) => task.dueDate? isToday(task.dueDate) || task.myDay : false);
       case 'all': return tasks;
       case 'search': return tasks.filter((task => searchInput.length > 0 && task.text.toLowerCase().includes(searchInput.toLowerCase()))) 
       default: return tasks.filter((task) => task.tagId == tagId);
@@ -111,5 +112,17 @@ const selectTasksByDueDate = (dueDate : Date | string  | null) => createSelector
    
   }
 )
-export {selectTasks,selectTasksByTagId,selectTaskById, selectTasksByDueDate}
-export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant } = tasksSlice.actions;
+const selectNumberOfTasksByTagId = (tagId : string) => createSelector(
+  selectTasks,
+  (tasks) => {
+    switch (tagId) {
+      case 'completed': return 0;
+      case 'important': return tasks.filter((task) => task.important && !task.completed).length;
+      case 'myday': return tasks.filter((task) => task.dueDate? (isToday(task.dueDate) || task.myDay) && !task.completed : false).length;
+      case 'all': return 0;
+      default: return tasks.filter((task) => task.tagId == tagId && !task.completed).length;
+    }
+  }
+)
+export {selectTasks,selectTasksByTagId,selectTaskById, selectTasksByDueDate,selectNumberOfTasksByTagId}
+export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant, } = tasksSlice.actions;

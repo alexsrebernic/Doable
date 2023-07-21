@@ -4,12 +4,26 @@ import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { SearchInput } from './SearchInput';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-
+import { NavLink } from 'react-router-dom';
+import { Popover } from '@mui/material';
+import myPhoto from '../../assets/myPhoto.png'
+import { logInUser } from '../../store/slices/userSlice';
 export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => {
-  const {sidebar,helpSidebar,searchBarData} = useContext(AppContext)
+  const {sidebar,helpSidebar ,searchBarData,user} = useContext(AppContext)
   const navigate = useNavigate()
   const location = useLocation()
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : 'null';
   const handleChange = (value: string) => {
     if(value.length == 0) navigate(-1)
     if(location.pathname !== '/tasks/search') navigate('tasks/search')
@@ -23,6 +37,7 @@ export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => 
   function collapseRightSidebar(){
     if(sidebar.state) return sidebar.func()
     helpSidebar.func()
+    helpSidebar.setTaskId(null)
     openAnimationRightSidebar()
   }
   return (
@@ -44,12 +59,64 @@ export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => 
                 </div>
                   <SearchInput value={searchBarData.state} func={handleChange}/>
             </div>
-            <div className='flex items-center space-x-3'>
-                <Icon className='cursor-pointer' width={30} height={30} icon="material-symbols:settings" color="#225ffc" />
-                <Icon className='cursor-pointer' width={30} height={30} icon="material-symbols:help-outline" color="#225ffc" />
-                <div className='w-[30px] cursor-pointer h-[30px] bg-gray-200 rounded-full'>
-
-                </div>
+            <div className='flex items-center space-x-3 2xl:px-5'>
+                <Icon onClick={handleClick} className='cursor-pointer' width={30} height={30} icon="material-symbols:help-outline" color="#225ffc" />
+                  <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  style={
+                    {
+                      "overflow" : "visible !important"
+                    }
+                  }
+                  className='overflow-visible'
+              >
+                  <div className='flex flex-col items-center justify-center font-montserrat my-3'>
+                    <div className='border-b font-semibold px-4 py-2 text-lg '>
+                      <h1 className='text-default'>
+                        Created by
+                      </h1>
+                     
+                    </div>
+                    <div className='flex flex-col items-center justify-center py-2'>
+                        <img src={myPhoto} className='rounded-full w-20 h-20 ' alt="" />
+                      <span className='text-md font-medium py-1'>Alex Srebernic</span>
+                    </div>
+                    <div className='flex space-x-3'>
+                      <a  target='_blank'  className='hover:text-default transition' href="https://stackoverflow.com/users/17751576/alexsc">
+                        <Icon width={32} icon="mdi:stackoverflow" />
+                      </a>
+                      <a target='_blank'  className='hover:text-default transition' href="https://github.com/alexsrebernic">
+                        <Icon width={32} icon="mdi:github" />
+                      </a>
+                      <a target='_blank'  className='hover:text-default transition' href="https://www.linkedin.com/in/alex-srebernic-201427213/">
+                        <Icon width={32} icon="mdi:linkedin" />
+                      </a>
+                    </div>
+                  </div>
+                </Popover>
+                {
+                  user &&
+                  <>
+                  {
+                    user.id !== 'anonymus'?
+                    <div className='w-[30px] cursor-pointer h-[30px] bg-gray-200 rounded-full'>
+                  </div>
+                  :
+                  <button  className='text-default font-semibold  px-3 hover:bg-[#80A3FE] hover:text-white py-2 rounded-md transition cursor-pointer' >
+                    Log in
+                  </button>
+                  }
+                  </>
+                }
+         
+                
                 <div onClick={collapseRightSidebar} className='xl:hidden'>
                     <Icon width={30} height={30} icon="mdi:calendar" color="#225ffc" />
                 </div>

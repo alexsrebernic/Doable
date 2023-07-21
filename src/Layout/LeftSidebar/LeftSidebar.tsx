@@ -26,7 +26,7 @@ export const LeftSidebar = ({springs}) => {
   function handleAddTag(){
   if(inputTagName.length == 0) return 
    const id =  uniqid()
-   dispatch(addTag({id,userId: user.id,tagName: inputTagName}))
+   dispatch(addTag({id,userId: user? user.id : null ,tagName: inputTagName}))
    navigate(`tasks/${id}`)
    sidebar.func()
    setInputTagName('')
@@ -80,16 +80,13 @@ export const LeftSidebar = ({springs}) => {
                       Create New Task
                     </span>
                   </button>
-                  <div >
-                      <ButtonNav notFavorite={false} func={sidebar.func} text='Stats' icon='gridicons:stats' fullPath='/stats'  number={0}/>
-                  </div>
                   <div className='space-y-2 '>
                     <span className='text-[#8a8a8a] font-semibold'>Favorites</span>
                     <div className=''>
                       {
                            FavoriteTags.filter(t => t.id !== 'search').map((o : Tag, index : number) => {
                             return (
-                              <ButtonNav notFavorite={false} func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  number={0} key={index}/>
+                              <ButtonNav  notFavorite={false} func={sidebar.func} text={o.name} icon={o.icon} fullPath={`tasks/${o.id}`}  id={o.id} key={index}/>
                               )
                             })
                       }

@@ -18,6 +18,9 @@ module.exports = {
         'span-15': 'span 15 / span 15',
         'span-14': 'span 14 / span 14',
         'span-13': 'span 13 / span 13',
+      },
+      colors: {
+        'default': "#225FFC"
       }
     },
   },

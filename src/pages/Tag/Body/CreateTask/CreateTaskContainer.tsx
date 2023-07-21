@@ -18,6 +18,7 @@ import { CustomInputDueDate } from './CustomInputDueDate'
 import { useContext } from 'react'
 import { AppContext } from '../../../../App'
 import { useLocation } from 'react-router-dom'
+import { isToday } from 'date-fns/esm'
 interface Props {
     route : string 
     tag: Tag,
@@ -29,11 +30,13 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
     const inputRef = useRef(null)
     useEffect(() => {
         if(location.state) inputRef.current.focus()
-        resetValues()
+        return(() => {
+            resetValues()
+        })
     },[route])
     const [inputValue,setInputValue] = useState<string>("")
     const [repeatValue, setRepeatValue] = useState<string | null>(null)
-    const [dueDateValue, setDueDateValue] = useState<Date | null>(null)
+    const [dueDateValue, setDueDateValue] = useState<number | null>(null)
     const [repeatValueString, setRepeatValueString] = useState<string | null>(null)
     const [dueDateValueString, setDueDateValueString] = useState<string | null>(null)
 
@@ -46,26 +49,31 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
         setTaskDueDate(null)
     }
     const setTaskRepeat = (selectedRepeat) => {
+        console.log(selectedRepeat)
         setRepeatValueString(selectedRepeat)
-        setTaskDueDate('Today')
+        if(!dueDateValue) setTaskDueDate("Today")
         setRepeatValue(selectedRepeat)
     };
     const setTaskDueDate = (selectedDate) => {
+        console.log(selectedDate)
         setDueDateValueString(selectedDate)
         const value = returnDueDateValue(selectedDate) 
         setDueDateValue(value)
     }
     function handleCreateTask(){
+        console.log(typeof dueDateValue)
         dispatch(addTask(
             {
                 text: inputValue,
                 completed: false,
                 important: tag.id === 'important'? true : false,
-                dueDate: tag.id === 'myday' && !dueDateValue? new Date() : dueDateValue,
+                dueDate: tag.id === 'myday' && !dueDateValue? Date.now() : dueDateValue,
                 repeat: repeatValue,
-                createdAt: new Date(),
+                createdAt: Date.now(),
                 ownerId: user.id ,
-                tagId: tag.id === 'important' || tag.id ===  'all' || tag.id === 'myday'? 'mytasks' : tag.id,
+                myDay: isToday(dueDateValue) || tag.id == 'myday'? true : false,
+                myDayDate: isToday(dueDateValue) || tag.id == 'myday'? Date.now() : null,
+                tagId: tag.id === 'important' || tag.id ===  'all' || tag.id === 'myday' ? 'mytasks' : tag.id,
                 id: uniqid(),
                 completedAt: null,
             }

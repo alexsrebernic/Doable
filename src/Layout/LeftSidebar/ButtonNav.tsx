@@ -2,6 +2,8 @@ import React from 'react'
 import { Icon } from '@iconify/react';
 import { NavLink, useNavigation } from 'react-router-dom';
 import { Emoji } from 'emoji-picker-react';
+import { useSelector } from 'react-redux';
+import { selectNumberOfTasksByTagId } from '../../store/slices/tasksSlice';
 interface Props {
     text : String,
     icon: String,
@@ -12,11 +14,11 @@ interface Props {
     isDragged? : boolean,
     isDragOver?: boolean,
 }
-export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false, isDragOver, isDragged} : Props) => {
+export const ButtonNav = ({text,icon, fullPath, id, func, notFavorite =false, isDragOver, isDragged} : Props) => {
 
     const activeClassesFavorite = 'bg-[#80A3FE] text-white hover:bg-[#80A3FE] hover:text-white '
     const activeClassesNonFavorite = 'bg-gray-200 transition text-black hover:bg-gray-200'
-
+    const number = useSelector(selectNumberOfTasksByTagId(id))
   return (
     <NavLink to={fullPath}>
         {({isActive, isPending}) => (
@@ -40,6 +42,12 @@ export const ButtonNav = ({text,icon, fullPath, number, func, notFavorite =false
                         {text}
                     </span> 
                 </div>
+                {
+                    (number > 0) &&  
+                    <span className={`${isActive? `${notFavorite? 'text-[#8A8A8A]' : 'text-white'} bg-[#D9D9D9]` : ''}bg-[#D9D9D9] text-[#8A8A8A] text-center group-hover:bg-transparent ${notFavorite? 'focus:text-black hover:text-black' : 'group-focus:text-white group-hover:text-white'}  rounded-full w-8 font-semibold p-0.5 transition`}>
+                        {number}
+                    </span>
+                }
             </div>
             </>
         )}

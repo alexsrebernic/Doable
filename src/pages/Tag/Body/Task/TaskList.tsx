@@ -15,9 +15,7 @@ export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
     },[tag]) 
 
     function handleDrop(event){
-        const type = event.dataTransfer.getData('type')
-        console.log(type)
-        if(type == 'tag') return resetValues()
+        if(event.dataTransfer.getData('type') == 'tag') return resetValues()
         const updatedTaskIds = tag.hasOwnProperty('tasksIds')?[...tag.tasksIds] : tasks.map(t => t.id)
         const draggedItemContent = updatedTaskIds.splice(draggedTaskIndex, 1)[0];
         updatedTaskIds.splice(dragOverTaskIndex, 0, draggedItemContent);
