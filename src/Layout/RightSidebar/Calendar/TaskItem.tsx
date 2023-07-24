@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
-import Task from '../../types/Task/Task'
+import Task from '../../../types/Task/Task'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { selectTaskById } from '../../store/slices/tasksSlice'
-import { toggleCompleted } from '../../store/slices/tasksSlice'
-import getDateStatus from '../../helper/getDateStatus'
-import { selectTagById } from '../../store/slices/tagsSlice'
+import { selectTaskById } from '../../../store/slices/tasksSlice'
+import { toggleCompleted } from '../../../store/slices/tasksSlice'
+import getDateStatus from '../../../helper/getDateStatus'
+import { selectTagById } from '../../../store/slices/tagsSlice'
 import { NavLink } from 'react-router-dom'
-import { AppContext } from '../../App'
+import { AppContext } from '../../../App'
 interface Props {
     task: Task
 }
@@ -21,13 +21,11 @@ export const TaskItem = ({task} : Props) => {
   return (
     <div className='w-full flex items-center space-x-6'>
         <div>
-            <div className={`${task.completed? 'bg-[#225ffc]' : 'bg-[#D9D9D9]'} w-6 h-6 cursor-pointer transition rounded-sm`} onClick={handleToggleCompleted}>
-                
-            </div>
+            <div className={`${task.completed? 'bg-[#225ffc]' : 'bg-[#D9D9D9]'} w-6 h-6 cursor-pointer transition rounded-sm`} onClick={handleToggleCompleted}></div>
         </div>
-        <div className='flex-1 flex flex-col items-start'>
-            <div className=''>
-                <span className='text-md'>
+        <div className='flex-1 flex flex-col items-start truncate'>
+            <div className='max-w-[20ch] overflow-x-auto '>
+                <span className='text-md '>
                     {task.text}
                 </span>
             </div>

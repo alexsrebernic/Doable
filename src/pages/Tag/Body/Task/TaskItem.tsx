@@ -81,9 +81,14 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
                 </span>
               </div>
             }
-            {
-              (task.dueDate || task.repeat) &&
-                <div className={`text-[12px] flex items-center space-x-1  ${isToday(task.dueDate) ? `text-[${tag.theme}]`:'text-gray-500'}`}>
+         
+                <div 
+                style={
+                  {
+                    color: isToday(task.dueDate) && !task.completed? tag.theme : 'rgb(107 114 128)'
+                  }
+                }
+                className={`text-[12px] flex items-center space-x-1  `}>
 
                   {
                     task.dueDate && 
@@ -104,7 +109,6 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
                     </div>
                   }
               </div>
-            }
           </div>
          
         </div>

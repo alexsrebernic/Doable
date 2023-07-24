@@ -62,7 +62,7 @@ export const TasksContainer = ({tasks,tag,reverseAnimation,route} : Props) => {
     }
   }
   const sortTasksByTagOrder = (tasks : Task[], tag : Tag) => {
-    if (!tag || !tag.tasksIds || tag.tasksIds.length === 0) {
+    if (!tag || !tag.tasksIds || tag.tasksIds.length === 0 || tag.id == 'all') {
       return tasks; 
     }
     const sortedTasks = [];
@@ -72,7 +72,6 @@ export const TasksContainer = ({tasks,tag,reverseAnimation,route} : Props) => {
         sortedTasks.push(task);
       }
     }
-  
     return sortedTasks;
   };
   return (

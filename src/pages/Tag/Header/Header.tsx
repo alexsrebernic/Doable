@@ -12,7 +12,7 @@ import { removeTag } from '../../../store/slices/tagsSlice'
 import { useNavigate } from 'react-router-dom'
 import { ColorPalletePicker } from './ColorPalletePicker'
 export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
-    const {showToast} = useContext(AppContext)
+    const {showToast, helpSidebar} = useContext(AppContext)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [tagName, setTagName] = useState<string>('')
@@ -23,11 +23,11 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
 
     }
     function changeTheme(color){
-        console.log(tag.theme)
         dispatch(updateTagProp({tagId: tag.id,prop: 'theme',value : color}))
     }
     function removeTagHandler(){
         dispatch(removeTag(tag.id))
+        helpSidebar.setTaskId(null)
         navigate('/tasks/myday')
     }
     function changeSortOrder(order){
@@ -148,7 +148,14 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                 </div>
                 <div className='flex items-center justify-between w-full'>
                             <div>
-                                <PopoverButton color={tag.theme} removeText='Remove tag' value={!favoriteTagsIds.includes(tag.id)} removeValueFunc={removeTagHandler} icon="ph:dots-three-bold" text="Settings" elements={menuSettingsElement}/>
+                                <PopoverButton 
+                                color={tag.theme} 
+                                removeText='Remove tag' 
+                                value={!favoriteTagsIds.includes(tag.id)} 
+                                removeValueFunc={removeTagHandler} 
+                                icon="ph:dots-three-bold" text="Settings" 
+                                elements={menuSettingsElement}
+                                />
                             </div>
                     <div className='flex space-x-4 font-medium '>
                         {

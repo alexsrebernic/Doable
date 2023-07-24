@@ -19,6 +19,7 @@ import { useContext } from 'react'
 import { AppContext } from '../../../../App'
 import { useLocation } from 'react-router-dom'
 import { isToday } from 'date-fns/esm'
+import { Icon } from '@iconify/react'
 interface Props {
     route : string 
     tag: Tag,
@@ -49,19 +50,16 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
         setTaskDueDate(null)
     }
     const setTaskRepeat = (selectedRepeat) => {
-        console.log(selectedRepeat)
         setRepeatValueString(selectedRepeat)
         if(!dueDateValue) setTaskDueDate("Today")
         setRepeatValue(selectedRepeat)
     };
     const setTaskDueDate = (selectedDate) => {
-        console.log(selectedDate)
         setDueDateValueString(selectedDate)
         const value = returnDueDateValue(selectedDate) 
         setDueDateValue(value)
     }
     function handleCreateTask(){
-        console.log(typeof dueDateValue)
         dispatch(addTask(
             {
                 text: inputValue,
@@ -137,7 +135,20 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                                 },
                             ]
                         } 
-                        icon="mdi:calendar"
+                        stylesButton={
+                            {
+                                "border" : typeof dueDateValueString == 'string' && `1px solid ${tag.theme}`,
+                                "borderRadius" : '5px'
+                            }
+                        }
+                        contentButton={
+                            <div  className={`${typeof dueDateValueString == 'string' && `space-x-2 flex items-center rounded   `} p-1 transition` }  >
+                                <Icon icon='mdi:calendar' width={20}  color={tag.theme}/>
+                                {
+                                  dueDateValueString && <span style={{color:tag.theme}} className={` text-sm font-medium`}>{dueDateValueString}</span>
+                                }
+                            </div>
+                        }
                         />
                     </div>
                     <div>
@@ -183,7 +194,20 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
                                 },
                             ]
                         } 
-                        icon="material-symbols:repeat"
+                        stylesButton={
+                            {
+                                "border" : typeof repeatValueString == 'string' && `1px solid ${tag.theme}`,
+                                "borderRadius" : '5px'
+                            }
+                        }
+                        contentButton={
+                            <div  className={`${typeof repeatValueString == 'string' && `space-x-2 flex items-center rounded   `} p-1 transition` }  >
+                                <Icon icon='material-symbols:repeat' width={20}  color={tag.theme}/>
+                                {
+                                  repeatValueString && <span style={{color:tag.theme}} className={` text-sm font-medium`}>{repeatValueString}</span>
+                                }
+                            </div>
+                        }
                         />
                     </div>
             </div>

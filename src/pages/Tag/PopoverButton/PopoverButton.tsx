@@ -1,4 +1,4 @@
-import React, { SVGProps } from 'react';
+import React, { ReactNode, SVGProps } from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Icon } from '@iconify/react'
@@ -14,8 +14,10 @@ interface Props {
   value?: string | boolean,
   removeValueFunc?: Function,
   removeText? : string,
+  stylesButton: object,
+  contentButton: ReactNode,
 }
-export default function PopoverButton({text,elements,icon,color,size,value,removeValueFunc,removeText} : Props) {
+export default function PopoverButton({text,elements,color,value,size,icon,removeValueFunc,removeText,stylesButton,contentButton} : Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   function handleFunction(func,args){
@@ -35,14 +37,25 @@ export default function PopoverButton({text,elements,icon,color,size,value,remov
 
   return (
     <div >
-      <button style={{
-        border : typeof value == 'string' && `1px solid ${color}`
-      }} className={`${typeof value == 'string' && `space-x-2 flex items-center rounded  border border-solid`} p-1 transition` }  aria-describedby={id}  onClick={handleClick}>
-        <Icon icon={icon} width={size?size:30} className={`text-[${color}] fill-[${color}] transition`} color={color}/>
-        {
-          value && <span style={{color:color}} className={` text-sm font-medium`}>{value}</span>
-        }
-      </button>
+      
+      {
+        contentButton?
+        <button
+        style={stylesButton}
+        aria-describedby={id}  onClick={handleClick}
+        >
+          {contentButton}
+        </button>
+        :
+        <button style={{
+          "border" : typeof value == 'string' && `1px solid ${color}`
+        }} className={`${typeof value == 'string' && `space-x-2 flex items-center rounded  border border-solid`} p-1 transition` }  aria-describedby={id}  onClick={handleClick}>
+          <Icon icon={icon} width={size?size:30} className={`text-[${color}] fill-[${color}] transition`} color={color}/>
+          {
+            value && <span style={{color:color}} className={` text-sm font-medium`}>{value}</span>
+          }
+        </button>
+      }
       <Popover
         id={id}
         open={open}

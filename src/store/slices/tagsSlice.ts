@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk, createSelector } from '@r
 import { Tag } from '../../types/Tag/Tag';
 import { fetchTags as fetchTagsFromAPI } from '../../api/api';
 import FavoriteTags,{favoriteTagsIds} from '../../helper/favoriteTag';
-import { addTask, removeTask, selectTaskById } from './tasksSlice';
+import { addTask, removeTask, selectTaskById, toggleCompleted } from './tasksSlice';
 import { RootState } from '..';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from './userSlice';
@@ -55,20 +55,31 @@ export const tagsSlice = createSlice({
       },
       setFavoriteTags:(state,action) => {
         return [...FavoriteTags]
+      },
+      addTaskToTag: (state,action) => {
+        const { id, tagId } = action.payload;
+        console.log(id,tagId)
+        const tag = state.find((tag) => tag.id == tagId);
+        if (tag) {
+          if (!tag.tasksIds) {
+            tag.tasksIds = []
+          }
+          tag.tasksIds.unshift(id);
+        }
       }
     },
     extraReducers: (builder) => {
       builder.addCase(fetchTags.fulfilled, (state, action, ) => {
         return action.payload
       })
-      .addCase(addTask, (state, action) => {
+      .addCase(addTask.type, (state, action) => {
         const { id, tagId } = action.payload;
         const tag = state.find((tag) => tag.id == tagId);
         if (tag) {
           if (!tag.tasksIds) {
             tag.tasksIds = []
           }
-          tag.tasksIds.push(id);
+          tag.tasksIds.unshift(id);
         }
       })
       .addCase(removeTask, (state, action) => {
@@ -78,10 +89,22 @@ export const tagsSlice = createSlice({
           tag.tasksIds = tag.tasksIds?.filter(taskId => taskId !== id)
         }
       })
+      .addCase(toggleCompleted, (state,action) => {
+        const { id, tagId } = action.payload;
+        if(id && tagId){
+          const tag = state.find((tag) => tag.id == tagId);
+          if (tag) {
+            if (!tag.tasksIds) {
+              tag.tasksIds = []
+            }
+            tag.tasksIds.unshift(id);
+          }
+        }
+      })
     },
   });
 
 export const selectTags = (state: RootState) => state.tags;
 export const selectTagById = (tagId : number | string) => createSelector(selectTags, (tags) => tags.find(tag => tag.id == tagId))
 export const selectNonFavoriteTags = createSelector(selectTags, (tags) => tags.filter((tag) => !favoriteTagsIds.includes(tag.id))) 
-export const { addTag, updateTagProp, removeTag, setTags, moveTaskToTag, setFavoriteTags } = tagsSlice.actions;
+export const { addTag, updateTagProp, removeTag, setTags, moveTaskToTag, setFavoriteTags,addTaskToTag } = tagsSlice.actions;

@@ -16,10 +16,14 @@ export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
 
     function handleDrop(event){
         if(event.dataTransfer.getData('type') == 'tag') return resetValues()
-        const updatedTaskIds = tag.hasOwnProperty('tasksIds')?[...tag.tasksIds] : tasks.map(t => t.id)
-        const draggedItemContent = updatedTaskIds.splice(draggedTaskIndex, 1)[0];
-        updatedTaskIds.splice(dragOverTaskIndex, 0, draggedItemContent);
-        console.log(draggedTaskIndex,dragOverTaskIndex)
+        const dragOverId = tasks.map(t => t.id)[dragOverTaskIndex]
+        const dragOverRealIndex = tag.tasksIds?.findIndex(id => id == dragOverId)
+        const draggedId = tasks.map(t => t.id)[draggedTaskIndex]
+        const draggedRealIndex = tag.tasksIds?.findIndex(id => id == draggedId)
+        console.log(dragOverId,dragOverRealIndex,dragOverTaskIndex)
+        const updatedTaskIds = [...tag.tasksIds] 
+        const draggedItemContent = updatedTaskIds.splice(draggedRealIndex, 1)[0];
+        updatedTaskIds.splice(dragOverRealIndex, 0, draggedItemContent);
         dispatch(updateTagProp({tagId: tag.id,prop: 'tasksIds',value : updatedTaskIds}))
         resetValues()
     }
@@ -27,6 +31,7 @@ export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
         setDraggedElementIndex(null)
         setOverElementIndex(null)
     }
+  
     function handleDrag(event,index,id){
         event.dataTransfer.setData('id',id);
         event.dataTransfer.setData('type','task');

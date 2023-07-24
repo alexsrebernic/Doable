@@ -13,5 +13,6 @@ type Task = {
     important: Boolean,
     dueDate: number | null,
     repeat : string | null,
+    taskSuccessorId?: string
 }
 export default Task

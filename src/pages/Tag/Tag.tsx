@@ -11,22 +11,20 @@ export const Tag = () => {
   const navigate = useNavigate()
   const {showToast,searchBarData} = useContext(AppContext)
   const {tag_id} = useParams()
-  const [isLoading,setIsLoading] = useState(false)
   let tag = useSelector(selectTagById(tag_id)) 
   let tasks = useSelector(selectTasksByTagId(tag_id,searchBarData.state));
   useEffect(() => {
     try {
       if(document.readyState !== 'complete') return
-      setIsLoading(true)
+      console.log(tasks)
       if(!tag) throw Error("ERROR 404: Tag doesn´t exists");
-      setIsLoading(false)
     } catch (error){
       setIsLoading(false)
       showToast(error.message,"error")
       console.error(error)
       navigate("/tasks/myday")
     }
-  },[tag_id])
+  },[tag_id,tasks])
   return (
     <div className='flex flex-col flex-1 max-h-full relative overflow-hidden'>
       {(tag && tasks)  && 

@@ -6,7 +6,10 @@ import { fetchTasks as fetchTasksFromAPI } from '../../api/api';
 import { RootState } from '..';
 import { createSelector } from '@reduxjs/toolkit';
 import { isToday, isSameDay,isThisWeek,isThisMonth } from 'date-fns';
-import { moveTaskToTag, removeTag } from './tagsSlice';
+import { addTaskToTag, moveTaskToTag, removeTag, tagsSlice } from './tagsSlice';
+import calculateNextDueDate from '../../helper/calculateNextDueDate'
+import uniqid from 'uniqid'
+import { useDispatch } from 'react-redux';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
     if(!userId) return
     const response = await fetchTasksFromAPI(userId);
@@ -54,6 +57,49 @@ export const tasksSlice = createSlice({
         const task = state.find((task) => task.id === taskId);
         if (task) {
           task.completed = !task.completed; // Toggle the favorite status
+        }
+        if(task?.repeat && task.completed && !state.find(t => t.taskSuccessorId == task.id)){
+          const nextDueDate = calculateNextDueDate(task.dueDate,task.repeat)
+          const id = uniqid()
+          console.log(nextDueDate)
+          tasksSlice.caseReducers.addTask(
+            state,
+            {
+              type: "tasks/addTask",
+              payload: {
+                text: task.text,
+               completed: false,
+               important: task.important,
+               dueDate: nextDueDate,
+               repeat: task.repeat,
+               createdAt: Date.now(),
+               ownerId: task.ownerId,
+               myDay: false,
+               myDayDate: null,
+               tagId: task.tagId,
+               id,
+               completedAt: null,
+               taskSuccessorId: task.id,
+              }
+              
+           }
+          )
+          action.payload = { id, tagId: task.tagId }
+        }
+      },
+      toggleMyDay: (state, action) => {
+        const taskId = action.payload;
+        const task = state.find((task) => task.id === taskId);
+        if (task) {
+          task.myDay = !task.myDay; // Toggle the favorite status
+          task.myDayDate = Date.now()
+        }
+      },
+      updateTaskProp: (state, action: PayloadAction<Task>) => {
+        const {taskId,prop,value} = action.payload;
+        const taskIndex = state.findIndex((task : Task) => task.id === taskId);
+        if (taskIndex !== -1) {
+          state[taskIndex][prop] = value;
         }
       },
       setTasks: (state, action: PayloadAction<Task[]>) => {
@@ -125,4 +171,4 @@ const selectNumberOfTasksByTagId = (tagId : string) => createSelector(
   }
 )
 export {selectTasks,selectTasksByTagId,selectTaskById, selectTasksByDueDate,selectNumberOfTasksByTagId}
-export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant, } = tasksSlice.actions;
+export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant,toggleMyDay,updateTaskProp } = tasksSlice.actions;

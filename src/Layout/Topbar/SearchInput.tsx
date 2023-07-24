@@ -9,7 +9,6 @@ export const SearchInput = ({value,func} : {value:string,func: Function}) => {
   const [springs, api] = useSpring(() => ({
     from: { width: 0 },
   }))
-  const navigate = useNavigate()
   const handleClick = () => {
     api.start({
       from: {
