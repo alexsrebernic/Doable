@@ -4,6 +4,7 @@ import { User } from '../types/User';
 import { fetchUser, selectCurrentUser,setUser } from '../store/slices/userSlice';
 import { fetchTags, setTags } from '../store/slices/tagsSlice';
 import { fetchTasks, setTasks } from '../store/slices/tasksSlice';
+import checkIfIsExpired from '../helper/isDateExpired'
 const useInitializeApp = () => {
   const dispatch = useDispatch();
   let currentUser = useSelector(selectCurrentUser)
@@ -18,7 +19,11 @@ const useInitializeApp = () => {
           await fetchData(dispatch,null)
         } else {
           if(user.id === 'anonymus' ){
-            if(user.createdAt! > Date.now() + 86400000) setAnonymusUser(dispatch)
+            if(checkIfIsExpired(user.createdAt)){
+                console.log("User expired")
+                setAnonymusUser(dispatch)
+                fetchData(dispatch,null)
+              }
           } else {
             await fetchData(dispatch,user.id)
           }

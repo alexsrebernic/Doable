@@ -27,7 +27,6 @@ export const SearchInput = ({value,func} : {value:string,func: Function}) => {
             <Icon onClick={() => {
                 collapseSearchInput(oldVal => !oldVal)
                 handleClick()
-                func("")
                 }} className='inline-block' icon="material-symbols:search" color="8a8a8a" width={30} />
             <div className={` ${showSearchInput?'inline-block':'hidden  '} w-full inline-block items-center justify-between `}>
                 <input 

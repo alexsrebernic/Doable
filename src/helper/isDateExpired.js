@@ -7,6 +7,6 @@ const isDateExpired = (timestampInMilliseconds) => {
     currentDate.setHours(0, 0, 0, 0);
   
     // Compare the given timestamp with the current date, excluding equality
-    return timestampInMilliseconds < currentDate.getTime();
+    return timestampInMilliseconds < currentDate.getTime() ;
   };
 export default isDateExpired

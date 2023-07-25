@@ -25,8 +25,8 @@ export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : 'null';
   const handleChange = (value: string) => {
-    if(value.length == 0) navigate(-1)
     if(location.pathname !== '/tasks/search') navigate('tasks/search')
+    if(value.length == 0) navigate(-1)
     searchBarData.func(value);
   };
   function collapseLeftSidebar(){

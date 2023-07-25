@@ -15,6 +15,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    boxShadow:" 0px 0px 15px -2px rgba(0,0,0,0.75)",
   },
 };
 export const AppContext = createContext(null as any)
@@ -72,6 +73,7 @@ export const App = ({children} : {children: React.ReactNode} ) => {
           {
             openModal: (arg : JSX.Element) => openModal(arg),
             closeModal: () => closeModal(),
+            modalIsOpen,
             showToast: (message: string , type : string) => showToast(message,type),
             sidebar: { state:isSidebarShowing, func:() => collapseSidebar(oldVal => !oldVal)},
             calendar: {state: isCalendarShowing, func: () => collapseCalendar(oldVal => !oldVal)},

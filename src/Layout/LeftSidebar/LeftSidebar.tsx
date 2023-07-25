@@ -14,7 +14,7 @@ import uniqid from 'uniqid'
 import { TagList } from './TagList';
 export const LeftSidebar = ({springs}) => {
   const dispatch = useDispatch()
-  const {sidebar,user, showToast} = useContext(AppContext)
+  const {sidebar,user, modalIsOpen} = useContext(AppContext)
 
   const [inputTagName, setInputTagName] = useState('')
   const input = useRef(null)
@@ -53,7 +53,7 @@ export const LeftSidebar = ({springs}) => {
       <div onClick={(e) =>{
         e.stopPropagation()
         sidebar.func()}
-        }  className={`${sidebar.state? phoneClasses : 'hidden'} ${desktopClasses} top-0   lg:static  h-screen lg:h-[95vh]  z-10 `}>
+        }  className={`${sidebar.state? phoneClasses : 'hidden'} ${desktopClasses} top-0   lg:static  h-screen lg:h-[95vh]  ${modalIsOpen? 'z-0' : 'z-10'} `}>
           <animated.div style={{ ...springs}} onClick={(e) =>{
             e.stopPropagation()
             }}

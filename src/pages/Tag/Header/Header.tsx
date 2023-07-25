@@ -10,9 +10,10 @@ import { AppContext } from '../../../App'
 import { CreateTaskContainer } from '../Body/CreateTask/CreateTaskContainer'
 import { removeTag } from '../../../store/slices/tagsSlice'
 import { useNavigate } from 'react-router-dom'
+import { ModalRemoveTag } from './ModalRemoveTag'
 import { ColorPalletePicker } from './ColorPalletePicker'
 export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
-    const {showToast, helpSidebar} = useContext(AppContext)
+    const {showToast, helpSidebar,openModal,closeModal} = useContext(AppContext)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [tagName, setTagName] = useState<string>('')
@@ -26,6 +27,9 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
         dispatch(updateTagProp({tagId: tag.id,prop: 'theme',value : color}))
     }
     function removeTagHandler(){
+        openModal(<ModalRemoveTag tagName={tag.name} acceptFunc={removeTagFunc} closeFunc={closeModal}/>)
+    }
+    function removeTagFunc(){
         dispatch(removeTag(tag.id))
         helpSidebar.setTaskId(null)
         navigate('/tasks/myday')

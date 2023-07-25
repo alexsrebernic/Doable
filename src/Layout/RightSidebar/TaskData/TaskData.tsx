@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import Task from '../../../types/Task/Task'
 import { Tag } from '../../../types/Tag/Tag'
 import { Icon } from '@iconify/react'
 import { useDispatch } from 'react-redux'
 import {formatDate} from '../../../helper/formatCreatedAtDate'
-import { toggleImportant, toggleCompleted, updateTask,toggleMyDay, updateTaskProp } from '../../../store/slices/tasksSlice'
+import { toggleImportant, toggleCompleted, updateTask,toggleMyDay, updateTaskProp, removeTask } from '../../../store/slices/tasksSlice'
 import getDateStatus from '../../../helper/getDateStatus'
 import PopoverButton from '../../../pages/Tag/PopoverButton/PopoverButton'
 import { CustomInputDueDate } from '../../../pages/Tag/Body/CreateTask/CustomInputDueDate'
@@ -18,6 +18,8 @@ import monthlySVG from '../../../assets/monthly.svg'
 import weeklySVG from '../../../assets/weekly.svg'
 import workdaysSVG from '../../../assets/workday.svg'
 import {returnDueDateValue} from '../../../helper/returnDueDateValue'
+import { AppContext } from '../../../App'
+import { ModalRemoveTask } from './ModalRemoveTask'
 interface Props {
   task : Task,
   tag: Tag,
@@ -26,6 +28,7 @@ interface Props {
 }
 export const TaskData = ({task, tag,func, setTaskId} : Props) => {
   const dispatch = useDispatch()
+  const {openModal,closeModal} = useContext(AppContext)
   const [repeatValue, setRepeatValue] = useState<string | null>(null)
   const [dueDateValue, setDueDateValue] = useState<number | null>(null)
   const [textTaskValue,setTextTaskValue] = useState<string | undefined>(task?.text || '')
@@ -47,6 +50,13 @@ export const TaskData = ({task, tag,func, setTaskId} : Props) => {
   const handleToggleImportant = () => dispatch(toggleImportant(task.id))
   const handleToggleCompleted = () => dispatch(toggleCompleted(task.id))
   const handleToggleMyDay = () => dispatch(toggleMyDay(task.id))
+  function handleRemoveTask(){
+    openModal(<ModalRemoveTask acceptFunc={removeTaskFunc} closeFunc={closeModal} taskName={task.text}/>)
+  }
+  function removeTaskFunc(){
+    dispatch(removeTask({id:task.id, tagId: task.tagId}))
+    setTaskId(null)
+  }
   function handleCloseTaskSidebar(){
     func()
     setTaskId('')
@@ -235,7 +245,7 @@ const setTaskDueDate = (selectedDate) => {
           </span>
         </div>
         <div className='cursor-pointer'>
-          <Icon icon="ph:trash" color={tag?.theme} width={25}/>
+          <Icon onClick={handleRemoveTask} icon="ph:trash" color={tag?.theme} width={25}/>
         </div>  
       </div>
     

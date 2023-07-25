@@ -92,7 +92,7 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
             </div>
            
             <div className='w-full'>
-                <input ref={inputRef} onKeyDown={(event) => (event.key === 'Enter' && inputValue.length > 0) && handleCreateTask()} value={inputValue} onChange={(e : Event) => handleInput(e)} type="text" placeholder='Add task...' className={`w-full focus:outline-none placeholder:text-[${tag.theme}] placeholder:text-sm placeholder:focus:text-black focus:text-black transition`}/>
+                <input ref={inputRef} onKeyDown={(event) => (event.key === 'Enter' && inputValue.length > 0) && handleCreateTask()} value={inputValue} onChange={(e : Event) => handleInput(e)} type="text" placeholder='Add task...' className={`w-full focus:outline-none placeholder:text-[${tag.theme}]  placeholder:text-sm placeholder:focus:text-black focus:text-black transition`}/>
             </div>
         </div>
         <div className='  flex py-1 w-full shadow px-3 border-t justify-between'>

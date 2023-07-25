@@ -69,16 +69,16 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
           {
               tag.id !== task.tagId &&
               <>
-                <NavLink className={`text-xs after:px-1 ${(task.dueDate || task.repeat || task.myDay) && 'after:content-["•"]'}  truncate max-w-[10ch] md:max-w-full text-gray-500 font-medium hover:underline inline-block w-fit`} to={`/tasks/${task.tagId}`}>
+                <NavLink className={`text-xs  ${(task.dueDate || task.repeat || task.myDay) && 'after:content-["•"] after:px-1'}  truncate max-w-[10ch] md:max-w-full text-gray-500 font-medium hover:underline inline-block w-fit`} to={`/tasks/${task.tagId}`}>
                     {tagName}
                 </NavLink>
               </>
             }
             {
               task.myDay &&
-              <div className={`text-gray-500 ${(task.dueDate || task.repeat) && 'after:content-["•"]'} after:px-1 max-w-[10ch] text-xs items-center justify-center space-x-1 px-1  flex font-medium   w-fit`}>
-                <Icon icon='ph:sun' color='' />
-                <span>
+              <div className={`text-gray-500 ${(task.dueDate || task.repeat) && 'after:content-["•"] after:px-1'}  max-w-[10ch] text-xs items-center justify-center space-x-1 px-1  flex font-medium   w-fit`}>
+                <Icon icon='ph:sun'  />
+                <span className='h-fit break-words	'>
                   My day
                 </span>
               </div>
@@ -90,13 +90,13 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
                     color: !task.completed? !checkIfItsExpired(task.dueDate)  ? isToday(task.dueDate) ? tag.theme : 'rgb(107 114 128)' : 'red' :  'rgb(107 114 128)'
                   }
                 }
-                className={`text-[12px] flex items-center space-x-1  `}>
+                className={`text-[12px] flex items-center space-x-1  flex-wrap`}>
 
                   {
                     task.dueDate && 
-                    <div className='flex items-center space-x-1'>
+                    <div className='flex items-center space-x-1 flex-wrap break-all '>
                     <Icon icon="bx:calendar" width={16}  />
-                      <span>
+                      <span className='break-words'>
                         {getDateStatus(task.dueDate)}
                       </span>
                     </div>

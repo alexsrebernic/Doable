@@ -11,7 +11,7 @@ import calculateNextDueDate from '../../helper/calculateNextDueDate'
 import uniqid from 'uniqid'
 import { useDispatch } from 'react-redux';
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
-    if(!userId) return
+    if(!userId) return []
     const response = await fetchTasksFromAPI(userId);
     return response.data;
   });
@@ -32,8 +32,8 @@ export const tasksSlice = createSlice({
         }
       },
       removeTask: (state, action: PayloadAction<number>) => {
-        const taskId = action.payload;
-        const taskIndex = state.findIndex((task) => task.id === taskId);
+        const {id} = action.payload;
+        const taskIndex = state.findIndex((task) => task.id === id);
         if (taskIndex !== -1) {
           state.splice(taskIndex, 1);
         }

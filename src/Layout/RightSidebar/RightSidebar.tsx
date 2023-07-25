@@ -8,7 +8,7 @@ import { selectTagById } from '../../store/slices/tagsSlice';
 import { TaskData } from './TaskData/TaskData';
 import { CalendarData } from './Calendar/CalendarData';
 export const RightSidebar = ({springs}) => {
-  const {helpSidebar: {func,state,taskId,setTaskId}} = useContext(AppContext)
+  const {helpSidebar: {func,state,taskId,setTaskId}, modalIsOpen} = useContext(AppContext)
 
   const task = useSelector(selectTaskById(taskId));
   const tag = useSelector(selectTagById(task?.tagId))
@@ -22,7 +22,7 @@ export const RightSidebar = ({springs}) => {
         func()
         if(taskId) setTaskId(null)
       }
-        }  className={`${state? phoneClasses : 'hidden'} ${desktopClasses}    h-screen xl:h-[95vh]  z-10 `}>
+        }  className={`${state? phoneClasses : 'hidden'} ${desktopClasses}    h-screen xl:h-[95vh]   ${modalIsOpen? 'z-0' : 'z-10'} `}>
           <animated.div style={{ ...springs}} onClick={(e) =>{
             e.stopPropagation()
             }}
