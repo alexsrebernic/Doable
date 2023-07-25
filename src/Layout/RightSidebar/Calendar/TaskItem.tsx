@@ -8,6 +8,8 @@ import getDateStatus from '../../../helper/getDateStatus'
 import { selectTagById } from '../../../store/slices/tagsSlice'
 import { NavLink } from 'react-router-dom'
 import { AppContext } from '../../../App'
+import isDateExpired from '../../../helper/isDateExpired'
+import isToday from 'date-fns/isToday'
 interface Props {
     task: Task
 }
@@ -18,6 +20,11 @@ export const TaskItem = ({task} : Props) => {
     function getTagName(){
       return useSelector(selectTagById(task.tagId))?.name
     }
+    function checkIfItsExpired(dueDate){
+        const isExpired = isDateExpired(dueDate)
+        console.log(isExpired)
+        return isExpired
+      }
   return (
     <div className='w-full flex items-center space-x-6'>
         <div>
@@ -33,7 +40,11 @@ export const TaskItem = ({task} : Props) => {
                 <NavLink className={``} to={`/tasks/${task.tagId}`}>
                     {getTagName()}
                 </NavLink>
-                <span className='text-[#225ffc]'>
+                <span  style={
+                    {
+                        color: !task.completed? !checkIfItsExpired(task.dueDate)  ? isToday(task.dueDate) ? '#225ffc' : 'rgb(107 114 128)' : 'red' :  'rgb(107 114 128)'
+                    }
+                }>
                     {getDateStatus(task.dueDate)}
                 </span>
             </div>

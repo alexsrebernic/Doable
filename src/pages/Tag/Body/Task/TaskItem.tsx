@@ -9,7 +9,7 @@ import { selectTagById } from '../../../../store/slices/tagsSlice'
 import getDateStatus from '../../../../helper/getDateStatus'
 import { isToday } from 'date-fns'
 import { AppContext } from '../../../../App'
-
+import isDateExpired from '../../../../helper/isDateExpired'
 interface Props {
   task : Task,
   isDragged : boolean,
@@ -19,7 +19,7 @@ interface Props {
 export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
   const dispatch = useDispatch()
   const {helpSidebar : { taskId, setTaskId, func,state }} = useContext(AppContext)
-
+  const tagName = useSelector(selectTagById(task.tagId))?.name
   const handleToggleCompleted = (e) => {
     dispatch(toggleCompleted(task.id))
     e.stopPropagation()
@@ -29,12 +29,15 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
     e.stopPropagation()
   }
 
-  function getTagName(){
-    return useSelector(selectTagById(task.tagId))?.name
-  }
+
   function handleClick(){
     setTaskId(task.id)
     if(!state) func()
+  }
+  function checkIfItsExpired(dueDate){
+    const isExpired = isDateExpired(dueDate)
+    console.log(isExpired)
+    return isExpired
   }
   return (
     <>
@@ -66,15 +69,14 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
           {
               tag.id !== task.tagId &&
               <>
-                <NavLink className={`text-xs after:px-1 ${(task.dueDate || task.repeat) && 'after:content-["•"]'}  truncate max-w-[10ch] md:max-w-full text-gray-500 font-medium hover:underline inline-block w-fit`} to={`/tasks/${task.tagId}`}>
-                    {getTagName()}
+                <NavLink className={`text-xs after:px-1 ${(task.dueDate || task.repeat || task.myDay) && 'after:content-["•"]'}  truncate max-w-[10ch] md:max-w-full text-gray-500 font-medium hover:underline inline-block w-fit`} to={`/tasks/${task.tagId}`}>
+                    {tagName}
                 </NavLink>
-               
               </>
             }
             {
               task.myDay &&
-              <div className='text-gray-500 after:content-["•"] after:px-1 max-w-[10ch] text-xs items-center justify-center space-x-1 px-1  flex font-medium   w-fit'>
+              <div className={`text-gray-500 ${(task.dueDate || task.repeat) && 'after:content-["•"]'} after:px-1 max-w-[10ch] text-xs items-center justify-center space-x-1 px-1  flex font-medium   w-fit`}>
                 <Icon icon='ph:sun' color='' />
                 <span>
                   My day
@@ -85,7 +87,7 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
                 <div 
                 style={
                   {
-                    color: isToday(task.dueDate) && !task.completed? tag.theme : 'rgb(107 114 128)'
+                    color: !task.completed? !checkIfItsExpired(task.dueDate)  ? isToday(task.dueDate) ? tag.theme : 'rgb(107 114 128)' : 'red' :  'rgb(107 114 128)'
                   }
                 }
                 className={`text-[12px] flex items-center space-x-1  `}>
