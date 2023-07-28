@@ -3,9 +3,9 @@ import { Tag } from '../../types/Tag/Tag'
 import { ButtonNav } from './ButtonNav'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { updateUserProp } from '../../store/slices/userSlice'
+import { updateUserProp, updateUserThunk } from '../../store/slices/userSlice'
 import { User } from '../../types/User'
-import { moveTaskToTag, setTags } from '../../store/slices/tagsSlice'
+import { updateTagThunk } from '../../store/slices/tagsSlice'
 interface Props {
     tags: Tag[],
     func: Function
@@ -29,18 +29,15 @@ export const TagList = ({tags,func,user} : Props) => {
         const type = event.dataTransfer.getData('type')
         if(type === 'task'){
             resetValues()    
-            return dispatch(moveTaskToTag({taskId:id,tagId:user.tagsIds[dragOverTagIndex]}))
+            return dispatch(updateTagThunk('moveTaskToTag',{taskId:id,tagId:user.tagsIds[dragOverTagIndex]}))
         }
         if(!user.tagsIds.includes(id)) return
         const updatedTagsIds = [...user.tagsIds] 
         const draggedItemContent = updatedTagsIds.splice(draggedTagIndex, 1)[0];
         updatedTagsIds.splice(dragOverTagIndex, 0, draggedItemContent);
         console.log(updatedTagsIds)
-        dispatch(updateUserProp({prop: 'tagsIds',value : updatedTagsIds}))
+        dispatch(updateUserThunk({prop: 'tagsIds',value : updatedTagsIds}))
         resetValues()
-    }
-    function moveTaskToTagHandler(taskId,tagId){
-        dispatch(moveTaskToTag({taskId,tagId}))
     }
     return (
     <div 

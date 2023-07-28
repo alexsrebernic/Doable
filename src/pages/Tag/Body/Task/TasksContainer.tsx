@@ -11,7 +11,6 @@ interface Props {
   route: string
 }
 export const TasksContainer = ({tasks,tag,reverseAnimation,route} : Props) => {
-  const dispatch = useDispatch()
   const [resetAnimation, setResetAnimation] = useState(true)
   const [springs, api] = useSpring(() => ({
     from:{

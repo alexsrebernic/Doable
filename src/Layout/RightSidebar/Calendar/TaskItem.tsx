@@ -3,7 +3,7 @@ import Task from '../../../types/Task/Task'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { selectTaskById } from '../../../store/slices/tasksSlice'
-import { toggleCompleted } from '../../../store/slices/tasksSlice'
+import { updateTaskThunk } from '../../../store/slices/tasksSlice'
 import getDateStatus from '../../../helper/getDateStatus'
 import { selectTagById } from '../../../store/slices/tagsSlice'
 import { NavLink } from 'react-router-dom'
@@ -15,14 +15,13 @@ interface Props {
 }
 export const TaskItem = ({task} : Props) => {
     const dispatch = useDispatch()
-    const handleToggleCompleted = () => dispatch(toggleCompleted(task.id))
+    const handleToggleCompleted = () => dispatch(updateTaskThunk('toggleCompleted',{taskId:task.id}))
   
     function getTagName(){
       return useSelector(selectTagById(task.tagId))?.name
     }
     function checkIfItsExpired(dueDate){
         const isExpired = isDateExpired(dueDate)
-        console.log(isExpired)
         return isExpired
       }
   return (

@@ -8,14 +8,14 @@ import "react-datepicker/dist/react-datepicker.css";
 interface Props {
   text: String,
   elements: object[],
-  icon: String,
+  icon?: String,
   color?:String,
   size?: Number,
   value?: string | boolean,
   removeValueFunc?: Function,
   removeText? : string,
-  stylesButton: object,
-  contentButton: ReactNode,
+  stylesButton?: object,
+  contentButton?: ReactNode,
 }
 export default function PopoverButton({text,elements,color,value,size,icon,removeValueFunc,removeText,stylesButton,contentButton} : Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -36,8 +36,7 @@ export default function PopoverButton({text,elements,color,value,size,icon,remov
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <div >
-      
+    < >
       {
         contentButton?
         <button
@@ -119,6 +118,6 @@ export default function PopoverButton({text,elements,color,value,size,icon,remov
         }
         
       </Popover>
-    </div>
+    </>
   );
 }

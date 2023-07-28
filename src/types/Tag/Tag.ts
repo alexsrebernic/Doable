@@ -6,6 +6,6 @@ export interface Tag {
     ownerId?: string | null,
     sortBy?: 'importance' | 'dueDate' | 'createdAt' | 'alphabetically' ,
     sortOrder? : 'asc' | 'desc',
-    createdAt? : Date,
+    createdAt? : number,
     theme?: string 
 }

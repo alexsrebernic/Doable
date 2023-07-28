@@ -10,6 +10,7 @@ import routes from './routes.js'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {store, persistor} from './store';
+import connectToFirebaseEmulator from './api/firebase/connectToFirebaseEmulator'
 const opts = {
   basename:"/"
 }
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
   routes,
   opts
 )
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>

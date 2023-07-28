@@ -16,10 +16,8 @@ export const Tag = () => {
   useEffect(() => {
     try {
       if(document.readyState !== 'complete') return
-      console.log(tasks)
       if(!tag) throw Error("ERROR 404: Tag doesn´t exists");
     } catch (error){
-      setIsLoading(false)
       showToast(error.message,"error")
       console.error(error)
       navigate("/tasks/myday")

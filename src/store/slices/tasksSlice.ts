@@ -10,53 +10,91 @@ import { addTaskToTag, moveTaskToTag, removeTag, tagsSlice } from './tagsSlice';
 import calculateNextDueDate from '../../helper/calculateNextDueDate'
 import uniqid from 'uniqid'
 import { useDispatch } from 'react-redux';
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:number) => {
+import { logOutUser } from './userSlice';
+import * as tasksApi from '../../api/firebase/controllers/taskController'
+import { updateTag } from '../../api/firebase/controllers/tagController';
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (userId:string) => {
     if(!userId) return []
-    const response = await fetchTasksFromAPI(userId);
-    return response.data;
+    const response = await tasksApi.getTasks(userId);
+    return response;
   });
+  export const createTask = createAsyncThunk('tasks/createTask', async (task: Task) => {
+    if(!task) return 
+    return await tasksApi.setTask(task);
+  });
+  export const updateTask = createAsyncThunk('tasks/updateTask', async (task: Task) => {
+    if(!task) return 
+    return await tasksApi.updateTask(task);
+  });
+  export const deleteTask = createAsyncThunk('tasks/deleteTask', async (taskId : string) => {
+    if(!taskId) return 
+    return await tasksApi.deleteTask(taskId);
+  });
+  export const createTaskThunk = (task : Task) => async (dispatch,getState) => {
+    try {
+      dispatch(addTask(task))
+      if(task.ownerId !== 'anonymus'){
+         dispatch(createTask(task))
+         const tag = getState().tags.filter(t => t.id == task.tagId).pop()
+         console.log(tag)
+         await updateTag(tag)
+      }
+    } catch(e){
+      console.error(e)
+    }
+  }
+  export const updateTaskThunk = (type : string,args : object) => async (dispatch,getState) => {
+    try {
+      dispatch(tasksSlice.actions[type](args))
+      const task = getState().tasks.filter(t => t.id == args.taskId).pop()
+      if(task.ownerId !== 'anonymus') dispatch(updateTask(task))
+    } catch (e){
+      console.error(e)
+    }
+  } 
+  export const removeTaskThunk = (args) => async (dispatch,getState) => {
+    try {
+      const task = getState().tasks.filter(t => t.id == args.taskId).pop()
+      dispatch(removeTask(args));
+      if(task.ownerId !== 'anonymus'){
+        dispatch(deleteTask(args.taskId))
+        const tag = getState().tags.filter(t => t.id == task.tagId).pop()
+        console.log(tag)
+        await updateTag(tag)
+      }
+    } catch(e){
+      console.error(e)
+    }
+   
+  }
 export const tasksSlice = createSlice({
     name: 'tasks',
     initialState: [] as Task[],
     reducers: {
       addTask: (state, action: PayloadAction<Task>) => {
         const task = action.payload;
-        console.log(task)
         state.unshift(task);
       },
-      updateTask: (state, action: PayloadAction<Task>) => {
-        const updatedTask = action.payload;
-        const taskIndex = state.findIndex((task) => task.id === updatedTask.id);
-        if (taskIndex !== -1) {
-          state[taskIndex] = updatedTask;
-        }
-      },
-      removeTask: (state, action: PayloadAction<number>) => {
-        const {id} = action.payload;
-        const taskIndex = state.findIndex((task) => task.id === id);
+      removeTask: (state, action: PayloadAction<object>) => {
+        const {taskId} = action.payload;
+        const taskIndex = state.findIndex((task) => task.id === taskId);
         if (taskIndex !== -1) {
           state.splice(taskIndex, 1);
         }
       },
-      reorderTasks: (state, action: PayloadAction<{ tagId: number; taskIds: number[] }>) => {
-        const { tagId, taskIds } = action.payload;
-        const tag = state.find((tag) => tag.id === tagId);
-        if (tag) {
-          tag.tasks = taskIds;
-        }
-      },
       toggleImportant: (state, action) => {
-        const taskId = action.payload;
+        const {taskId} = action.payload;
         const task = state.find((task) => task.id === taskId);
         if (task) {
-          task.important = !task.important; // Toggle the favorite status
+          task.important = !task.important; 
         }
       },
       toggleCompleted: (state, action) => {
-        const taskId = action.payload;
+        const {taskId} = action.payload;
+        console.log(taskId)
         const task = state.find((task) => task.id === taskId);
         if (task) {
-          task.completed = !task.completed; // Toggle the favorite status
+          task.completed = !task.completed; 
         }
         if(task?.repeat && task.completed && !state.find(t => t.taskSuccessorId == task.id)){
           const nextDueDate = calculateNextDueDate(task.dueDate,task.repeat)
@@ -88,11 +126,12 @@ export const tasksSlice = createSlice({
         }
       },
       toggleMyDay: (state, action) => {
-        const taskId = action.payload;
+        const {taskId} = action.payload;
         const task = state.find((task) => task.id === taskId);
         if (task) {
           task.myDay = !task.myDay; // Toggle the favorite status
           task.myDayDate = Date.now()
+          if(!task.myDay) task.myDayDate = null
         }
       },
       updateTaskProp: (state, action: PayloadAction<Task>) => {
@@ -120,6 +159,9 @@ export const tasksSlice = createSlice({
       .addCase(removeTag, (state,action) => {
         return state.filter(task => task.tagId !== action.payload)
       })
+      .addCase(logOutUser.fulfilled, (state,action) => {
+        return []
+      })
     },
   });
 const selectTasks = (state: RootState) => state.tasks;
@@ -135,7 +177,7 @@ const selectTasksByTagId = (tagId: number | string,searchInput : string | null) 
     switch (tagId) {
       case 'completed': return tasks.filter((task) => task.completed);
       case 'important': return tasks.filter((task) => task.important);
-      case 'myday': return tasks.filter((task) => task.dueDate? isToday(task.dueDate) || task.myDay : false);
+      case 'myday': return tasks.filter((task) => task.dueDate || task.myDay? (isToday(task.dueDate) || isToday(task.myDayDate)): false);
       case 'all': return tasks;
       case 'search': return tasks.filter((task => searchInput.length > 0 && task.text.toLowerCase().includes(searchInput.toLowerCase()))) 
       default: return tasks.filter((task) => task.tagId == tagId);
@@ -148,7 +190,7 @@ const selectTasksByDueDate = (dueDate : Date | string  | null) => createSelector
   (tasks) => {
     if(typeof dueDate == 'string'){
       switch(dueDate){
-        case 'Today' : return tasks.filter(task => isToday(task.dueDate));
+        case 'Today' : return tasks.filter(task => isToday(task.dueDate) || task.myDay);
         case 'This week':return tasks.filter((task) => isThisWeek(task.dueDate));
         case 'This month' :return tasks.filter((task) => isThisMonth(task.dueDate));
       }
@@ -164,11 +206,11 @@ const selectNumberOfTasksByTagId = (tagId : string) => createSelector(
     switch (tagId) {
       case 'completed': return 0;
       case 'important': return tasks.filter((task) => task.important && !task.completed).length;
-      case 'myday': return tasks.filter((task) => task.dueDate? (isToday(task.dueDate) || task.myDay) && !task.completed : false).length;
+      case 'myday': return tasks.filter((task) => task.dueDate || task.myDay? (isToday(task.dueDate) || isToday(task.myDayDate)) && !task.completed : false).length;
       case 'all': return 0;
       default: return tasks.filter((task) => task.tagId == tagId && !task.completed).length;
     }
   }
 )
 export {selectTasks,selectTasksByTagId,selectTaskById, selectTasksByDueDate,selectNumberOfTasksByTagId}
-export const { addTask, updateTask, removeTask, setTasks, toggleCompleted, toggleImportant,toggleMyDay,updateTaskProp } = tasksSlice.actions;
+export const { addTask, removeTask, setTasks, toggleCompleted, toggleImportant,toggleMyDay,updateTaskProp } = tasksSlice.actions;

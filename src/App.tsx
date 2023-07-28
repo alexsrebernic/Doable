@@ -7,6 +7,7 @@ import { User } from './types/User';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from './store/slices/userSlice';
 import Task from './types/Task/Task';
+import connectToFirebaseEmulator from './api/firebase/connectToFirebaseEmulator'
 const customStyles = {
   content: {
     top: '50%',

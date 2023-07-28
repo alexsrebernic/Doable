@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Task from '../../../../types/Task/Task'
 import { TaskItem } from './TaskItem';
 import { Tag } from '../../../../types/Tag/Tag';
-import { tagsSlice, updateTagProp } from '../../../../store/slices/tagsSlice';
+import { tagsSlice, updateTagProp, updateTagThunk } from '../../../../store/slices/tagsSlice';
 import { useDispatch } from 'react-redux';
 import { useRef } from 'react';
 
@@ -24,7 +24,7 @@ export const TaskList = ({tasks,tag} : {tasks: Task[], tag: Tag}) => {
         const updatedTaskIds = [...tag.tasksIds] 
         const draggedItemContent = updatedTaskIds.splice(draggedRealIndex, 1)[0];
         updatedTaskIds.splice(dragOverRealIndex, 0, draggedItemContent);
-        dispatch(updateTagProp({tagId: tag.id,prop: 'tasksIds',value : updatedTaskIds}))
+        dispatch(updateTagThunk('updateTagProp',{tagId: tag.id,prop: 'tasksIds',value : updatedTaskIds}))
         resetValues()
     }
     function resetValues(){

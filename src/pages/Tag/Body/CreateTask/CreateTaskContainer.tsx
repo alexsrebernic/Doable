@@ -12,7 +12,7 @@ import workdaysSVG from '../../../../assets/workday.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { Tag } from '../../../../types/Tag/Tag'
 import uniqid from 'uniqid'
-import { addTask } from '../../../../store/slices/tasksSlice'
+import { addTask, createTask, createTaskThunk } from '../../../../store/slices/tasksSlice'
 import {returnDueDateValue} from '../../../../helper/returnDueDateValue'
 import { CustomInputDueDate } from './CustomInputDueDate'
 import { useContext } from 'react'
@@ -20,6 +20,7 @@ import { AppContext } from '../../../../App'
 import { useLocation } from 'react-router-dom'
 import { isToday } from 'date-fns/esm'
 import { Icon } from '@iconify/react'
+import Task from '../../../../types/Task/Task'
 interface Props {
     route : string 
     tag: Tag,
@@ -60,22 +61,21 @@ export const CreateTaskContainer = ({route,tag} : Props) => {
         setDueDateValue(value)
     }
     function handleCreateTask(){
-        dispatch(addTask(
-            {
-                text: inputValue,
-                completed: false,
-                important: tag.id === 'important'? true : false,
-                dueDate: tag.id === 'myday' && !dueDateValue? Date.now() : dueDateValue,
-                repeat: repeatValue,
-                createdAt: Date.now(),
-                ownerId: user.id ,
-                myDay: isToday(dueDateValue) || tag.id == 'myday'? true : false,
-                myDayDate: isToday(dueDateValue) || tag.id == 'myday'? Date.now() : null,
-                tagId: tag.id === 'important' || tag.id ===  'all' || tag.id === 'myday' ? 'mytasks' : tag.id,
-                id: uniqid(),
-                completedAt: null,
-            }
-        ))
+        const task : Task =    {
+            text: inputValue,
+            completed: false,
+            important: tag.id === 'important'? true : false,
+            dueDate: tag.id === 'myday' && !dueDateValue? Date.now() : dueDateValue,
+            repeat: repeatValue,
+            createdAt: Date.now(),
+            ownerId: user.id ,
+            myDay: isToday(dueDateValue) || tag.id == 'myday'? true : false,
+            myDayDate: isToday(dueDateValue) || tag.id == 'myday'? Date.now() : null,
+            tagId: tag.id === 'important' || tag.id ===  'all' || tag.id === 'myday' ? 'mytasks' : tag.id,
+            id: uniqid(),
+            completedAt: null,
+        }
+        dispatch(createTaskThunk(task))
         resetValues()
     }
     

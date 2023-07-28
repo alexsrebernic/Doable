@@ -3,7 +3,7 @@ import { Tag } from '../../../types/Tag/Tag'
 import { Icon } from '@iconify/react'
 import PopoverButton from '../PopoverButton/PopoverButton'
 import { useDispatch } from 'react-redux'
-import { updateTagProp } from '../../../store/slices/tagsSlice'
+import { deleteTag, deleteTagThunk, updateTagProp, updateTagThunk } from '../../../store/slices/tagsSlice'
 import { useContext } from 'react'
 import { favoriteTagsIds } from '../../../helper/favoriteTag'
 import { AppContext } from '../../../App'
@@ -24,30 +24,25 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
 
     }
     function changeTheme(color){
-        dispatch(updateTagProp({tagId: tag.id,prop: 'theme',value : color}))
+        dispatch(updateTagThunk('updateTagProp',{tagId: tag.id,prop: 'theme',value : color}))
     }
     function removeTagHandler(){
         openModal(<ModalRemoveTag tagName={tag.name} acceptFunc={removeTagFunc} closeFunc={closeModal}/>)
     }
     function removeTagFunc(){
-        dispatch(removeTag(tag.id))
+        dispatch(deleteTagThunk(tag.id))
         helpSidebar.setTaskId(null)
         navigate('/tasks/myday')
     }
     function changeSortOrder(order){
         console.log(order)
         if(order == tag.sortBy) {
-           return dispatch(updateTagProp({tagId: tag.id, prop: 'sortBy', value: null}))
+           return dispatch(updateTagThunk('updateTagProp',{tagId: tag.id, prop: 'sortBy', value: null}))
         }
-        return dispatch(updateTagProp({tagId: tag.id, prop: 'sortBy', value: order}))
+        return dispatch(updateTagThunk('updateTagProp',{tagId: tag.id, prop: 'sortBy', value: order}))
     }
     const menuSettingsElement = [
-        {
-            icon:"material-symbols:print",
-            text:"Print this list",
-            func: printList,
-        },
-        !favoriteTagsIds.includes(tag.id) &&
+       
         {
             component: <ColorPalletePicker tag={tag} setValue={changeTheme}/>
         }
@@ -81,10 +76,10 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
         }
     ]
       function toggleSortOrder (){
-        dispatch(updateTagProp({tagId: tag.id, prop: 'sortOrder', value: tag.sortOrder === 'asc'? 'desc' : 'asc'}))
+        dispatch(updateTagThunk('updateTagProp',{tagId: tag.id, prop: 'sortOrder', value: tag.sortOrder === 'asc'? 'desc' : 'asc'}))
       }
       function removeSortBy(){
-        dispatch(updateTagProp({tagId: tag.id, prop: 'sortBy', value: null}))
+        dispatch(updateTagThunk('updateTagProp',{tagId: tag.id, prop: 'sortBy', value: null}))
       }
       function getSortedText(){
         let sortByText;
@@ -109,7 +104,7 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
     }
   
     function handleChangeTagName(){
-        return tagName.length > 0 ? dispatch(updateTagProp({tagId: tag.id,prop: 'name',value: tagName})) : setTagName(tag.name)
+        return tagName.length > 0 ? dispatch(updateTagThunk('updateTagProp',{tagId: tag.id,prop: 'name',value: tagName})) : setTagName(tag.name)
 
     }
 
@@ -152,14 +147,18 @@ export const Header = ({tag,tag_id} : {tag:Tag,tag_id: string}) => {
                 </div>
                 <div className='flex items-center justify-between w-full'>
                             <div>
-                                <PopoverButton 
-                                color={tag.theme} 
-                                removeText='Remove tag' 
-                                value={!favoriteTagsIds.includes(tag.id)} 
-                                removeValueFunc={removeTagHandler} 
-                                icon="ph:dots-three-bold" text="Settings" 
-                                elements={menuSettingsElement}
-                                />
+                                {
+                                     !favoriteTagsIds.includes(tag.id) &&
+                                     <PopoverButton 
+                                     color={tag.theme} 
+                                     removeText='Remove tag' 
+                                     value={!favoriteTagsIds.includes(tag.id)} 
+                                     removeValueFunc={removeTagHandler} 
+                                     icon="ph:dots-three-bold" text="Settings" 
+                                     elements={menuSettingsElement}
+                                     />
+                                }
+                            
                             </div>
                     <div className='flex space-x-4 font-medium '>
                         {

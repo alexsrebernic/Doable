@@ -3,4 +3,5 @@ export interface User {
     email: string | null,
     tagsIds: string[],
     createdAt?: number,
+    img: string
 }

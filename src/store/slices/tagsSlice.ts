@@ -5,28 +5,67 @@ import FavoriteTags,{favoriteTagsIds} from '../../helper/favoriteTag';
 import { addTask, removeTask, selectTaskById, toggleCompleted } from './tasksSlice';
 import { RootState } from '..';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser } from './userSlice';
-import Task from '../../types/Task/Task';
-export const fetchTags = createAsyncThunk('tags/fetchTags', async (userId: number) => {
+import { logOutUser, selectCurrentUser, updateUserThunk } from './userSlice';
+import * as tagsApi from '../../api/firebase/controllers/tagController';
+import { updateUser } from '../../api/firebase/controllers/userController';
+import { deleteTask } from '../../api/firebase/controllers/taskController';
+export const fetchTags = createAsyncThunk('tags/fetchTags', async (userId: string) => {
     if(!userId) return [...FavoriteTags]
-    const response = await fetchTagsFromAPI(userId);
-    return [...response.data, ...FavoriteTags];
+    const response = await tagsApi.getTags(userId);
+    return [...response, ...FavoriteTags];
 });
-
+export const createTag = createAsyncThunk('tags/createTag', async (tag: Tag) => {
+  await tagsApi.setTag(tag);
+});
+export const updateTag = createAsyncThunk('tags/updateTag', async (tag: Tag) => {
+  await tagsApi.updateTag(tag);
+});
+export const deleteTag = createAsyncThunk('tags/deleteTag', async (tagId: string) => {
+  await tagsApi.deleteTag(tagId);
+});
+export const updateTagThunk = (type : string,args : object) => async (dispatch,getState) => {
+  try {
+    if(type && args) dispatch(tagsSlice.actions[type](args))
+    const tag = getState().tags.filter(t => t.id == args.tagId).pop()
+    if(tag.ownerId !== 'anonymus') dispatch(updateTag(tag))
+    dispatch(updateUserThunk(null))
+  } catch (e){
+    console.error(e)
+  }
+} 
+export const createTagThunk = (tag: Tag) => async (dispatch) => {
+  try {
+      dispatch(addTag(tag))
+      if(tag.ownerId !== 'anonymus') dispatch(createTag(tag))
+      dispatch(updateUserThunk(null))
+  } catch(e){
+    console.error(e)
+  }
+}
+export const deleteTagThunk = (tagId) => async (dispatch,getState) => {
+  try {
+    const tag = getState().tags.filter(t => t.id == tagId).pop()
+    if(tag.ownerId !== 'anonymus') {
+      dispatch(removeTag(tagId))
+      if(tag.tasksIds.length > 0){
+        tag.tasksIds.forEach(t => {
+          deleteTask(t)
+        })
+      }
+    }
+    dispatch(deleteTag(tagId))
+    dispatch(updateUserThunk(null))
+  } catch (e){
+    console.error(e)
+  }
+}
 export const tagsSlice = createSlice({
     name: 'tags',
     initialState: [] as Tag[],
     reducers: {
       addTag: (state, action) => {
-        const {id, userId,tagName} = action.payload
-        state.push({
-          name:tagName,
-          tasksIds: [],
-          id: id,
-          ownerId:  userId,
-          createdAt: new Date(),
-          theme: '#225FFC',
-        });
+        const tag = action.payload
+        state.push(tag);
       },
       updateTagProp: (state, action: PayloadAction<Tag>) => {
         const {tagId,prop,value} = action.payload;
@@ -44,11 +83,10 @@ export const tagsSlice = createSlice({
       },
       moveTaskToTag:(state, action) => {
         const {taskId,tagId} = action.payload;
-        console.log(tagId)
+        console.log(taskId,tagId)
         const toTagIndex = state.findIndex((tag : Tag) => tag.id == tagId);
         const fromTagIndex = state.findIndex((tag : Tag) => tag.tasksIds?.includes(taskId))
         if(toTagIndex == fromTagIndex) return
-        console.log(toTagIndex,fromTagIndex)
         const taskIndex = state[fromTagIndex].tasksIds?.findIndex(t => t.id == taskId)
         state[toTagIndex].tasksIds?.push(taskId)
         state[fromTagIndex].tasksIds?.slice(taskIndex,1)
@@ -57,19 +95,19 @@ export const tagsSlice = createSlice({
         return [...FavoriteTags]
       },
       addTaskToTag: (state,action) => {
-        const { id, tagId } = action.payload;
-        console.log(id,tagId)
+        const { taskId, tagId } = action.payload;
         const tag = state.find((tag) => tag.id == tagId);
         if (tag) {
           if (!tag.tasksIds) {
             tag.tasksIds = []
           }
-          tag.tasksIds.unshift(id);
+          tag.tasksIds.unshift(taskId);
         }
       }
     },
     extraReducers: (builder) => {
-      builder.addCase(fetchTags.fulfilled, (state, action, ) => {
+      builder
+      .addCase(fetchTags.fulfilled, (state, action, ) => {
         return action.payload
       })
       .addCase(addTask.type, (state, action) => {
@@ -83,10 +121,10 @@ export const tagsSlice = createSlice({
         }
       })
       .addCase(removeTask, (state, action) => {
-        const { id, tagId } = action.payload;
+        const { taskId, tagId } = action.payload;
         const tag = state.find((tag) => tag.id == tagId);
         if (tag) {
-          tag.tasksIds = tag.tasksIds?.filter(taskId => taskId !== id)
+          tag.tasksIds = tag.tasksIds?.filter(t => t !== taskId)
         }
       })
       .addCase(toggleCompleted, (state,action) => {
@@ -100,6 +138,9 @@ export const tagsSlice = createSlice({
             tag.tasksIds.unshift(id);
           }
         }
+      })
+      .addCase(logOutUser.fulfilled, (state,action) => {
+        return [...FavoriteTags]
       })
     },
   });

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Task from '../../../../types/Task/Task'
 import { Icon } from '@iconify/react'
-import { toggleImportant,toggleCompleted, updateTask } from '../../../../store/slices/tasksSlice'
+import { updateTaskThunk } from '../../../../store/slices/tasksSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { Tag } from '../../../../types/Tag/Tag'
@@ -21,22 +21,24 @@ export const TaskItem = ({task,isDragged,isDragOver,tag} : Props) => {
   const {helpSidebar : { taskId, setTaskId, func,state }} = useContext(AppContext)
   const tagName = useSelector(selectTagById(task.tagId))?.name
   const handleToggleCompleted = (e) => {
-    dispatch(toggleCompleted(task.id))
+    dispatch(updateTaskThunk('toggleCompleted',{taskId:task.id}))
     e.stopPropagation()
   }
   const handleToggleImportant = (e) => { 
-    dispatch(toggleImportant(task.id))
+    dispatch(updateTaskThunk('toggleImportant',{taskId:task.id}))
     e.stopPropagation()
   }
-
-
   function handleClick(){
     setTaskId(task.id)
     if(!state) func()
   }
   function checkIfItsExpired(dueDate){
     const isExpired = isDateExpired(dueDate)
-    console.log(isExpired)
+    return isExpired
+  }
+  function checkIfItsMyDayDateExpired(myDayDate){
+    const isExpired = isDateExpired(myDayDate)
+    if(isExpired) dispatch(updateTaskThunk('toggleMyDay',{taskId:task.id}))
     return isExpired
   }
   return (

@@ -19,6 +19,7 @@ import weeklySVG from '../../../assets/weekly.svg'
 import workdaysSVG from '../../../assets/workday.svg'
 import {returnDueDateValue} from '../../../helper/returnDueDateValue'
 import { AppContext } from '../../../App'
+import { updateTaskThunk,removeTaskThunk } from '../../../store/slices/tasksSlice'
 import { ModalRemoveTask } from './ModalRemoveTask'
 interface Props {
   task : Task,
@@ -36,7 +37,6 @@ export const TaskData = ({task, tag,func, setTaskId} : Props) => {
   const [dueDateValueString, setDueDateValueString] = useState<string | null>(null)
   useEffect(() => {
     setTextTaskValue(task.text)
-    console.log(task.dueDate)
     if(task.dueDate) {
       setDueDateValueString(getDateStatus(task.dueDate))
       setDueDateValue(task.dueDate)
@@ -47,14 +47,15 @@ export const TaskData = ({task, tag,func, setTaskId} : Props) => {
     }
   },[task])
 
-  const handleToggleImportant = () => dispatch(toggleImportant(task.id))
-  const handleToggleCompleted = () => dispatch(toggleCompleted(task.id))
-  const handleToggleMyDay = () => dispatch(toggleMyDay(task.id))
+  const handleToggleImportant = () => dispatch(updateTaskThunk('toggleImportant',{taskId:task.id}))
+  const handleToggleCompleted = () => dispatch(updateTaskThunk('toggleCompleted',{taskId:task.id}))
+  const handleToggleMyDay = () => dispatch(updateTaskThunk('toggleMyDay',{taskId:task.id}))
+
   function handleRemoveTask(){
     openModal(<ModalRemoveTask acceptFunc={removeTaskFunc} closeFunc={closeModal} taskName={task.text}/>)
   }
   function removeTaskFunc(){
-    dispatch(removeTask({id:task.id, tagId: task.tagId}))
+    dispatch(removeTaskThunk({taskId:task.id, tagId: task.tagId}))
     setTaskId(null)
   }
   function handleCloseTaskSidebar(){
@@ -68,19 +69,19 @@ export const TaskData = ({task, tag,func, setTaskId} : Props) => {
     setRepeatValueString(selectedRepeat)
     if(!dueDateValue) setTaskDueDate("Today")
     setRepeatValue(selectedRepeat)
-    dispatch(updateTaskProp({taskId: task.id,prop : 'repeat',value : selectedRepeat}))
+    dispatch(updateTaskThunk('updateTaskProp',{taskId: task.id,prop : 'repeat',value : selectedRepeat}))
 
 };
 const setTaskDueDate = (selectedDate) => {
     setDueDateValueString(selectedDate)
     const value = returnDueDateValue(selectedDate) 
     setDueDateValue(value)
-    dispatch(updateTaskProp({taskId: task.id,prop : 'dueDate',value : value}))
+    dispatch(updateTaskThunk('updateTaskProp',{taskId: task.id,prop : 'dueDate',value : value}))
 }
   function onBlur(){
     const newTask = window.structuredClone(task)
     newTask.text = textTaskValue
-    dispatch(updateTask(newTask))
+    dispatch(updateTaskThunk('updateTaskProp',{taskId: task.id,prop : 'text',value : textTaskValue}))
   }
   function resetValues(){
     setTaskRepeat(null)
@@ -117,7 +118,7 @@ const setTaskDueDate = (selectedDate) => {
           </div>
         </div>
       </div>
-      <div className='space-y-7'
+      <div className='space-y-7 flex flex-col'
       >
         <div className='flex space-x-2 cursor-pointer'
         onClick={handleToggleMyDay}

@@ -6,8 +6,8 @@ import { Tag } from '../../types/Tag/Tag';
 import { ButtonNav } from './ButtonNav';
 import { useSpring, animated } from '@react-spring/web'
 import { useDispatch, useSelector } from 'react-redux';
-selectNonFavoriteTags
-import { addTag, selectNonFavoriteTags } from '../../store/slices/tagsSlice';
+
+import { addTag,  createTagThunk,  selectNonFavoriteTags } from '../../store/slices/tagsSlice';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import uniqid from 'uniqid'
@@ -23,10 +23,18 @@ export const LeftSidebar = ({springs}) => {
   const navigate = useNavigate()
   const nonFavoriteTags = useSelector(selectNonFavoriteTags)
 
-  function handleAddTag(){
+  async function handleAddTag(){
   if(inputTagName.length == 0) return 
    const id =  uniqid()
-   dispatch(addTag({id,userId: user? user.id : null ,tagName: inputTagName}))
+   const tag : Tag = {
+     id,
+     ownerId: user? user.id : null ,
+     name: inputTagName,
+     createdAt: Date.now(),
+     theme : '#225FFC'
+    
+    }
+   dispatch(createTagThunk(tag))
    navigate(`tasks/${id}`)
    sidebar.func()
    setInputTagName('')

@@ -7,11 +7,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Popover } from '@mui/material';
 import myPhoto from '../../assets/myPhoto.png'
-import { logInUser } from '../../store/slices/userSlice';
+import { logInUserWithGoogle,logOutUser  } from '../../store/slices/userSlice';
+import { useDispatch } from 'react-redux';
+import PopoverButton from '../../pages/Tag/PopoverButton/PopoverButton';
 export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => {
   const {sidebar,helpSidebar ,searchBarData,user} = useContext(AppContext)
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,6 +42,20 @@ export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => 
     helpSidebar.func()
     helpSidebar.setTaskId(null)
     openAnimationRightSidebar()
+  }
+  function displayLogIn(){
+    try {
+      dispatch(logInUserWithGoogle())
+    } catch(error){
+      console.error(error)
+    }
+  }
+  function handleLogOutUser(){
+    try {
+      dispatch(logOutUser())
+    } catch (error){
+      console.error(error)
+    }
   }
   return (
     <div  className='  bg-white static  border-b w-screen grid grid-cols-16 '>
@@ -106,10 +123,27 @@ export const Topbar = ({openAnimationLeftSidebar,openAnimationRightSidebar}) => 
                   <>
                   {
                     user.id !== 'anonymus'?
-                    <div className='w-[30px] cursor-pointer h-[30px] bg-gray-200 rounded-full'>
-                  </div>
+                    <PopoverButton
+                    text='User settings'
+                    elements={
+                      [
+                        {
+                          icon: 'material-symbols:logout',
+                          text: 'Log out',
+                          func: handleLogOutUser,
+                          arg: null
+                        }
+                      ]
+                    }
+                    contentButton={
+                      <div className='w-[30px] cursor-pointer h-[30px] bg-gray-200 rounded-full'>
+                      <img src={user.img} className='w-full h-full rounded-full' alt="" />
+                      </div>
+                      }
+                    />
+                   
                   :
-                  <button  className='text-default font-semibold  px-3 hover:bg-[#80A3FE] hover:text-white py-2 rounded-md transition cursor-pointer' >
+                  <button onClick={displayLogIn} className='text-default font-semibold  px-3 hover:bg-[#80A3FE] hover:text-white py-2 rounded-md transition cursor-pointer' >
                     Log in
                   </button>
                   }
